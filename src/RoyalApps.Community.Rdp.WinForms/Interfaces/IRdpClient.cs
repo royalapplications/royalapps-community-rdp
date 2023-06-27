@@ -468,7 +468,7 @@ public interface IRdpClient : IDisposable
     /// <see>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-performanceflags</cref>
     /// </see>
-    int PerformanceFlags { get; set; }
+    internal int PerformanceFlags { get; set; }
 
     /// <summary>
     /// Specifies whether or not DirectX is enabled or not.
@@ -499,6 +499,11 @@ public interface IRdpClient : IDisposable
     /// </summary>
     ClientSpec ClientProtocolSpec { get; set; }
 
+    /// <summary>
+    /// Allows you to configure the performance settings of the RDP session.
+    /// </summary>
+    RdpPerformanceFlags PerformanceSettings { get; set; }
+    
     #endregion
 
     #region ::: Redirection :::

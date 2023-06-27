@@ -372,8 +372,16 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get => AdvancedSettings2.PerformanceFlags;
-        set => AdvancedSettings2.PerformanceFlags = value;
+        get
+        {
+            AdvancedSettings2.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
+            return AdvancedSettings2.PerformanceFlags;
+        }
+        set
+        {
+            PerformanceSettings.SetPerformanceFlags(value);
+            AdvancedSettings2.PerformanceFlags = value;
+        }
     }
 
     /// <summary>
@@ -422,6 +430,9 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         get => ClientSpec.FullMode;
         set => LogFeatureNotSupported(nameof(ClientProtocolSpec));
     }
+
+    /// <inheritdoc cref="PerformanceSettings"/>
+    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -1123,10 +1134,17 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get => AdvancedSettings7.PerformanceFlags;
-        set => AdvancedSettings7.PerformanceFlags = value;
+        get
+        {
+            AdvancedSettings7.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
+            return AdvancedSettings7.PerformanceFlags;
+        }
+        set
+        {
+            PerformanceSettings.SetPerformanceFlags(value);
+            AdvancedSettings7.PerformanceFlags = value;
+        }
     }
-
     /// <inheritdoc cref="RedirectDirectX"/>
     public bool RedirectDirectX
     {
@@ -1164,6 +1182,9 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         get => ClientSpec.FullMode;
         set => LogFeatureNotSupported(nameof(ClientProtocolSpec));
     }
+
+    /// <inheritdoc cref="PerformanceSettings"/>
+    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -1799,8 +1820,16 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get => AdvancedSettings8.PerformanceFlags;
-        set => AdvancedSettings8.PerformanceFlags = value;
+        get
+        {
+            AdvancedSettings8.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
+            return AdvancedSettings8.PerformanceFlags;
+        }
+        set
+        {
+            PerformanceSettings.SetPerformanceFlags(value);
+            AdvancedSettings8.PerformanceFlags = value;
+        }
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
@@ -1846,6 +1875,9 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         get => ClientSpec.FullMode;
         set => LogFeatureNotSupported(nameof(ClientProtocolSpec));
     }
+
+    /// <inheritdoc cref="PerformanceSettings"/>
+    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -2548,8 +2580,16 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get => AdvancedSettings9.PerformanceFlags;
-        set => AdvancedSettings9.PerformanceFlags = value;
+        get
+        {
+            AdvancedSettings9.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
+            return AdvancedSettings9.PerformanceFlags;
+        }
+        set
+        {
+            PerformanceSettings.SetPerformanceFlags(value);
+            AdvancedSettings9.PerformanceFlags = value;
+        }
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
@@ -2589,6 +2629,9 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         get => AdvancedSettings9.ClientProtocolSpec;
         set => AdvancedSettings9.ClientProtocolSpec = value;
     }
+
+    /// <inheritdoc cref="PerformanceSettings"/>
+    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -3236,8 +3279,16 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get => AdvancedSettings9.PerformanceFlags;
-        set => AdvancedSettings9.PerformanceFlags = value;
+        get
+        {
+            AdvancedSettings9.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
+            return AdvancedSettings9.PerformanceFlags;
+        }
+        set
+        {
+            PerformanceSettings.SetPerformanceFlags(value);
+            AdvancedSettings9.PerformanceFlags = value;
+        }
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
@@ -3277,6 +3328,9 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         get => AdvancedSettings9.ClientProtocolSpec;
         set => AdvancedSettings9.ClientProtocolSpec = value;
     }
+
+    /// <inheritdoc cref="PerformanceSettings"/>
+    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 

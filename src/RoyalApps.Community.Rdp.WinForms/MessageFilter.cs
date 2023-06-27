@@ -12,7 +12,7 @@ internal static class MessageFilter
         if (m.Msg == PInvoke.WM_DESTROY && control is {IsDisposed: true, IsHandleCreated: false})
             return true;
 
-        if (control.DisableClickDetection ||
+        if (control.Configuration.Input.DisableClickDetection ||
             (m.Msg != PInvoke.WM_MOUSEACTIVATE &&
              m.Msg != PInvoke.WM_LBUTTONDOWN &&
              m.Msg != PInvoke.WM_MDIACTIVATE)) 

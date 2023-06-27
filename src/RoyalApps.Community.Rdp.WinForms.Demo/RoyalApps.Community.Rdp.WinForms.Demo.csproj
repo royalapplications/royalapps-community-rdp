@@ -8,4 +8,8 @@
         <RootNamespace>RoyalApps.Community.Rdp.Demo</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\RoyalApps.Community.Rdp.WinForms\RoyalApps.Community.Rdp.WinForms.csproj" />
+    </ItemGroup>
+
 </Project>

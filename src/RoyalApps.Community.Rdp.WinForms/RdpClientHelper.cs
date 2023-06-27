@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using MSTSCLib;
+using RoyalApps.Community.Rdp.WinForms.Configuration;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
+using ColorDepth = RoyalApps.Community.Rdp.WinForms.Configuration.ColorDepth;
 
 namespace RoyalApps.Community.Rdp.WinForms;
 
@@ -18,6 +21,139 @@ internal static class RdpClientHelper
     public static readonly string RestrictedLogon = "RestrictedLogon";
     public static readonly string RedirectedAuthentication = "RedirectedAuthentication";
 
+    public static void SetupClient(IRdpClient client, RdpClientConfiguration configuration)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(configuration.Server, nameof(configuration.Server));
+        
+        var control = (Control) client;
+        control.Dock = DockStyle.Fill;
+        configuration.ParentControl!.Controls.Add(control);
+        
+        client.Server = configuration.Server;
+        client.Port = configuration.Port;
+        
+        client.UserName = configuration.Credentials.Username;
+        client.Domain = configuration.Credentials.Domain;
+        client.Password = configuration.Credentials.Password;
+        client.NetworkLevelAuthentication = configuration.Credentials.NetworkLevelAuthentication;
+        client.PasswordContainsSmartCardPin = configuration.Credentials.PasswordContainsSmartCardPin;
+
+        if (configuration.Display is {DesktopWidth: > 0, DesktopHeight: > 0})
+        {
+            client.DesktopWidth = configuration.Display.DesktopWidth;
+            client.DesktopHeight = configuration.Display.DesktopHeight;
+        }
+        client.ColorDepth = configuration.Display.ColorDepth switch
+        {
+            ColorDepth.ColorDepth8Bpp => 8,
+            ColorDepth.ColorDepth15Bpp => 15,
+            ColorDepth.ColorDepth16Bpp => 16,
+            ColorDepth.ColorDepth24Bpp => 24,
+            ColorDepth.ColorDepth32Bpp => 32,
+            _ => 32
+        };
+        client.SmartSizing = configuration.Display.ResizeBehavior == ResizeBehavior.SmartSizing;
+        if (!string.IsNullOrWhiteSpace(configuration.Display.FullScreenTitle))
+            client.FullScreenTitle = configuration.Display.FullScreenTitle;
+        client.ContainerHandledFullScreen = configuration.Display.ContainerHandledFullScreen ? 1 : 0;
+        client.DisplayConnectionBar = configuration.Display.DisplayConnectionBar;
+        client.PinConnectionBar = configuration.Display.PinConnectionBar;
+        client.UseMultimon = configuration.Display.UseMultimon;
+
+        client.AuthenticationLevel = configuration.Security.AuthenticationLevel;
+        client.Compression = configuration.Connection.Compression;
+        client.BitmapCaching = configuration.Performance.BitmapCaching;
+        client.PublicMode = configuration.Security.PublicMode;
+        client.AllowBackgroundInput = configuration.Input.AllowBackgroundInput;
+        client.EnableAutoReconnect = configuration.Connection.EnableAutoReconnect;
+        client.MaxReconnectAttempts = configuration.Connection.MaxReconnectAttempts;
+        client.ConnectToAdministerServer = configuration.Security.ConnectToAdministerServer;
+        client.UseRedirectionServerName = configuration.Connection.UseRedirectionServerName;
+        if (!string.IsNullOrWhiteSpace(configuration.Connection.LoadBalanceInfo))
+            client.LoadBalanceInfo = configuration.Connection.LoadBalanceInfo;
+        if (!string.IsNullOrWhiteSpace(configuration.PluginDlls))
+            client.PluginDlls = configuration.PluginDlls;
+        client.GrabFocusOnConnect = configuration.Input.GrabFocusOnConnect;
+        client.RelativeMouseMode = configuration.Input.RelativeMouseMode;
+        client.RemoteCredentialGuard = configuration.Security.RemoteCredentialGuard;
+        client.RestrictedAdminMode = configuration.Security.RestrictedAdminMode;
+        client.NetworkConnectionType = configuration.Performance.NetworkConnectionType switch
+        {
+            NetworkConnectionType.Modem => 1,
+            NetworkConnectionType.BroadbandLow => 2,
+            NetworkConnectionType.Satellite => 3,
+            NetworkConnectionType.BroadbandHigh => 4,
+            NetworkConnectionType.WAN => 5,
+            NetworkConnectionType.LAN => 6,
+            _ => 4
+        };
+        client.PerformanceFlags = configuration.Performance.GetPerformanceFlags();
+        //client.RedirectDirectX = configuration.Performance.RedirectDirectX;
+        //client.BandwidthDetection = configuration.Performance.BandwidthDetection;
+        client.EnableHardwareMode = configuration.Performance.EnableHardwareMode;
+        client.ClientProtocolSpec = configuration.Performance.ClientProtocolSpec switch
+        {
+            ClientProtocolSpec.FullMode => ClientSpec.FullMode,
+            ClientProtocolSpec.SmallCacheMode => ClientSpec.SmallCacheMode,
+            ClientProtocolSpec.ThinClientMode => ClientSpec.ThinClientMode,
+            _ => ClientSpec.FullMode
+        };
+
+        client.AudioRedirectionMode = configuration.Redirection.AudioRedirectionMode;
+        client.AudioCaptureRedirectionMode = configuration.Redirection.AudioCaptureRedirectionMode;
+        client.RedirectPrinters = configuration.Redirection.RedirectPrinters;
+        client.RedirectClipboard = configuration.Redirection.RedirectClipboard;
+        client.RedirectSmartCards = configuration.Redirection.RedirectSmartCards;
+        client.RedirectPorts = configuration.Redirection.RedirectPorts;
+        client.RedirectDevices = configuration.Redirection.RedirectDevices;
+        client.RedirectPOSDevices = configuration.Redirection.RedirectPointOfServiceDevices;
+        client.RedirectDrives = configuration.Redirection.RedirectDrives;
+        if (!string.IsNullOrWhiteSpace(configuration.Redirection.RedirectDriveLetters))
+            client.RedirectDriveLetters = configuration.Redirection.RedirectDriveLetters;
+
+        client.AcceleratorPassthrough = configuration.Input.AcceleratorPassthrough;
+        client.EnableWindowsKey = configuration.Input.EnableWindowsKey;
+        client.KeyboardHookMode = configuration.Input.KeyboardHookMode ? 1 : 0;
+        if (!string.IsNullOrWhiteSpace(configuration.Input.KeyBoardLayoutStr))
+            client.KeyBoardLayoutStr = configuration.Input.KeyBoardLayoutStr;
+
+        if (!string.IsNullOrWhiteSpace(configuration.Program.StartProgram))
+            client.StartProgram = configuration.Program.StartProgram;
+        if (!string.IsNullOrWhiteSpace(configuration.Program.WorkDir))
+            client.WorkDir = configuration.Program.WorkDir;
+        client.MaximizeShell = configuration.Program.MaximizeShell;
+
+        if (configuration.Gateway.GatewayUsageMethod != GatewayUsageMethod.Never)
+        {
+            client.GatewayUsageMethod = configuration.Gateway.GatewayUsageMethod;
+            client.GatewayProfileUsageMethod = configuration.Gateway.GatewayProfileUsageMethod;
+            client.GatewayCredsSource = configuration.Gateway.GatewayCredsSource;
+            client.GatewayUserSelectedCredsSource = configuration.Gateway.GatewayUserSelectedCredsSource;
+            client.GatewayCredSharing = configuration.Gateway.GatewayCredSharing;
+            if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayHostname))
+                client.GatewayHostname = configuration.Gateway.GatewayHostname;
+            if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayUsername))
+                client.GatewayUsername = configuration.Gateway.GatewayUsername;
+            if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayDomain))
+                client.GatewayDomain = configuration.Gateway.GatewayDomain;
+            if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayPassword))
+                client.GatewayPassword = configuration.Gateway.GatewayPassword;
+        }
+
+        if (!string.IsNullOrWhiteSpace(configuration.HyperV.Instance))
+        {
+            client.Port = configuration.HyperV.HyperVPort;
+            client.AuthenticationLevel = AuthenticationLevel.NoAuthenticationOfServer;
+            client.AuthenticationServiceClass = "Microsoft Virtual Console Service";
+            client.NetworkLevelAuthentication = true;
+            client.NegotiateSecurityLayer = false;
+            client.DisableCredentialsDelegation = true;
+            client.PCB = configuration.HyperV.Instance;
+            if (configuration.HyperV.EnhancedSessionMode)
+                client.PCB = $"{client.PCB};EnhancedMode=1";
+        }
+    }
+    
     /// <summary>
     /// Provides access to the non-scriptable properties (version 4) of a client's remote session on the Remote Desktop ActiveX control.
     /// </summary>

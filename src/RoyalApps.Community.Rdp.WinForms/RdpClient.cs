@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using AxMSTSCLib;
 using Microsoft.Extensions.Logging;
 using MSTSCLib;
+using RoyalApps.Community.Rdp.WinForms.Configuration;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
 using RoyalApps.Community.Rdp.WinForms.Logging;
 
@@ -16,6 +17,31 @@ namespace RoyalApps.Community.Rdp.WinForms;
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 {
+    #region --- Constructor / Configuration ---
+
+    /// <inheritdoc cref="Configuration"/>
+    public RdpClientConfiguration Configuration { get; }
+
+    /// <summary>
+    /// Creates an instance with the default configuration.
+    /// </summary>
+    public RdpClient2()
+    {
+        Configuration = new();
+    }
+
+    /// <summary>
+    /// Creates an instance with provided configuration.
+    /// </summary>
+    /// <param name="rdpClientConfiguration">Configuration</param>
+    public RdpClient2(RdpClientConfiguration rdpClientConfiguration)
+    {
+        Configuration = rdpClientConfiguration;
+        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
+    }
+    
+    #endregion
+    
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -372,16 +398,8 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get
-        {
-            AdvancedSettings2.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
-            return AdvancedSettings2.PerformanceFlags;
-        }
-        set
-        {
-            PerformanceSettings.SetPerformanceFlags(value);
-            AdvancedSettings2.PerformanceFlags = value;
-        }
+        get => AdvancedSettings2.PerformanceFlags;
+        set => AdvancedSettings2.PerformanceFlags = value;
     }
 
     /// <summary>
@@ -430,9 +448,6 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         get => ClientSpec.FullMode;
         set => LogFeatureNotSupported(nameof(ClientProtocolSpec));
     }
-
-    /// <inheritdoc cref="PerformanceSettings"/>
-    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -612,18 +627,18 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayCredsSource"/>
-    public GatewayCredsSource GatewayCredsSource
+    public GatewayCredentialSource GatewayCredsSource
     {
-        get => GatewayCredsSource.Any;
+        get => GatewayCredentialSource.Any;
         set => LogFeatureNotSupported(nameof(GatewayCredsSource));
     }
     /// <summary>
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
-    public GatewayCredsSource GatewayUserSelectedCredsSource
+    public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
-        get => GatewayCredsSource.Any;
+        get => GatewayCredentialSource.Any;
         set => LogFeatureNotSupported(nameof(GatewayUserSelectedCredsSource));
     }
     /// <summary>
@@ -807,6 +822,31 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
 {
+    #region --- Constructor / Configuration ---
+
+    /// <inheritdoc cref="Configuration"/>
+    public RdpClientConfiguration Configuration { get; }
+
+    /// <summary>
+    /// Creates an instance with the default configuration.
+    /// </summary>
+    public RdpClient7()
+    {
+        Configuration = new();
+    }
+
+    /// <summary>
+    /// Creates an instance with provided configuration.
+    /// </summary>
+    /// <param name="rdpClientConfiguration">Configuration</param>
+    public RdpClient7(RdpClientConfiguration rdpClientConfiguration)
+    {
+        Configuration = rdpClientConfiguration;
+        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
+    }
+    
+    #endregion
+
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -1134,16 +1174,8 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get
-        {
-            AdvancedSettings7.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
-            return AdvancedSettings7.PerformanceFlags;
-        }
-        set
-        {
-            PerformanceSettings.SetPerformanceFlags(value);
-            AdvancedSettings7.PerformanceFlags = value;
-        }
+        get => AdvancedSettings7.PerformanceFlags;
+        set => AdvancedSettings7.PerformanceFlags = value;
     }
     /// <inheritdoc cref="RedirectDirectX"/>
     public bool RedirectDirectX
@@ -1182,9 +1214,6 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         get => ClientSpec.FullMode;
         set => LogFeatureNotSupported(nameof(ClientProtocolSpec));
     }
-
-    /// <inheritdoc cref="PerformanceSettings"/>
-    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -1340,15 +1369,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         set => TransportSettings2.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
-    public GatewayCredsSource GatewayCredsSource
+    public GatewayCredentialSource GatewayCredsSource
     {
-        get => (GatewayCredsSource)TransportSettings2.GatewayCredsSource;
+        get => (GatewayCredentialSource)TransportSettings2.GatewayCredsSource;
         set => TransportSettings2.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
-    public GatewayCredsSource GatewayUserSelectedCredsSource
+    public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
-        get => (GatewayCredsSource)TransportSettings2.GatewayUserSelectedCredsSource;
+        get => (GatewayCredentialSource)TransportSettings2.GatewayUserSelectedCredsSource;
         set => TransportSettings2.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
@@ -1519,12 +1548,36 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     #endregion
-
 }
 
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 {
+    #region --- Constructor / Configuration ---
+
+    /// <inheritdoc cref="Configuration"/>
+    public RdpClientConfiguration Configuration { get; }
+
+    /// <summary>
+    /// Creates an instance with the default configuration.
+    /// </summary>
+    public RdpClient8()
+    {
+        Configuration = new();
+    }
+
+    /// <summary>
+    /// Creates an instance with provided configuration.
+    /// </summary>
+    /// <param name="rdpClientConfiguration">Configuration</param>
+    public RdpClient8(RdpClientConfiguration rdpClientConfiguration)
+    {
+        Configuration = rdpClientConfiguration;
+        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
+    }
+    
+    #endregion
+
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -1820,16 +1873,8 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get
-        {
-            AdvancedSettings8.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
-            return AdvancedSettings8.PerformanceFlags;
-        }
-        set
-        {
-            PerformanceSettings.SetPerformanceFlags(value);
-            AdvancedSettings8.PerformanceFlags = value;
-        }
+        get => AdvancedSettings8.PerformanceFlags;
+        set => AdvancedSettings8.PerformanceFlags = value;
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
@@ -1875,9 +1920,6 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         get => ClientSpec.FullMode;
         set => LogFeatureNotSupported(nameof(ClientProtocolSpec));
     }
-
-    /// <inheritdoc cref="PerformanceSettings"/>
-    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -2033,15 +2075,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         set => TransportSettings3.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
-    public GatewayCredsSource GatewayCredsSource
+    public GatewayCredentialSource GatewayCredsSource
     {
-        get => (GatewayCredsSource)TransportSettings3.GatewayCredsSource;
+        get => (GatewayCredentialSource)TransportSettings3.GatewayCredsSource;
         set => TransportSettings3.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
-    public GatewayCredsSource GatewayUserSelectedCredsSource
+    public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
-        get => (GatewayCredsSource)TransportSettings3.GatewayUserSelectedCredsSource;
+        get => (GatewayCredentialSource)TransportSettings3.GatewayUserSelectedCredsSource;
         set => TransportSettings3.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
@@ -2251,6 +2293,31 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 {
+    #region --- Constructor / Configuration ---
+
+    /// <inheritdoc cref="Configuration"/>
+    public RdpClientConfiguration Configuration { get; }
+
+    /// <summary>
+    /// Creates an instance with the default configuration.
+    /// </summary>
+    public RdpClient9()
+    {
+        Configuration = new();
+    }
+
+    /// <summary>
+    /// Creates an instance with provided configuration.
+    /// </summary>
+    /// <param name="rdpClientConfiguration">Configuration</param>
+    public RdpClient9(RdpClientConfiguration rdpClientConfiguration)
+    {
+        Configuration = rdpClientConfiguration;
+        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
+    }
+    
+    #endregion
+
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -2580,16 +2647,8 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get
-        {
-            AdvancedSettings9.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
-            return AdvancedSettings9.PerformanceFlags;
-        }
-        set
-        {
-            PerformanceSettings.SetPerformanceFlags(value);
-            AdvancedSettings9.PerformanceFlags = value;
-        }
+        get => AdvancedSettings9.PerformanceFlags;
+        set => AdvancedSettings9.PerformanceFlags = value;
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
@@ -2629,9 +2688,6 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         get => AdvancedSettings9.ClientProtocolSpec;
         set => AdvancedSettings9.ClientProtocolSpec = value;
     }
-
-    /// <inheritdoc cref="PerformanceSettings"/>
-    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -2787,15 +2843,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         set => TransportSettings3.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
-    public GatewayCredsSource GatewayCredsSource
+    public GatewayCredentialSource GatewayCredsSource
     {
-        get => (GatewayCredsSource)TransportSettings3.GatewayCredsSource;
+        get => (GatewayCredentialSource)TransportSettings3.GatewayCredsSource;
         set => TransportSettings3.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
-    public GatewayCredsSource GatewayUserSelectedCredsSource
+    public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
-        get => (GatewayCredsSource)TransportSettings3.GatewayUserSelectedCredsSource;
+        get => (GatewayCredentialSource)TransportSettings3.GatewayUserSelectedCredsSource;
         set => TransportSettings3.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
@@ -2949,6 +3005,31 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
 {
+    #region --- Constructor / Configuration ---
+
+    /// <inheritdoc cref="Configuration"/>
+    public RdpClientConfiguration Configuration { get; }
+
+    /// <summary>
+    /// Creates an instance with the default configuration.
+    /// </summary>
+    public RdpClient10()
+    {
+        Configuration = new();
+    }
+
+    /// <summary>
+    /// Creates an instance with provided configuration.
+    /// </summary>
+    /// <param name="rdpClientConfiguration">Configuration</param>
+    public RdpClient10(RdpClientConfiguration rdpClientConfiguration)
+    {
+        Configuration = rdpClientConfiguration;
+        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
+    }
+    
+    #endregion
+
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -3279,16 +3360,8 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="PerformanceFlags"/>
     public int PerformanceFlags
     {
-        get
-        {
-            AdvancedSettings9.PerformanceFlags = PerformanceSettings.GetPerformanceFlags();
-            return AdvancedSettings9.PerformanceFlags;
-        }
-        set
-        {
-            PerformanceSettings.SetPerformanceFlags(value);
-            AdvancedSettings9.PerformanceFlags = value;
-        }
+        get => AdvancedSettings9.PerformanceFlags;
+        set => AdvancedSettings9.PerformanceFlags = value;
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
@@ -3328,9 +3401,6 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         get => AdvancedSettings9.ClientProtocolSpec;
         set => AdvancedSettings9.ClientProtocolSpec = value;
     }
-
-    /// <inheritdoc cref="PerformanceSettings"/>
-    public RdpPerformanceFlags PerformanceSettings { get; set; }
 
     #endregion
 
@@ -3487,15 +3557,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         set => TransportSettings4.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
-    public GatewayCredsSource GatewayCredsSource
+    public GatewayCredentialSource GatewayCredsSource
     {
-        get => (GatewayCredsSource)TransportSettings4.GatewayCredsSource;
+        get => (GatewayCredentialSource)TransportSettings4.GatewayCredsSource;
         set => TransportSettings4.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
-    public GatewayCredsSource GatewayUserSelectedCredsSource
+    public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
-        get => (GatewayCredsSource)TransportSettings4.GatewayUserSelectedCredsSource;
+        get => (GatewayCredentialSource)TransportSettings4.GatewayUserSelectedCredsSource;
         set => TransportSettings4.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
@@ -3627,6 +3697,8 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
 
     #endregion
 
+    #region --- Message Processing ---
+
     /// <inheritdoc cref="WndProc"/>
     protected override void WndProc(ref Message m)
     {
@@ -3634,4 +3706,6 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
             return;
         base.WndProc(ref m);
     }
+    
+    #endregion
 }

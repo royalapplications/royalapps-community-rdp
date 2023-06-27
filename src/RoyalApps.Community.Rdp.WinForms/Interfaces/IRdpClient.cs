@@ -2,34 +2,13 @@
 using AxMSTSCLib;
 using Microsoft.Extensions.Logging;
 using MSTSCLib;
+using RoyalApps.Community.Rdp.WinForms.Configuration;
 using IMsTscAxEvents_OnConfirmCloseEventHandler = AxMSTSCLib.IMsTscAxEvents_OnConfirmCloseEventHandler;
 using IMsTscAxEvents_OnDisconnectedEventHandler = AxMSTSCLib.IMsTscAxEvents_OnDisconnectedEventHandler;
 
 namespace RoyalApps.Community.Rdp.WinForms.Interfaces;
 
 #region --- Enums ---
-
-/// <inheritdoc cref="AudioRedirectionMode"/>
-public enum AudioRedirectionMode
-{
-    /// <inheritdoc cref="RedirectToClient"/>
-    RedirectToClient = 0,
-    /// <inheritdoc cref="PlayRemote"/>
-    PlayRemote = 1,
-    /// <inheritdoc cref="DisableSound"/>
-    DisableSound = 2
-}
-
-/// <inheritdoc cref="AuthenticationLevel"/>
-public enum AuthenticationLevel
-{
-    /// <inheritdoc cref="NoAuthenticationOfServer"/>
-    NoAuthenticationOfServer = 0,
-    /// <inheritdoc cref="ServerAuthenticationRequired"/>
-    ServerAuthenticationRequired = 1,
-    /// <inheritdoc cref="PromptIfAuthenticationFails"/>
-    PromptIfAuthenticationFails = 2
-}
 
 /// <inheritdoc cref="ConnectionState"/>
 public enum ConnectionState
@@ -42,37 +21,6 @@ public enum ConnectionState
     Connecting = 2
 }
 
-/// <inheritdoc cref="GatewayUsageMethod"/>
-public enum GatewayUsageMethod
-{
-    /// <inheritdoc cref="Never"/>
-    Never = 0,
-    /// <inheritdoc cref="Always"/>
-    Always = 1,
-    /// <inheritdoc cref="OnDemand"/>
-    OnDemand = 2
-}
-
-/// <inheritdoc cref="GatewayProfileUsageMethod"/>
-public enum GatewayProfileUsageMethod
-{
-    /// <inheritdoc cref="Default"/>
-    Default = 0,
-    /// <inheritdoc cref="Explicit"/>
-    Explicit = 1
-}
-
-/// <inheritdoc cref="GatewayCredsSource"/>
-public enum GatewayCredsSource
-{
-    /// <inheritdoc cref="UsernameAndPassword"/>
-    UsernameAndPassword = 0,
-    /// <inheritdoc cref="SmartCard"/>
-    SmartCard = 1,
-    /// <inheritdoc cref="Any"/>
-    Any = 4
-}
-
 #endregion
 
 /// <summary>
@@ -81,6 +29,15 @@ public enum GatewayCredsSource
 /// <inheritdoc cref="AxMsRdpClient9NotSafeForScripting"/>
 public interface IRdpClient : IDisposable
 {
+    
+    #region --- Configuration ---
+    
+    /// <summary>
+    /// The client configuration.
+    /// </summary>
+    RdpClientConfiguration Configuration { get; }
+    
+    #endregion
 
     #region --- Events ---
 
@@ -499,11 +456,6 @@ public interface IRdpClient : IDisposable
     /// </summary>
     ClientSpec ClientProtocolSpec { get; set; }
 
-    /// <summary>
-    /// Allows you to configure the performance settings of the RDP session.
-    /// </summary>
-    RdpPerformanceFlags PerformanceSettings { get; set; }
-    
     #endregion
 
     #region ::: Redirection :::
@@ -680,7 +632,7 @@ public interface IRdpClient : IDisposable
     /// <see>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclienttransportsettings-gatewaycredssource</cref>
     /// </see>
-    GatewayCredsSource GatewayCredsSource { get; set; }
+    GatewayCredentialSource GatewayCredsSource { get; set; }
 
     /// <summary>
     /// Sets or retrieves the user-specified Remote Desktop Gateway (RD Gateway) credential source.
@@ -688,7 +640,7 @@ public interface IRdpClient : IDisposable
     /// <see>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclienttransportsettings-gatewayuserselectedcredssource</cref>
     /// </see>
-    GatewayCredsSource GatewayUserSelectedCredsSource { get; set; }
+    GatewayCredentialSource GatewayUserSelectedCredsSource { get; set; }
 
     /// <summary>
     /// Specifies or retrieves the setting for whether the Remote Desktop Gateway (RD Gateway) credential sharing feature is enabled. When the feature is enabled, the Remote Desktop ActiveX control tries to use the same credentials to authenticate to the Remote Desktop Session Host (RD Session Host) server and to the RD Gateway server.
@@ -769,8 +721,6 @@ public interface IRdpClient : IDisposable
     ILogger Logger { get; set; }
     /// <inheritdoc cref="ContainsFocus"/>
     bool ContainsFocus { get; }
-    /// <inheritdoc cref="DisableClickDetection"/>
-    bool DisableClickDetection { get; set; }
     /// <inheritdoc cref="Handle"/>
     IntPtr Handle { get; }
     /// <inheritdoc cref="IsDisposed"/>

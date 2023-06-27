@@ -34,4 +34,10 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="Resources\Images\RoyalApps_1024.png" Pack="true" PackagePath="\" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+        <EmbeddedResource Include="Resources\Files\*.*" />
+    </ItemGroup>
+    
 </Project>

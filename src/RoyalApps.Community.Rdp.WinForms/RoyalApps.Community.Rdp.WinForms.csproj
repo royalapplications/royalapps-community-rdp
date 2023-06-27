@@ -1,10 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <Product>RoyalApps.Community.Rdp.WinForms</Product>
+        <Description>An embeddable WinForms control which uses MsRdpEx.</Description>
+        <Company>Royal Apps GmbH</Company>
+        <Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)), Royal Apps GmbH, Austria</Copyright>
+        <PackageProjectUrl>https://github.com/royalapplications/royalapps-community-rdp</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/royalapplications/royalapps-community-rdp</RepositoryUrl>
+        <PackageIconUrl>https://github.com/royalapplications/royalapps-community-rdp/blob/main/docs/assets/RoyalApps_1024.png</PackageIconUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>RoyalApps_1024.png</PackageIcon>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Version>0.9.0</Version>
+    </PropertyGroup>
+    
+    <PropertyGroup>
         <TargetFramework>net7.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
         <Nullable>enable</Nullable>
-        <WarningsAsErrors>true</WarningsAsErrors>
+        <LangVersion>latest</LangVersion>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>CS8981;NU1701</NoWarn>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 

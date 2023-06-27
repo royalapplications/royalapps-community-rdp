@@ -84,6 +84,11 @@ public class RdpControl : UserControl
     }
 
     /// <summary>
+    /// If true, Microsoft's Remote Desktop Client will be used instead of the legacy terminal services client (mstsc ActiveX).
+    /// </summary>
+    public bool UseMsRdc { get; set; }
+    
+    /// <summary>
     /// Returns true if a connection has been established successfully.
     /// </summary>
     public bool WasSuccessfullyConnected { get; private set; }
@@ -128,37 +133,16 @@ public class RdpControl : UserControl
         TabIndex = 0;
     }
 
-    /// <summary>
-    /// The RdpClient instance is created here.
-    /// </summary>
-    /// <inheritdoc cref="OnLoad"/>
-    protected override void OnLoad(EventArgs e)
-    {
-        base.OnLoad(e);
-        
-        RdpClient = RdpClientFactory.Create(RdpClientVersion);
-        RegisterEvents();
-
-        var control = (Control) RdpClient;
-        control.Dock = DockStyle.Fill;
-        Controls.Add(control);
-    }
-
-    /// <summary>
-    /// In some situations, the immediate Dispose call can take a long time resulting in blocking the UI.
-    /// Use the UnregisterEvents method to unsubscribe internal event wire-up and delay disposal.
-    /// </summary>
     /// <inheritdoc cref="Dispose"/>
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
             UnregisterEvents();
-            
+            RdpClient.Dispose();
+
             _timerResizeInProgress.Dispose();
             _timerSmartReconnect.Dispose();
-
-            RdpClient.Dispose();
         }
 
         base.Dispose(disposing);
@@ -241,7 +225,20 @@ public class RdpControl : UserControl
     /// </summary>
     public void Connect()
     {
-        _canScale = false;
+        if (!RdpClient.IsDisposed)
+        {
+            if (RdpClient.ConnectionState != ConnectionState.Disconnected) 
+                RdpClient.Disconnect();
+            UnregisterEvents();
+            RdpClient.Dispose();
+        }
+        
+        RdpClient = RdpClientFactory.Create(RdpClientVersion);
+        if (UseMsRdc)
+        {
+            RdpClient.AxName = "msrdc";
+            RdpClient.RdpExDll = MsRdpExManager.Instance.CoreApi.MsRdpExDllPath;
+        }
 
         // workaround to ensure msrdcax.dll can be used even when hooking not enabled:
         // https://github.com/Devolutions/MsRdpEx/blob/01995487f22fd697262525ece2e0a6f02908715b/dotnet/MsRdpEx_App/MainDlg.cs#L307
@@ -254,6 +251,14 @@ public class RdpControl : UserControl
         {
             // ignored
         }
+
+        RegisterEvents();
+
+        var control = (Control) RdpClient;
+        control.Dock = DockStyle.Fill;
+        Controls.Add(control);
+
+        _canScale = false;
 
         // set default values with no configuration
         RdpClient.ContainerHandledFullScreen = 1;

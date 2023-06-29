@@ -29,16 +29,6 @@ public enum ConnectionState
 /// <inheritdoc cref="AxMsRdpClient9NotSafeForScripting"/>
 public interface IRdpClient : IDisposable
 {
-    
-    #region --- Configuration ---
-    
-    /// <summary>
-    /// The client configuration.
-    /// </summary>
-    RdpClientConfiguration Configuration { get; }
-    
-    #endregion
-
     #region --- Events ---
 
     /// <inheritdoc cref="OnConnected"/>
@@ -721,6 +711,10 @@ public interface IRdpClient : IDisposable
     ILogger Logger { get; set; }
     /// <inheritdoc cref="ContainsFocus"/>
     bool ContainsFocus { get; }
+    /// <summary>
+    /// If true, a click in the remote session does not focus the control and does not trigger the OnClientAreaClicked event.
+    /// </summary>
+    bool DisableClickDetection { get; set; }
     /// <inheritdoc cref="Handle"/>
     IntPtr Handle { get; }
     /// <inheritdoc cref="IsDisposed"/>

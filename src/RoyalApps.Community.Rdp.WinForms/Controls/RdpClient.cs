@@ -12,7 +12,7 @@ using RoyalApps.Community.Rdp.WinForms.Logging;
 // ReSharper disable HeapView.BoxingAllocation
 // ReSharper disable InconsistentNaming
 
-namespace RoyalApps.Community.Rdp.WinForms;
+namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
@@ -30,16 +30,6 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         Configuration = new();
     }
 
-    /// <summary>
-    /// Creates an instance with provided configuration.
-    /// </summary>
-    /// <param name="rdpClientConfiguration">Configuration</param>
-    public RdpClient2(RdpClientConfiguration rdpClientConfiguration)
-    {
-        Configuration = rdpClientConfiguration;
-        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
-    }
-    
     #endregion
     
     #region --- Events ---
@@ -99,15 +89,15 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.PasswordContainsSmartcardPin, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.PasswordContainsSmartcardPin);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.PasswordContainsSmartcardPin, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.PasswordContainsSmartcardPin);
             return value;
         }
         set
         {
             object passwordContainsSCardPin = value;
-            if (!this.TrySetProperty(RdpClientHelper.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.PasswordContainsSmartcardPin, passwordContainsSCardPin);
+            if (!this.TrySetProperty(RdpClientExtensions.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.PasswordContainsSmartcardPin, passwordContainsSCardPin);
         }
     }
 
@@ -177,15 +167,15 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DeviceScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DeviceScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DeviceScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DeviceScaleFactor);
             return value;
         } 
         set
         {
             object deviceScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DeviceScaleFactor, deviceScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DeviceScaleFactor, deviceScaleFactor);
         }
     }
 
@@ -194,15 +184,15 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DesktopScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DesktopScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DesktopScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DesktopScaleFactor);
             return value;
         }
         set
         {
             object desktopScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DesktopScaleFactor, desktopScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DesktopScaleFactor, desktopScaleFactor);
         }
     }
 
@@ -302,7 +292,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     public string LoadBalanceInfo
     {
         get => AdvancedSettings2.LoadBalanceInfo;
-        set => RdpClientHelper.SetLoadBalanceInfo(value, AdvancedSettings2);
+        set => RdpClientExtensions.SetLoadBalanceInfo(value, AdvancedSettings2);
     }
 
     /// <inheritdoc cref="PluginDlls"/>
@@ -427,15 +417,15 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.EnableHardwareMode, out var value, out var ex))
-                Logger.LogWarning(ex,"Failed to get RDP client property: {PropertyName}", RdpClientHelper.EnableHardwareMode);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableHardwareMode, out var value, out var ex))
+                Logger.LogWarning(ex,"Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableHardwareMode);
             return value;
         }
         set
         {
             object enableHardwareMode = value;
-            if (!this.TrySetProperty(RdpClientHelper.EnableHardwareMode, ref enableHardwareMode, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.EnableHardwareMode, enableHardwareMode);
+            if (!this.TrySetProperty(RdpClientExtensions.EnableHardwareMode, ref enableHardwareMode, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableHardwareMode, enableHardwareMode);
         }
     }
 
@@ -835,16 +825,6 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         Configuration = new();
     }
 
-    /// <summary>
-    /// Creates an instance with provided configuration.
-    /// </summary>
-    /// <param name="rdpClientConfiguration">Configuration</param>
-    public RdpClient7(RdpClientConfiguration rdpClientConfiguration)
-    {
-        Configuration = rdpClientConfiguration;
-        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
-    }
-    
     #endregion
 
     #region --- Events ---
@@ -885,15 +865,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.PasswordContainsSmartcardPin, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.PasswordContainsSmartcardPin);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.PasswordContainsSmartcardPin, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.PasswordContainsSmartcardPin);
             return value;
         }
         set
         {
             object passwordContainsSCardPin = value;
-            if (!this.TrySetProperty(RdpClientHelper.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.PasswordContainsSmartcardPin, passwordContainsSCardPin);
+            if (!this.TrySetProperty(RdpClientExtensions.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.PasswordContainsSmartcardPin, passwordContainsSCardPin);
         }
     }
 
@@ -957,15 +937,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DeviceScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DeviceScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DeviceScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DeviceScaleFactor);
             return value;
         }
         set
         {
             object deviceScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DeviceScaleFactor, deviceScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DeviceScaleFactor, deviceScaleFactor);
         }
     }
 
@@ -974,15 +954,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DesktopScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DesktopScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DesktopScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DesktopScaleFactor);
             return value;
         }
         set
         {
             object desktopScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DesktopScaleFactor, desktopScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DesktopScaleFactor, desktopScaleFactor);
         }
     }
 
@@ -1070,7 +1050,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     public string LoadBalanceInfo
     {
         get => AdvancedSettings7.LoadBalanceInfo;
-        set => RdpClientHelper.SetLoadBalanceInfo(value, AdvancedSettings7);
+        set => RdpClientExtensions.SetLoadBalanceInfo(value, AdvancedSettings7);
     }
 
     /// <inheritdoc cref="PluginDlls"/>
@@ -1091,15 +1071,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.DisableCredentialsDelegation, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DisableCredentialsDelegation);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableCredentialsDelegation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableCredentialsDelegation);
             return value;
         }
         set
         {
             object disableCredentialsDelegation = value;
-            if (!this.TrySetProperty(RdpClientHelper.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DisableCredentialsDelegation, disableCredentialsDelegation);
+            if (!this.TrySetProperty(RdpClientExtensions.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableCredentialsDelegation, disableCredentialsDelegation);
         }
     }
 
@@ -1108,15 +1088,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.RedirectedAuthentication, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.RedirectedAuthentication);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RedirectedAuthentication, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RedirectedAuthentication);
             return value;
         }
         set
         {
             object redirectedAuthentication = value;
-            if (!this.TrySetProperty(RdpClientHelper.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.RedirectedAuthentication, redirectedAuthentication);
+            if (!this.TrySetProperty(RdpClientExtensions.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RedirectedAuthentication, redirectedAuthentication);
         }
     }
 
@@ -1125,15 +1105,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.RestrictedLogon, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.RestrictedLogon);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RestrictedLogon, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RestrictedLogon);
             return value;
         }
         set
         {
             object restrictedLogon = value;
-            if (!this.TrySetProperty(RdpClientHelper.RestrictedLogon, ref restrictedLogon, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.RestrictedLogon, restrictedLogon);
+            if (!this.TrySetProperty(RdpClientExtensions.RestrictedLogon, ref restrictedLogon, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RestrictedLogon, restrictedLogon);
         }
     }
 
@@ -1196,15 +1176,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.EnableHardwareMode, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.EnableHardwareMode);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableHardwareMode, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableHardwareMode);
             return value;
         }
         set
         {
             object enableHardwareMode = value;
-            if (!this.TrySetProperty(RdpClientHelper.EnableHardwareMode, ref enableHardwareMode, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.EnableHardwareMode, enableHardwareMode);
+            if (!this.TrySetProperty(RdpClientExtensions.EnableHardwareMode, ref enableHardwareMode, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableHardwareMode, enableHardwareMode);
         }
     }
 
@@ -1566,16 +1546,6 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         Configuration = new();
     }
 
-    /// <summary>
-    /// Creates an instance with provided configuration.
-    /// </summary>
-    /// <param name="rdpClientConfiguration">Configuration</param>
-    public RdpClient8(RdpClientConfiguration rdpClientConfiguration)
-    {
-        Configuration = rdpClientConfiguration;
-        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
-    }
-    
     #endregion
 
     #region --- Events ---
@@ -1616,15 +1586,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.PasswordContainsSmartcardPin, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.PasswordContainsSmartcardPin);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.PasswordContainsSmartcardPin, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.PasswordContainsSmartcardPin);
             return value;
         }
         set
         {
             object passwordContainsSCardPin = value;
-            if (!this.TrySetProperty(RdpClientHelper.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.PasswordContainsSmartcardPin, passwordContainsSCardPin);
+            if (!this.TrySetProperty(RdpClientExtensions.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.PasswordContainsSmartcardPin, passwordContainsSCardPin);
         }
     }
 
@@ -1769,7 +1739,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     public string LoadBalanceInfo
     {
         get => AdvancedSettings8.LoadBalanceInfo;
-        set => RdpClientHelper.SetLoadBalanceInfo(value, AdvancedSettings8);
+        set => RdpClientExtensions.SetLoadBalanceInfo(value, AdvancedSettings8);
     }
 
     /// <inheritdoc cref="GrabFocusOnConnect"/>
@@ -1790,15 +1760,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.DisableCredentialsDelegation, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DisableCredentialsDelegation);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableCredentialsDelegation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableCredentialsDelegation);
             return value;
         }
         set
         {
             object disableCredentialsDelegation = value;
-            if (!this.TrySetProperty(RdpClientHelper.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DisableCredentialsDelegation, disableCredentialsDelegation);
+            if (!this.TrySetProperty(RdpClientExtensions.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableCredentialsDelegation, disableCredentialsDelegation);
         }
     }
 
@@ -1807,15 +1777,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.RedirectedAuthentication, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.RedirectedAuthentication);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RedirectedAuthentication, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RedirectedAuthentication);
             return value;
         }
         set
         {
             object redirectedAuthentication = value;
-            if (!this.TrySetProperty(RdpClientHelper.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.RedirectedAuthentication, redirectedAuthentication);
+            if (!this.TrySetProperty(RdpClientExtensions.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RedirectedAuthentication, redirectedAuthentication);
         }
     }
 
@@ -1824,15 +1794,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.RestrictedLogon, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.RestrictedLogon);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RestrictedLogon, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RestrictedLogon);
             return value;
         }
         set
         {
             object restrictedLogon = value;
-            if (!this.TrySetProperty(RdpClientHelper.RestrictedLogon, ref restrictedLogon, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.RestrictedLogon, restrictedLogon);
+            if (!this.TrySetProperty(RdpClientExtensions.RestrictedLogon, ref restrictedLogon, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RestrictedLogon, restrictedLogon);
         }
     }
 
@@ -1899,15 +1869,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.EnableHardwareMode, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.EnableHardwareMode);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableHardwareMode, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableHardwareMode);
             return value;
         }
         set
         {
             object enableHardwareMode = value;
-            if (!this.TrySetProperty(RdpClientHelper.EnableHardwareMode, ref enableHardwareMode, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.EnableHardwareMode, enableHardwareMode);
+            if (!this.TrySetProperty(RdpClientExtensions.EnableHardwareMode, ref enableHardwareMode, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableHardwareMode, enableHardwareMode);
         }
     }
 
@@ -2246,15 +2216,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DeviceScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DeviceScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DeviceScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DeviceScaleFactor);
             return value;
         }
         set
         {
             object deviceScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DeviceScaleFactor, deviceScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DeviceScaleFactor, deviceScaleFactor);
         }
     }
 
@@ -2263,15 +2233,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DesktopScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DesktopScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DesktopScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DesktopScaleFactor);
             return value;
         }
         set
         {
             object desktopScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DesktopScaleFactor, desktopScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DesktopScaleFactor, desktopScaleFactor);
         }
     }
 
@@ -2306,16 +2276,6 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         Configuration = new();
     }
 
-    /// <summary>
-    /// Creates an instance with provided configuration.
-    /// </summary>
-    /// <param name="rdpClientConfiguration">Configuration</param>
-    public RdpClient9(RdpClientConfiguration rdpClientConfiguration)
-    {
-        Configuration = rdpClientConfiguration;
-        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
-    }
-    
     #endregion
 
     #region --- Events ---
@@ -2356,15 +2316,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.PasswordContainsSmartcardPin, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.PasswordContainsSmartcardPin);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.PasswordContainsSmartcardPin, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.PasswordContainsSmartcardPin);
             return value;
         }
         set
         {
             object passwordContainsSCardPin = value;
-            if (!this.TrySetProperty(RdpClientHelper.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.PasswordContainsSmartcardPin, passwordContainsSCardPin);
+            if (!this.TrySetProperty(RdpClientExtensions.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.PasswordContainsSmartcardPin, passwordContainsSCardPin);
         }
     }
 
@@ -2430,15 +2390,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DeviceScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DeviceScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DeviceScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DeviceScaleFactor);
             return value;
         }
         set
         {
             object deviceScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DeviceScaleFactor, deviceScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DeviceScaleFactor, deviceScaleFactor);
         }
     }
 
@@ -2447,15 +2407,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DesktopScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DesktopScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DesktopScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DesktopScaleFactor);
             return value;
         }
         set
         {
             object desktopScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DesktopScaleFactor, desktopScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DesktopScaleFactor, desktopScaleFactor);
         }
     }
 
@@ -2543,7 +2503,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     public string LoadBalanceInfo
     {
         get => AdvancedSettings9.LoadBalanceInfo;
-        set => RdpClientHelper.SetLoadBalanceInfo(value, AdvancedSettings9);
+        set => RdpClientExtensions.SetLoadBalanceInfo(value, AdvancedSettings9);
     }
 
     /// <inheritdoc cref="PluginDlls"/>
@@ -2564,15 +2524,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.DisableCredentialsDelegation, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DisableCredentialsDelegation);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableCredentialsDelegation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableCredentialsDelegation);
             return value;
         }
         set
         {
             object disableCredentialsDelegation = value;
-            if (!this.TrySetProperty(RdpClientHelper.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DisableCredentialsDelegation, disableCredentialsDelegation);
+            if (!this.TrySetProperty(RdpClientExtensions.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableCredentialsDelegation, disableCredentialsDelegation);
         }
     }
 
@@ -2581,15 +2541,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.RedirectedAuthentication, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.RedirectedAuthentication);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RedirectedAuthentication, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RedirectedAuthentication);
             return value;
         }
         set
         {
             object redirectedAuthentication = value;
-            if (!this.TrySetProperty(RdpClientHelper.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.RedirectedAuthentication, redirectedAuthentication);
+            if (!this.TrySetProperty(RdpClientExtensions.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RedirectedAuthentication, redirectedAuthentication);
         }
     }
 
@@ -2598,15 +2558,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.RestrictedLogon, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.RestrictedLogon);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RestrictedLogon, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RestrictedLogon);
             return value;
         }
         set
         {
             object restrictedLogon = value;
-            if (!this.TrySetProperty(RdpClientHelper.RestrictedLogon, ref restrictedLogon, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.RestrictedLogon, restrictedLogon);
+            if (!this.TrySetProperty(RdpClientExtensions.RestrictedLogon, ref restrictedLogon, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RestrictedLogon, restrictedLogon);
         }
     }
 
@@ -2670,15 +2630,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.EnableHardwareMode, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.EnableHardwareMode);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableHardwareMode, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableHardwareMode);
             return value;
         }
         set
         {
             object enableHardwareMode = value;
-            if (!this.TrySetProperty(RdpClientHelper.EnableHardwareMode, ref enableHardwareMode, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.EnableHardwareMode, enableHardwareMode);
+            if (!this.TrySetProperty(RdpClientExtensions.EnableHardwareMode, ref enableHardwareMode, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableHardwareMode, enableHardwareMode);
         }
     }
 
@@ -3018,16 +2978,6 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         Configuration = new();
     }
 
-    /// <summary>
-    /// Creates an instance with provided configuration.
-    /// </summary>
-    /// <param name="rdpClientConfiguration">Configuration</param>
-    public RdpClient10(RdpClientConfiguration rdpClientConfiguration)
-    {
-        Configuration = rdpClientConfiguration;
-        RdpClientHelper.SetupClient(this, rdpClientConfiguration);
-    }
-    
     #endregion
 
     #region --- Events ---
@@ -3068,15 +3018,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.PasswordContainsSmartcardPin, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.PasswordContainsSmartcardPin);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.PasswordContainsSmartcardPin, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.PasswordContainsSmartcardPin);
             return value;
         }
         set
         {
             object passwordContainsSCardPin = value;
-            if (!this.TrySetProperty(RdpClientHelper.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.PasswordContainsSmartcardPin, passwordContainsSCardPin);
+            if (!this.TrySetProperty(RdpClientExtensions.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.PasswordContainsSmartcardPin, passwordContainsSCardPin);
         }
     }
 
@@ -3142,15 +3092,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DeviceScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DeviceScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DeviceScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DeviceScaleFactor);
             return value;
         }
         set
         {
             object deviceScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DeviceScaleFactor, deviceScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DeviceScaleFactor, deviceScaleFactor);
         }
     }
 
@@ -3159,15 +3109,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<uint>(RdpClientHelper.DesktopScaleFactor, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DesktopScaleFactor);
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DesktopScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DesktopScaleFactor);
             return value;
         }
         set
         {
             object desktopScaleFactor = value;
-            if (!this.TrySetProperty(RdpClientHelper.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DesktopScaleFactor, desktopScaleFactor);
+            if (!this.TrySetProperty(RdpClientExtensions.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DesktopScaleFactor, desktopScaleFactor);
         }
     }
 
@@ -3256,7 +3206,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     public string LoadBalanceInfo
     {
         get => AdvancedSettings9.LoadBalanceInfo;
-        set => RdpClientHelper.SetLoadBalanceInfo(value, AdvancedSettings9);
+        set => RdpClientExtensions.SetLoadBalanceInfo(value, AdvancedSettings9);
     }
 
     /// <inheritdoc cref="PluginDlls"/>
@@ -3277,15 +3227,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.DisableCredentialsDelegation, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.DisableCredentialsDelegation);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableCredentialsDelegation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableCredentialsDelegation);
             return value;
         }
         set
         {
             object disableCredentialsDelegation = value;
-            if (!this.TrySetProperty(RdpClientHelper.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.DisableCredentialsDelegation, disableCredentialsDelegation);
+            if (!this.TrySetProperty(RdpClientExtensions.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableCredentialsDelegation, disableCredentialsDelegation);
         }
     }
 
@@ -3294,15 +3244,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.RedirectedAuthentication, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.RedirectedAuthentication);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RedirectedAuthentication, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RedirectedAuthentication);
             return value;
         }
         set
         {
             object redirectedAuthentication = value;
-            if (!this.TrySetProperty(RdpClientHelper.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.RedirectedAuthentication, redirectedAuthentication);
+            if (!this.TrySetProperty(RdpClientExtensions.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RedirectedAuthentication, redirectedAuthentication);
         }
     }
 
@@ -3311,15 +3261,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.RestrictedLogon, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.RestrictedLogon);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RestrictedLogon, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RestrictedLogon);
             return value;
         }
         set
         {
             object restrictedLogon = value;
-            if (!this.TrySetProperty(RdpClientHelper.RestrictedLogon, ref restrictedLogon, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.RestrictedLogon, restrictedLogon);
+            if (!this.TrySetProperty(RdpClientExtensions.RestrictedLogon, ref restrictedLogon, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RestrictedLogon, restrictedLogon);
         }
     }
 
@@ -3383,15 +3333,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get
         {
-            if (!this.TryGetProperty<bool>(RdpClientHelper.EnableHardwareMode, out var value, out var ex))
-                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientHelper.EnableHardwareMode);
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableHardwareMode, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableHardwareMode);
             return value;
         }
         set
         {
             object enableHardwareMode = value;
-            if (!this.TrySetProperty(RdpClientHelper.EnableHardwareMode, ref enableHardwareMode, out var ex))
-                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientHelper.EnableHardwareMode, enableHardwareMode);
+            if (!this.TrySetProperty(RdpClientExtensions.EnableHardwareMode, ref enableHardwareMode, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableHardwareMode, enableHardwareMode);
         }
     }
 

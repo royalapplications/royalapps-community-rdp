@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// The credential configuration used to log on to the remote desktop session.
 /// </summary>
-public class CredentialConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class CredentialConfiguration : ExpandableObjectConverter
 {
     /// <summary>
     /// Specifies the user name logon credential.
@@ -45,4 +48,13 @@ public class CredentialConfiguration
     /// Experimental feature!
     /// </summary>
     public bool PasswordContainsSmartCardPin { get; set; }
+
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

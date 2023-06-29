@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RoyalApps.Community.Rdp.WinForms;
+namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 /// <summary>
 /// Event args for the OnDisconnected event. 

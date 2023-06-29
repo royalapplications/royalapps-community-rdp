@@ -1,17 +1,10 @@
-﻿using System.Windows.Forms;
-
-namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// The remote desktop client configuration.
 /// </summary>
 public class RdpClientConfiguration
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public Control? ParentControl { get; set; }
-    
     /// <summary>
     /// The client version to use. By default (value is 0) the highest available client will be used.
     /// </summary>
@@ -98,5 +91,4 @@ public class RdpClientConfiguration
     /// Security related settings for the remote desktop connection.
     /// </summary>
     public SecurityConfiguration Security { get; set; } = new();
-
 }

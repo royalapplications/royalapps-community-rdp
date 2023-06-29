@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Connection related configuration and settings.
 /// </summary>
-public class ConnectionConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class ConnectionConfiguration : ExpandableObjectConverter
 {
     /// <summary>
     /// Specifies whether compression is enabled.
@@ -44,4 +47,13 @@ public class ConnectionConfiguration
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-loadbalanceinfo</cref>
     /// </seealso>
     public string? LoadBalanceInfo { get; set; }
+    
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

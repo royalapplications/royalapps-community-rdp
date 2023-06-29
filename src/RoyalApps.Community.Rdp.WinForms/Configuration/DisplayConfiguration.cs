@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// The display settings used for the remote desktop session.
 /// </summary>
-public class DisplayConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class DisplayConfiguration : ExpandableObjectConverter
 {
     /// <summary>
     /// Specifies the current control's width, in pixels, on the initial remote desktop.
@@ -28,6 +31,11 @@ public class DisplayConfiguration
     public int DesktopHeight { get; set; }
 
     /// <summary>
+    /// Return true if a desktop width and height is set.
+    /// </summary>
+    public bool HasDesktopSize => DesktopWidth != 0 && DesktopHeight != 0;
+    
+    /// <summary>
     /// The color depth (in bits per pixel) for the control's connection.
     /// Values include 8, 15, 16, 24, and 32 bits per pixel.
     /// </summary>
@@ -43,6 +51,7 @@ public class DisplayConfiguration
 
     /// <summary>
     /// Use local scaling instead of setting the DPI in the remote session.
+    /// If enabled, Smart Sizing is not available.
     /// </summary>
     public bool UseLocalScaling { get; set; }
     
@@ -111,4 +120,13 @@ public class DisplayConfiguration
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable5-usemultimon</cref>
     /// </seealso>
     public bool UseMultimon { get; set; }
+    
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

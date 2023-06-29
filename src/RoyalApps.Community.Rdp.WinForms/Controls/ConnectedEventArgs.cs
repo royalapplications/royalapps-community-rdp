@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace RoyalApps.Community.Rdp.WinForms;
+namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 /// <summary>
 /// Event args for the OnConnected event.

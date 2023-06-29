@@ -1,6 +1,6 @@
 ﻿namespace RoyalApps.Community.Rdp.Demo;
 
-partial class Form1
+partial class RdpForm
 {
     /// <summary>
     ///  Required designer variable.

@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Remote Desktop Gateway configuration and settings
 /// </summary>
-public class GatewayConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class GatewayConfiguration : ExpandableObjectConverter
 {
     /// <summary>
     /// Specifies when to use a Remote Desktop Gateway (RD Gateway) server.
@@ -76,4 +79,13 @@ public class GatewayConfiguration
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclienttransportsettings2-gatewaypassword</cref>
     /// </see>
     public string? GatewayPassword { get; set; }
+    
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

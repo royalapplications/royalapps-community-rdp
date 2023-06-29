@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Security related settings for the remote desktop connection.
 /// </summary>
-public class SecurityConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class SecurityConfiguration : ExpandableObjectConverter
 {
     /// <summary>
     /// Specifies the authentication level to use for the connection.
@@ -46,4 +49,13 @@ public class SecurityConfiguration
     ///     <cref>https://docs.microsoft.com/en-us/archive/blogs/kfalde/restricted-admin-mode-for-rdp-in-windows-8-1-2012-r2</cref>
     /// </seealso>
     public bool RestrictedAdminMode { get; set; }
+    
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

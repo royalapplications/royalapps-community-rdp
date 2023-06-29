@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Configuration related to a program to be started on the remote server upon connection.
 /// </summary>
-public class ProgramConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class ProgramConfiguration : ExpandableObjectConverter
 {
     /// <summary>
     /// Specifies the program to be started on the remote server upon connection.
@@ -28,4 +31,13 @@ public class ProgramConfiguration
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-maximizeshell</cref>
     /// </see>
     public bool MaximizeShell { get; set; }
+    
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

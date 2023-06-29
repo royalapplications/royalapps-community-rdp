@@ -2,7 +2,7 @@
 using Windows.Win32;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
 
-namespace RoyalApps.Community.Rdp.WinForms;
+namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 internal static class MessageFilter
 {
@@ -12,7 +12,7 @@ internal static class MessageFilter
         if (m.Msg == PInvoke.WM_DESTROY && control is {IsDisposed: true, IsHandleCreated: false})
             return true;
 
-        if (control.Configuration.Input.DisableClickDetection ||
+        if (control.DisableClickDetection ||
             (m.Msg != PInvoke.WM_MOUSEACTIVATE &&
              m.Msg != PInvoke.WM_LBUTTONDOWN &&
              m.Msg != PInvoke.WM_MDIACTIVATE)) 

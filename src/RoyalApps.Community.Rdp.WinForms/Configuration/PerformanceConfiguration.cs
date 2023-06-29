@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Performance related configuration and settings.
 /// </summary>
-public class PerformanceConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class PerformanceConfiguration : ExpandableObjectConverter
 {
     private const int TS_PERF_DISABLE_WALLPAPER          = 0x00000001;
     private const int TS_PERF_DISABLE_FULLWINDOWDRAG     = 0x00000002;
@@ -102,7 +105,16 @@ public class PerformanceConfiguration
     /// </summary>
     public ClientProtocolSpec ClientProtocolSpec { get; set; }
     
-        /// <summary>
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
+    
+    /// <summary>
     /// Returns the configured performance flags as integer.
     /// </summary>
     /// <returns>An integer representing the configured performance flags.</returns>

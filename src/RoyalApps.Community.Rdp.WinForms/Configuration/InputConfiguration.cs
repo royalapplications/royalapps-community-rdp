@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Input related configuration and settings.
 /// </summary>
-public class InputConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class InputConfiguration : ExpandableObjectConverter
 {
     /// <summary>
     /// Specifies whether background input mode is enabled. When background input is enabled the client can accept input when the client does not have focus.
@@ -66,4 +69,13 @@ public class InputConfiguration
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imstscadvancedsettings-keyboardlayoutstr</cref>
     /// </see>
     public string? KeyBoardLayoutStr { get; set; }
+    
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using MSTSCLib;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
-using ColorDepth = RoyalApps.Community.Rdp.WinForms.Configuration.ColorDepth;
 
-namespace RoyalApps.Community.Rdp.WinForms;
+namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
-internal static class RdpClientHelper
+internal static class RdpClientExtensions
 {
     public static readonly string DesktopScaleFactor = "DesktopScaleFactor";
     public static readonly string DeviceScaleFactor = "DeviceScaleFactor";
@@ -21,13 +19,14 @@ internal static class RdpClientHelper
     public static readonly string RestrictedLogon = "RestrictedLogon";
     public static readonly string RedirectedAuthentication = "RedirectedAuthentication";
 
-    public static void SetupClient(IRdpClient client, RdpClientConfiguration configuration)
+    /// <summary>
+    /// Applies the RdpClientConfiguration to the RdpClient.
+    /// </summary>
+    /// <param name="client">The RdpClient instance.</param>
+    /// <param name="configuration">The RdpClientConfiguration instance.</param>
+    public static void ApplyRdpClientConfiguration(this IRdpClient client, RdpClientConfiguration configuration)
     {
         ArgumentException.ThrowIfNullOrEmpty(configuration.Server, nameof(configuration.Server));
-        
-        var control = (Control) client;
-        control.Dock = DockStyle.Fill;
-        configuration.ParentControl!.Controls.Add(control);
         
         client.Server = configuration.Server;
         client.Port = configuration.Port;
@@ -52,7 +51,7 @@ internal static class RdpClientHelper
             ColorDepth.ColorDepth32Bpp => 32,
             _ => 32
         };
-        client.SmartSizing = configuration.Display.ResizeBehavior == ResizeBehavior.SmartSizing;
+        client.SmartSizing = configuration.Display is {UseLocalScaling: false, ResizeBehavior: ResizeBehavior.SmartSizing};
         if (!string.IsNullOrWhiteSpace(configuration.Display.FullScreenTitle))
             client.FullScreenTitle = configuration.Display.FullScreenTitle;
         client.ContainerHandledFullScreen = configuration.Display.ContainerHandledFullScreen ? 1 : 0;
@@ -180,6 +179,14 @@ internal static class RdpClientHelper
         return (IMsRdpClientNonScriptable5)rdpClient.GetOcx();
     }
 
+    /// <summary>
+    /// Provides access to the extended settings interface of a client's remote session on the Remote Desktop ActiveX control.
+    /// </summary>
+    /// <param name="rdpClient">The RDP client instance.</param>
+    /// <returns>IMsRdpExtendedSettings</returns>
+    /// <seealso>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpextendedsettings</cref>
+    /// </seealso>
     public static IMsRdpExtendedSettings GetExtendedSettings(this IRdpClient rdpClient)
     {
         return (IMsRdpExtendedSettings)rdpClient.GetOcx();

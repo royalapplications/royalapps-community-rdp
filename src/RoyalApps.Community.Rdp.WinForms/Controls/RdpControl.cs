@@ -15,7 +15,7 @@ using RoyalApps.Community.Rdp.WinForms.Configuration;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
 using RoyalApps.Community.Rdp.WinForms.Logging;
 
-namespace RoyalApps.Community.Rdp.WinForms;
+namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 /// <summary>
 /// A WinForms control to establish and work in a RDP remote desktop session.
@@ -34,7 +34,6 @@ public class RdpControl : UserControl
     private Size _previousClientSize = Size.Empty;
     
     private readonly System.Windows.Forms.Timer _timerResizeInProgress;
-    private readonly System.Windows.Forms.Timer _timerSmartReconnect;
 
     /// <summary>
     /// Access to the RDP client and their events, methods and properties.
@@ -88,10 +87,6 @@ public class RdpControl : UserControl
         {
             Interval = 1000
         };
-        _timerSmartReconnect = new System.Windows.Forms.Timer
-        {
-            Interval = 1000
-        };
         SetStyle(ControlStyles.Selectable, true);
         SetStyle(ControlStyles.ContainerControl, false);
         TabStop = true;
@@ -106,7 +101,6 @@ public class RdpControl : UserControl
             CleanupRdpClient();
 
             _timerResizeInProgress.Dispose();
-            _timerSmartReconnect.Dispose();
         }
 
         base.Dispose(disposing);
@@ -145,7 +139,6 @@ public class RdpControl : UserControl
     public void UnregisterEvents()
     {
         _timerResizeInProgress.Tick -= TimerResizeInProgress_Tick;
-        _timerSmartReconnect.Tick -= TimerSmartReconnect_Tick;
         
         if (RdpClient == null)
             return;
@@ -254,6 +247,18 @@ public class RdpControl : UserControl
     }
 
     /// <summary>
+    /// Change the resize behavior while connected.
+    /// </summary>
+    /// <param name="resizeBehavior">The desired resize behavior.</param>
+    public void SetResizeBehavior(ResizeBehavior resizeBehavior)
+    {
+        RdpConfiguration.Display.ResizeBehavior = resizeBehavior;
+        if (RdpClient is not {ConnectionState: ConnectionState.Connected})
+            return;
+        RdpClient.SmartSizing = resizeBehavior == ResizeBehavior.SmartSizing;
+    }
+    
+    /// <summary>
     /// Ensure the ActiveX control updates the client size according to the control size.
     /// </summary>
     /// <returns></returns>
@@ -264,6 +269,20 @@ public class RdpControl : UserControl
             
         _previousClientSize = Size;
 
+        if (RdpConfiguration.Display.UseLocalScaling)
+        {
+            if (RdpConfiguration.Display.HasDesktopSize)
+                return true;
+            
+            var scaleFactor = _currentZoomLevel / 100.00;
+            var width = (int)(Width / scaleFactor);
+            var height = (int)(Height / scaleFactor);
+            var success = UpdateClientSizeWithoutReconnect(width, height, 100);
+            if (success)
+                SetZoomLevelLocal(_currentZoomLevel);
+            return success;
+        }
+        
         return UpdateClientSizeWithoutReconnect() || UpdateClientSizeWithReconnect();
     }
 
@@ -428,10 +447,20 @@ public class RdpControl : UserControl
 
     private void ApplyInitialScaling()
     {
-        _currentZoomLevel = RdpConfiguration.Display.InitialZoomLevel;
+        _currentZoomLevel = RdpConfiguration.Display.AutoScaling 
+            ? LogicalToDeviceUnits(100) : 
+            RdpConfiguration.Display.InitialZoomLevel;
 
         if (RdpConfiguration.Display.UseLocalScaling)
+        {
+            if (RdpConfiguration.Display.HasDesktopSize)
+                return;
+        
+            var scaleFactor = _currentZoomLevel / 100.00;
+            RdpClient!.DesktopWidth = (int)(Width / scaleFactor);
+            RdpClient.DesktopHeight = (int)(Height / scaleFactor);
             return;
+        }
 
         try
         {
@@ -459,8 +488,13 @@ public class RdpControl : UserControl
 
     private void CreateRdpClient()
     {
-        RdpConfiguration.ParentControl = this;
-        RdpClient = RdpClientFactory.Create(RdpConfiguration.ClientVersion, RdpConfiguration);
+        RdpClient = RdpClientFactory.Create(RdpConfiguration.ClientVersion);
+
+        var control = (Control) RdpClient;
+        control.Dock = DockStyle.Fill;
+        Controls.Add(control);
+
+        RdpClient.ApplyRdpClientConfiguration(RdpConfiguration);
 
         if (RdpConfiguration.UseMsRdc)
         {
@@ -532,7 +566,6 @@ public class RdpControl : UserControl
     private void RegisterEvents()
     {
         _timerResizeInProgress.Tick += TimerResizeInProgress_Tick;
-        _timerSmartReconnect.Tick += TimerSmartReconnect_Tick;
         
         RdpClient!.OnConnected += RdpClient_OnConnected;
         RdpClient.OnDisconnected += RdpClient_OnDisconnected;
@@ -592,13 +625,6 @@ public class RdpControl : UserControl
         RaiseRemoteDesktopSizeChanged();
     }
 
-    private void TimerSmartReconnect_Tick(object? sender, EventArgs e)
-    {
-        if (MouseButtons == MouseButtons.Left)
-            return;
-        RaiseRemoteDesktopSizeChanged();
-    }
-
     private bool RaiseBeforeRemoteDesktopSizeChangedAndCancel()
     {
         var args = new CancelEventArgs();
@@ -618,21 +644,27 @@ public class RdpControl : UserControl
         if (RaiseBeforeRemoteDesktopSizeChangedAndCancel())
             return;
 
+        UpdateClientSize();
         RemoteDesktopSizeChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private bool UpdateClientSizeWithoutReconnect()
     {
+        return UpdateClientSizeWithoutReconnect(Width, Height, _currentZoomLevel);
+    }
+    
+    private bool UpdateClientSizeWithoutReconnect(int width, int height, int zoomLevel)
+    {
         try
         {
             RdpClient!.UpdateSessionDisplaySettings(
-                (uint) Width,
-                (uint) Height,
+                (uint) width,
+                (uint) height,
                 0,
                 0,
                 0,
-                GetDesktopScaleFactor(_currentZoomLevel),
-                GetDeviceScaleFactor(_currentZoomLevel)
+                GetDesktopScaleFactor(zoomLevel),
+                GetDeviceScaleFactor(zoomLevel)
             );
             return true;
         }

@@ -1,9 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System.ComponentModel;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Configuration and settings for device redirection.
 /// </summary>
-public class RedirectionConfiguration
+[TypeConverter(typeof(ExpandableObjectConverter))]
+public class RedirectionConfiguration : ExpandableObjectConverter
 {
     /// <summary>
     /// Specifies the audio redirection settings, which specify whether to redirect sounds or play sounds at the Remote Desktop Session Host (RD Session Host) server.
@@ -82,4 +85,13 @@ public class RedirectionConfiguration
     /// If empty, all drives are redirected when RedirectDrives property is true.
     /// </summary>
     public string? RedirectDriveLetters { get; set; }
+    
+    /// <summary>
+    /// ToString
+    /// </summary>
+    /// <returns>Empty string.</returns>
+    public override string ToString()
+    {
+        return string.Empty;
+    }
 }

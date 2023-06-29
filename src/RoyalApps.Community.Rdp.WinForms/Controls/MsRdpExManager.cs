@@ -4,7 +4,7 @@ using MsRdpEx;
 
 // ReSharper disable InconsistentNaming
 
-namespace RoyalApps.Community.Rdp.WinForms;
+namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 internal class MsRdpExManager
 {

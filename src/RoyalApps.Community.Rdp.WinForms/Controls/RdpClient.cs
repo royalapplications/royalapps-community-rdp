@@ -245,6 +245,23 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         set => AdvancedSettings2.allowBackgroundInput = value ? 1 : 0;
     }
 
+    /// <inheritdoc cref="DisableUdpTransport"/>>
+    public bool DisableUdpTransport
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableUdpTransport, out var value, out var ex))
+                Logger.LogWarning(ex,"Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableUdpTransport);
+            return value;
+        }
+        set
+        {
+            object disableUdpTransport = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DisableUdpTransport, ref disableUdpTransport, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableUdpTransport, disableUdpTransport);
+        }
+    }
+
     /// <summary>
     /// This client does not support this feature. 
     /// </summary>
@@ -1009,6 +1026,23 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         set => AdvancedSettings7.allowBackgroundInput = value ? 1 : 0;
     }
 
+    /// <inheritdoc cref="DisableUdpTransport"/>>
+    public bool DisableUdpTransport
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableUdpTransport, out var value, out var ex))
+                Logger.LogWarning(ex,"Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableUdpTransport);
+            return value;
+        }
+        set
+        {
+            object disableUdpTransport = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DisableUdpTransport, ref disableUdpTransport, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableUdpTransport, disableUdpTransport);
+        }
+    }
+
     /// <inheritdoc cref="EnableAutoReconnect"/>
     public bool EnableAutoReconnect
     {
@@ -1696,6 +1730,23 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get => AdvancedSettings8.allowBackgroundInput > 0;
         set => AdvancedSettings8.allowBackgroundInput = value ? 1 : 0;
+    }
+
+    /// <inheritdoc cref="DisableUdpTransport"/>>
+    public bool DisableUdpTransport
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableUdpTransport, out var value, out var ex))
+                Logger.LogWarning(ex,"Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableUdpTransport);
+            return value;
+        }
+        set
+        {
+            object disableUdpTransport = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DisableUdpTransport, ref disableUdpTransport, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableUdpTransport, disableUdpTransport);
+        }
     }
 
     /// <inheritdoc cref="EnableAutoReconnect"/>
@@ -2462,6 +2513,23 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         set => AdvancedSettings9.allowBackgroundInput = value ? 1 : 0;
     }
 
+    /// <inheritdoc cref="DisableUdpTransport"/>>
+    public bool DisableUdpTransport
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableUdpTransport, out var value, out var ex))
+                Logger.LogWarning(ex,"Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableUdpTransport);
+            return value;
+        }
+        set
+        {
+            object disableUdpTransport = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DisableUdpTransport, ref disableUdpTransport, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableUdpTransport, disableUdpTransport);
+        }
+    }
+
     /// <inheritdoc cref="EnableAutoReconnect"/>
     public bool EnableAutoReconnect
     {
@@ -3163,6 +3231,23 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get => AdvancedSettings9.allowBackgroundInput > 0;
         set => AdvancedSettings9.allowBackgroundInput = value ? 1 : 0;
+    }
+
+    /// <inheritdoc cref="DisableUdpTransport"/>>
+    public bool DisableUdpTransport
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableUdpTransport, out var value, out var ex))
+                Logger.LogWarning(ex,"Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableUdpTransport);
+            return value;
+        }
+        set
+        {
+            object disableUdpTransport = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DisableUdpTransport, ref disableUdpTransport, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableUdpTransport, disableUdpTransport);
+        }
     }
 
     /// <inheritdoc cref="EnableAutoReconnect"/>

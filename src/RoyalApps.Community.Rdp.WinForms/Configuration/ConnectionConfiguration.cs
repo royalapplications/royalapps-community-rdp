@@ -33,6 +33,11 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     public int MaxReconnectAttempts { get; set; }
     
     /// <summary>
+    /// Disables RDP UDP transport and forces TCP transport. It is recommended to set this true when using connection through UDP based VPN connections. 
+    /// </summary>
+    public bool DisableUdpTransport { get; set; }
+    
+    /// <summary>
     /// Gets and sets whether to use the redirection server name.
     /// </summary>
     /// <seealso>

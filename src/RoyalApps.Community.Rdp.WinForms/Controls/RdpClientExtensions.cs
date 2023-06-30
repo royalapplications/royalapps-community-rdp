@@ -14,6 +14,7 @@ internal static class RdpClientExtensions
     public static readonly string DesktopScaleFactor = "DesktopScaleFactor";
     public static readonly string DeviceScaleFactor = "DeviceScaleFactor";
     public static readonly string DisableCredentialsDelegation = "DisableCredentialsDelegation";
+    public static readonly string DisableUdpTransport = "DisableUDPTransport";
     public static readonly string EnableHardwareMode = "EnableHardwareMode";
     public static readonly string PasswordContainsSmartcardPin = "PasswordContainsSCardPin";
     public static readonly string RestrictedLogon = "RestrictedLogon";

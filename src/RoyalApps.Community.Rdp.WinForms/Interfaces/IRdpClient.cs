@@ -304,6 +304,11 @@ public interface IRdpClient : IDisposable
     bool EnableAutoReconnect { get; set; }
 
     /// <summary>
+    /// Disables RDP UDP transport and forces TCP transport. It is recommended to set this true when using connection through UDP based VPN connections. 
+    /// </summary>
+    bool DisableUdpTransport { get; set; }
+    
+    /// <summary>
     /// Specifies the number of times to try to reconnect during automatic reconnection. Valid values are 0 to 200.
     /// </summary>
     /// <seealso>

@@ -36,7 +36,7 @@ public class InputConfiguration : ExpandableObjectConverter
     /// <seealso>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings6-relativemousemode</cref>
     /// </seealso>
-    public bool RelativeMouseMode { get; set; }
+    public bool RelativeMouseMode { get; set; } = true;
     
     /// <summary>
     /// Specifies if keyboard accelerators should be passed to the server.

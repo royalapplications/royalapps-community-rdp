@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Microsoft.Extensions.Logging;
 using MSTSCLib;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
@@ -23,27 +25,54 @@ internal static class RdpClientExtensions
     /// <summary>
     /// Applies the RdpClientConfiguration to the RdpClient.
     /// </summary>
-    /// <param name="client">The RdpClient instance.</param>
+    /// <param name="rdpControl">The RdpControl instance.</param>
     /// <param name="configuration">The RdpClientConfiguration instance.</param>
-    public static void ApplyRdpClientConfiguration(this IRdpClient client, RdpClientConfiguration configuration)
+    public static void ApplyRdpClientConfiguration(this RdpControl rdpControl, RdpClientConfiguration configuration)
     {
         ArgumentException.ThrowIfNullOrEmpty(configuration.Server, nameof(configuration.Server));
-        
-        client.Server = configuration.Server;
-        client.Port = configuration.Port;
-        
-        client.UserName = configuration.Credentials.Username;
-        client.Domain = configuration.Credentials.Domain;
-        client.Password = configuration.Credentials.Password;
-        client.NetworkLevelAuthentication = configuration.Credentials.NetworkLevelAuthentication;
-        client.PasswordContainsSmartCardPin = configuration.Credentials.PasswordContainsSmartCardPin;
 
+        var rdpClient = rdpControl.RdpClient;
+        var logger = rdpControl.Logger;
+
+        if (rdpClient is null)
+            throw new InvalidOperationException("Cannot apply configuration because there is no IRdpClient instance.");
+        
+        try
+        {
+            logger.LogTrace("Set {Server} and {Port}", configuration.Server, configuration.Port);
+            rdpClient.Server = configuration.Server.Trim();
+            rdpClient.Port = configuration.Port;
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "The computer name or IP address is invalid");
+        }
+
+        if (!string.IsNullOrWhiteSpace(configuration.PluginDlls))
+        {
+            logger.LogTrace("Set {PluginDlls}", configuration.PluginDlls);
+            rdpClient.PluginDlls = configuration.PluginDlls;
+        }
+
+        TraceConfigurationData(logger, configuration.Credentials);
+        rdpClient.UserName = string.IsNullOrEmpty(configuration.Credentials.Username) ? null : configuration.Credentials.Username;
+        rdpClient.Domain = string.IsNullOrEmpty(configuration.Credentials.Domain) ? null : configuration.Credentials.Domain;
+        var password = configuration.Credentials.Password?.GetValue();
+        if (!string.IsNullOrEmpty(password))
+            rdpClient.Password = password;
+        
+        rdpClient.NetworkLevelAuthentication = configuration.Credentials.NetworkLevelAuthentication;
+
+        if (configuration.Credentials.PasswordContainsSmartCardPin)
+            rdpClient.PasswordContainsSmartCardPin = configuration.Credentials.PasswordContainsSmartCardPin;
+
+        TraceConfigurationData(logger, configuration.Display);
         if (configuration.Display is {DesktopWidth: > 0, DesktopHeight: > 0})
         {
-            client.DesktopWidth = configuration.Display.DesktopWidth;
-            client.DesktopHeight = configuration.Display.DesktopHeight;
+            rdpClient.DesktopWidth = configuration.Display.DesktopWidth;
+            rdpClient.DesktopHeight = configuration.Display.DesktopHeight;
         }
-        client.ColorDepth = configuration.Display.ColorDepth switch
+        rdpClient.ColorDepth = configuration.Display.ColorDepth switch
         {
             ColorDepth.ColorDepth8Bpp => 8,
             ColorDepth.ColorDepth15Bpp => 15,
@@ -52,32 +81,34 @@ internal static class RdpClientExtensions
             ColorDepth.ColorDepth32Bpp => 32,
             _ => 32
         };
-        client.SmartSizing = configuration.Display is {UseLocalScaling: false, ResizeBehavior: ResizeBehavior.SmartSizing};
+        rdpClient.SmartSizing = configuration.Display is {UseLocalScaling: false, ResizeBehavior: ResizeBehavior.SmartSizing};
         if (!string.IsNullOrWhiteSpace(configuration.Display.FullScreenTitle))
-            client.FullScreenTitle = configuration.Display.FullScreenTitle;
-        client.ContainerHandledFullScreen = configuration.Display.ContainerHandledFullScreen ? 1 : 0;
-        client.DisplayConnectionBar = configuration.Display.DisplayConnectionBar;
-        client.PinConnectionBar = configuration.Display.PinConnectionBar;
-        client.UseMultimon = configuration.Display.UseMultimon;
+            rdpClient.FullScreenTitle = configuration.Display.FullScreenTitle;
+        rdpClient.ContainerHandledFullScreen = configuration.Display.ContainerHandledFullScreen ? 1 : 0;
+        rdpClient.DisplayConnectionBar = configuration.Display.DisplayConnectionBar;
+        rdpClient.PinConnectionBar = configuration.Display.PinConnectionBar;
+        rdpClient.UseMultimon = configuration.Display.UseMultimon;
 
-        client.AuthenticationLevel = configuration.Security.AuthenticationLevel;
-        client.Compression = configuration.Connection.Compression;
-        client.BitmapCaching = configuration.Performance.BitmapCaching;
-        client.PublicMode = configuration.Security.PublicMode;
-        client.AllowBackgroundInput = configuration.Input.AllowBackgroundInput;
-        client.EnableAutoReconnect = configuration.Connection.EnableAutoReconnect;
-        client.MaxReconnectAttempts = configuration.Connection.MaxReconnectAttempts;
-        client.ConnectToAdministerServer = configuration.Security.ConnectToAdministerServer;
-        client.UseRedirectionServerName = configuration.Connection.UseRedirectionServerName;
+        TraceConfigurationData(logger, configuration.Security);
+        rdpClient.AuthenticationLevel = configuration.Security.AuthenticationLevel;
+        rdpClient.ConnectToAdministerServer = configuration.Security.ConnectToAdministerServer;
+        rdpClient.PublicMode = configuration.Security.PublicMode;
+        if (configuration.Security.RemoteCredentialGuard)
+            rdpClient.RemoteCredentialGuard = configuration.Security.RemoteCredentialGuard;
+        if (configuration.Security.RestrictedAdminMode)
+            rdpClient.RestrictedAdminMode = configuration.Security.RestrictedAdminMode;
+
+        TraceConfigurationData(logger, configuration.Connection);
+        rdpClient.Compression = configuration.Connection.Compression;
+        rdpClient.EnableAutoReconnect = configuration.Connection.EnableAutoReconnect;
         if (!string.IsNullOrWhiteSpace(configuration.Connection.LoadBalanceInfo))
-            client.LoadBalanceInfo = configuration.Connection.LoadBalanceInfo;
-        if (!string.IsNullOrWhiteSpace(configuration.PluginDlls))
-            client.PluginDlls = configuration.PluginDlls;
-        client.GrabFocusOnConnect = configuration.Input.GrabFocusOnConnect;
-        client.RelativeMouseMode = configuration.Input.RelativeMouseMode;
-        client.RemoteCredentialGuard = configuration.Security.RemoteCredentialGuard;
-        client.RestrictedAdminMode = configuration.Security.RestrictedAdminMode;
-        client.NetworkConnectionType = configuration.Performance.NetworkConnectionType switch
+            rdpClient.LoadBalanceInfo = configuration.Connection.LoadBalanceInfo;
+        rdpClient.MaxReconnectAttempts = configuration.Connection.MaxReconnectAttempts;
+        rdpClient.UseRedirectionServerName = configuration.Connection.UseRedirectionServerName;
+
+        TraceConfigurationData(logger, configuration.Performance);
+        rdpClient.BitmapCaching = configuration.Performance.BitmapCaching;
+        rdpClient.NetworkConnectionType = configuration.Performance.NetworkConnectionType switch
         {
             NetworkConnectionType.Modem => 1,
             NetworkConnectionType.BroadbandLow => 2,
@@ -87,11 +118,11 @@ internal static class RdpClientExtensions
             NetworkConnectionType.LAN => 6,
             _ => 4
         };
-        client.PerformanceFlags = configuration.Performance.GetPerformanceFlags();
-        //client.RedirectDirectX = configuration.Performance.RedirectDirectX;
-        //client.BandwidthDetection = configuration.Performance.BandwidthDetection;
-        client.EnableHardwareMode = configuration.Performance.EnableHardwareMode;
-        client.ClientProtocolSpec = configuration.Performance.ClientProtocolSpec switch
+        rdpClient.PerformanceFlags = configuration.Performance.GetPerformanceFlags();
+        rdpClient.RedirectDirectX = configuration.Performance.RedirectDirectX;
+        rdpClient.BandwidthDetection = configuration.Performance.BandwidthDetection;
+        rdpClient.EnableHardwareMode = configuration.Performance.EnableHardwareMode;
+        rdpClient.ClientProtocolSpec = configuration.Performance.ClientProtocolSpec switch
         {
             ClientProtocolSpec.FullMode => ClientSpec.FullMode,
             ClientProtocolSpec.SmallCacheMode => ClientSpec.SmallCacheMode,
@@ -99,59 +130,90 @@ internal static class RdpClientExtensions
             _ => ClientSpec.FullMode
         };
 
-        client.AudioRedirectionMode = configuration.Redirection.AudioRedirectionMode;
-        client.AudioCaptureRedirectionMode = configuration.Redirection.AudioCaptureRedirectionMode;
-        client.RedirectPrinters = configuration.Redirection.RedirectPrinters;
-        client.RedirectClipboard = configuration.Redirection.RedirectClipboard;
-        client.RedirectSmartCards = configuration.Redirection.RedirectSmartCards;
-        client.RedirectPorts = configuration.Redirection.RedirectPorts;
-        client.RedirectDevices = configuration.Redirection.RedirectDevices;
-        client.RedirectPOSDevices = configuration.Redirection.RedirectPointOfServiceDevices;
-        client.RedirectDrives = configuration.Redirection.RedirectDrives;
-        if (!string.IsNullOrWhiteSpace(configuration.Redirection.RedirectDriveLetters))
-            client.RedirectDriveLetters = configuration.Redirection.RedirectDriveLetters;
-
-        client.AcceleratorPassthrough = configuration.Input.AcceleratorPassthrough;
-        client.EnableWindowsKey = configuration.Input.EnableWindowsKey;
-        client.KeyboardHookMode = configuration.Input.KeyboardHookMode ? 1 : 0;
+        TraceConfigurationData(logger, configuration.Input);
+        rdpClient.AllowBackgroundInput = configuration.Input.AllowBackgroundInput;
+        rdpClient.GrabFocusOnConnect = configuration.Input.GrabFocusOnConnect;
+        rdpClient.RelativeMouseMode = configuration.Input.RelativeMouseMode;
+        rdpClient.AcceleratorPassthrough = configuration.Input.AcceleratorPassthrough;
+        rdpClient.EnableWindowsKey = configuration.Input.EnableWindowsKey;
+        rdpClient.KeyboardHookMode = configuration.Input.KeyboardHookMode ? 1 : 0;
         if (!string.IsNullOrWhiteSpace(configuration.Input.KeyBoardLayoutStr))
-            client.KeyBoardLayoutStr = configuration.Input.KeyBoardLayoutStr;
+            rdpClient.KeyBoardLayoutStr = configuration.Input.KeyBoardLayoutStr;
 
+        TraceConfigurationData(logger, configuration.Redirection);
+        rdpClient.AudioRedirectionMode = configuration.Redirection.AudioRedirectionMode;
+        rdpClient.AudioCaptureRedirectionMode = configuration.Redirection.AudioCaptureRedirectionMode;
+        rdpClient.RedirectPrinters = configuration.Redirection.RedirectPrinters;
+        rdpClient.RedirectClipboard = configuration.Redirection.RedirectClipboard;
+        rdpClient.RedirectSmartCards = configuration.Redirection.RedirectSmartCards;
+        rdpClient.RedirectPorts = configuration.Redirection.RedirectPorts;
+        rdpClient.RedirectDevices = configuration.Redirection.RedirectDevices;
+        rdpClient.RedirectPOSDevices = configuration.Redirection.RedirectPointOfServiceDevices;
+        rdpClient.RedirectDrives = configuration.Redirection.RedirectDrives;
+        if (!string.IsNullOrWhiteSpace(configuration.Redirection.RedirectDriveLetters))
+            rdpClient.RedirectDriveLetters = configuration.Redirection.RedirectDriveLetters;
+
+        TraceConfigurationData(logger, configuration.Program);
         if (!string.IsNullOrWhiteSpace(configuration.Program.StartProgram))
-            client.StartProgram = configuration.Program.StartProgram;
+            rdpClient.StartProgram = configuration.Program.StartProgram;
         if (!string.IsNullOrWhiteSpace(configuration.Program.WorkDir))
-            client.WorkDir = configuration.Program.WorkDir;
-        client.MaximizeShell = configuration.Program.MaximizeShell;
+            rdpClient.WorkDir = configuration.Program.WorkDir;
+        rdpClient.MaximizeShell = configuration.Program.MaximizeShell;
 
         if (configuration.Gateway.GatewayUsageMethod != GatewayUsageMethod.Never)
         {
-            client.GatewayUsageMethod = configuration.Gateway.GatewayUsageMethod;
-            client.GatewayProfileUsageMethod = configuration.Gateway.GatewayProfileUsageMethod;
-            client.GatewayCredsSource = configuration.Gateway.GatewayCredsSource;
-            client.GatewayUserSelectedCredsSource = configuration.Gateway.GatewayUserSelectedCredsSource;
-            client.GatewayCredSharing = configuration.Gateway.GatewayCredSharing;
+            TraceConfigurationData(logger, configuration.Gateway);
+            rdpClient.GatewayUsageMethod = configuration.Gateway.GatewayUsageMethod;
+            rdpClient.GatewayProfileUsageMethod = configuration.Gateway.GatewayProfileUsageMethod;
+            rdpClient.GatewayCredsSource = configuration.Gateway.GatewayCredsSource;
+            rdpClient.GatewayUserSelectedCredsSource = configuration.Gateway.GatewayUserSelectedCredsSource;
+            rdpClient.GatewayCredSharing = configuration.Gateway.GatewayCredSharing;
             if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayHostname))
-                client.GatewayHostname = configuration.Gateway.GatewayHostname;
+                rdpClient.GatewayHostname = configuration.Gateway.GatewayHostname;
             if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayUsername))
-                client.GatewayUsername = configuration.Gateway.GatewayUsername;
+                rdpClient.GatewayUsername = configuration.Gateway.GatewayUsername;
             if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayDomain))
-                client.GatewayDomain = configuration.Gateway.GatewayDomain;
-            if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayPassword))
-                client.GatewayPassword = configuration.Gateway.GatewayPassword;
+                rdpClient.GatewayDomain = configuration.Gateway.GatewayDomain;
+            var gatewayPassword = configuration.Gateway.GatewayPassword?.GetValue();
+            if (!string.IsNullOrWhiteSpace(gatewayPassword))
+                rdpClient.GatewayPassword = gatewayPassword;
+        }
+        else
+        {
+            rdpClient.GatewayUsageMethod = GatewayUsageMethod.Never;
+            rdpClient.GatewayProfileUsageMethod = GatewayProfileUsageMethod.Default;
         }
 
         if (!string.IsNullOrWhiteSpace(configuration.HyperV.Instance))
         {
-            client.Port = configuration.HyperV.HyperVPort;
-            client.AuthenticationLevel = AuthenticationLevel.NoAuthenticationOfServer;
-            client.AuthenticationServiceClass = "Microsoft Virtual Console Service";
-            client.NetworkLevelAuthentication = true;
-            client.NegotiateSecurityLayer = false;
-            client.DisableCredentialsDelegation = true;
-            client.PCB = configuration.HyperV.Instance;
+            TraceConfigurationData(logger, configuration.HyperV);
+            rdpClient.Port = configuration.HyperV.HyperVPort;
+            rdpClient.AuthenticationLevel = AuthenticationLevel.NoAuthenticationOfServer;
+            rdpClient.AuthenticationServiceClass = "Microsoft Virtual Console Service";
+            rdpClient.NetworkLevelAuthentication = true;
+            rdpClient.NegotiateSecurityLayer = false;
+            rdpClient.DisableCredentialsDelegation = true;
+            rdpClient.PCB = configuration.HyperV.Instance;
             if (configuration.HyperV.EnhancedSessionMode)
-                client.PCB = $"{client.PCB};EnhancedMode=1";
+                rdpClient.PCB = $"{rdpClient.PCB};EnhancedMode=1";
         }
+    }
+
+    private static void TraceConfigurationData(ILogger logger, object configuration)
+    {
+        if (!logger.IsEnabled(LogLevel.Trace))
+            return;
+        
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"Configuration class: {configuration.GetType().Name}");
+        var properties = configuration.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+        foreach (var property in properties)
+        {
+            stringBuilder.AppendLine($"      {property.Name}: {property.GetValue(configuration)}");
+        }
+
+        // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
+        logger.LogTrace(stringBuilder.ToString());
     }
     
     /// <summary>

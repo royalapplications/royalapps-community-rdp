@@ -81,7 +81,7 @@ public class DisplayConfiguration : ExpandableObjectConverter
     /// <seealso>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imstscadvancedsettings-containerhandledfullscreen</cref>
     /// </seealso>
-    public bool ContainerHandledFullScreen { get; set; }
+    public bool ContainerHandledFullScreen { get; set; } = true;
     
     /// <summary>
     /// Specifies the window title displayed when the control is in full-screen mode.

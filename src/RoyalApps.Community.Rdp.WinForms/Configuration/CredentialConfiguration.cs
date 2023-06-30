@@ -31,7 +31,8 @@ public class CredentialConfiguration : ExpandableObjectConverter
     /// <seealso>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imstscnonscriptable-cleartextpassword</cref>
     /// </seealso>
-    public string? Password { get; set; }
+    [TypeConverter(typeof(SensitiveStringConverter))]
+    public SensitiveString? Password { get; set; }
 
     /// <summary>
     /// This property is not supported in this version.

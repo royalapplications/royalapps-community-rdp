@@ -78,7 +78,8 @@ public class GatewayConfiguration : ExpandableObjectConverter
     /// <see>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclienttransportsettings2-gatewaypassword</cref>
     /// </see>
-    public string? GatewayPassword { get; set; }
+    [TypeConverter(typeof(SensitiveStringConverter))]
+    public SensitiveString? GatewayPassword { get; set; }
     
     /// <summary>
     /// ToString

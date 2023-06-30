@@ -64,7 +64,22 @@ public class RdpControl : UserControl
     /// Raised when the RDP ActiveX has been disconnected.
     /// </summary>
     public event EventHandler<DisconnectedEventArgs>? OnDisconnected;
-    
+
+    /// <summary>
+    /// Raised when the user presses the Minimize button on the connection bar in full-screen mode. The firing of this event is a request that the container application minimize itself.
+    /// </summary>
+    public event EventHandler? OnRequestContainerMinimize;
+
+    /// <summary>
+    /// Raised when the client requests to leave full-screen mode or the ContainerHandledFullScreen property has been set to a nonzero value.
+    /// </summary>
+    public event EventHandler? OnRequestLeaveFullScreen;
+
+    /// <summary>
+    /// Raised when the client calls the RequestClose method.
+    /// </summary>
+    public event EventHandler<IMsTscAxEvents_OnConfirmCloseEvent>? OnConfirmClose; 
+
     /// <summary>
     /// Raised before the remote desktop size is going to change.
     /// This event can be used to cancel the resize event using the CancelEventArgs.
@@ -145,6 +160,9 @@ public class RdpControl : UserControl
         
         RdpClient.OnConnected -= RdpClient_OnConnected;
         RdpClient.OnDisconnected -= RdpClient_OnDisconnected;
+        RdpClient.OnRequestContainerMinimize -= RdpClient_OnRequestContainerMinimize;
+        RdpClient.OnRequestLeaveFullScreen -= RdpClient_OnRequestLeaveFullScreen;
+        RdpClient.OnConfirmClose -= RdpClient_OnConfirmClose;
     }
 
     /// <summary>
@@ -445,6 +463,21 @@ public class RdpControl : UserControl
         }
     }
 
+    private void RdpClient_OnRequestContainerMinimize(object? sender, EventArgs e)
+    {
+        OnRequestContainerMinimize?.Invoke(sender, e);
+    }
+
+    private void RdpClient_OnRequestLeaveFullScreen(object? sender, EventArgs e)
+    {
+        OnRequestLeaveFullScreen?.Invoke(sender, e);
+    }
+
+    private void RdpClient_OnConfirmClose(object sender, IMsTscAxEvents_OnConfirmCloseEvent e)
+    {
+        OnConfirmClose?.Invoke(sender, e);
+    }
+
     private void ApplyInitialScaling()
     {
         _currentZoomLevel = RdpConfiguration.Display.AutoScaling 
@@ -494,7 +527,7 @@ public class RdpControl : UserControl
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
 
-        RdpClient.ApplyRdpClientConfiguration(RdpConfiguration);
+        this.ApplyRdpClientConfiguration(RdpConfiguration);
 
         if (RdpConfiguration.UseMsRdc)
         {
@@ -543,11 +576,6 @@ public class RdpControl : UserControl
         }
 
         RegisterEvents();
-
-        // set default values with no configuration
-        RdpClient.ContainerHandledFullScreen = 1;
-        RdpClient.RelativeMouseMode = true;
-        RdpClient.GrabFocusOnConnect = false;
     }
 
     private uint GetDesktopScaleFactor(int zoomLevel)
@@ -569,6 +597,9 @@ public class RdpControl : UserControl
         
         RdpClient!.OnConnected += RdpClient_OnConnected;
         RdpClient.OnDisconnected += RdpClient_OnDisconnected;
+        RdpClient.OnRequestContainerMinimize += RdpClient_OnRequestContainerMinimize;
+        RdpClient.OnRequestLeaveFullScreen += RdpClient_OnRequestLeaveFullScreen;
+        RdpClient.OnConfirmClose += RdpClient_OnConfirmClose;
     }
 
     private bool SetZoomLevel(int desiredZoomLevel)

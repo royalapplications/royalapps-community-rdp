@@ -17,21 +17,6 @@ namespace RoyalApps.Community.Rdp.WinForms.Controls;
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 {
-    #region --- Constructor / Configuration ---
-
-    /// <inheritdoc cref="Configuration"/>
-    public RdpClientConfiguration Configuration { get; }
-
-    /// <summary>
-    /// Creates an instance with the default configuration.
-    /// </summary>
-    public RdpClient2()
-    {
-        Configuration = new();
-    }
-
-    #endregion
-    
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -829,21 +814,6 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
 {
-    #region --- Constructor / Configuration ---
-
-    /// <inheritdoc cref="Configuration"/>
-    public RdpClientConfiguration Configuration { get; }
-
-    /// <summary>
-    /// Creates an instance with the default configuration.
-    /// </summary>
-    public RdpClient7()
-    {
-        Configuration = new();
-    }
-
-    #endregion
-
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -1567,21 +1537,6 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 {
-    #region --- Constructor / Configuration ---
-
-    /// <inheritdoc cref="Configuration"/>
-    public RdpClientConfiguration Configuration { get; }
-
-    /// <summary>
-    /// Creates an instance with the default configuration.
-    /// </summary>
-    public RdpClient8()
-    {
-        Configuration = new();
-    }
-
-    #endregion
-
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -2314,21 +2269,6 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 {
-    #region --- Constructor / Configuration ---
-
-    /// <inheritdoc cref="Configuration"/>
-    public RdpClientConfiguration Configuration { get; }
-
-    /// <summary>
-    /// Creates an instance with the default configuration.
-    /// </summary>
-    public RdpClient9()
-    {
-        Configuration = new();
-    }
-
-    #endregion
-
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>
@@ -3033,21 +2973,6 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 /// <inheritdoc cref="IRdpClient"/>
 public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
 {
-    #region --- Constructor / Configuration ---
-
-    /// <inheritdoc cref="Configuration"/>
-    public RdpClientConfiguration Configuration { get; }
-
-    /// <summary>
-    /// Creates an instance with the default configuration.
-    /// </summary>
-    public RdpClient10()
-    {
-        Configuration = new();
-    }
-
-    #endregion
-
     #region --- Events ---
     
     /// <inheritdoc cref="OnClientAreaClicked"/>

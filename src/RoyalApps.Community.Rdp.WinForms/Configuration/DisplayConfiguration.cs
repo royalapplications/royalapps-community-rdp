@@ -90,14 +90,14 @@ public class DisplayConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imstscax-fullscreentitle</cref>
     /// </seealso>
     public string? FullScreenTitle { get; set; }
-    
+
     /// <summary>
     /// Specifies whether to use the connection bar. The default value is true, which enables the property.
     /// </summary>
     /// <seealso>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-displayconnectionbar</cref>
     /// </seealso>
-    public bool DisplayConnectionBar { get; set; }
+    public bool DisplayConnectionBar { get; set; } = true;
 
     /// <summary>
     /// Specifies the state of the UI connection bar.

@@ -155,10 +155,12 @@ internal static class RdpClientExtensions
 
         TraceConfigurationData(logger, configuration.Program);
         if (!string.IsNullOrWhiteSpace(configuration.Program.StartProgram))
+        {
             rdpClient.StartProgram = configuration.Program.StartProgram;
+            rdpClient.MaximizeShell = configuration.Program.MaximizeShell;
+        }
         if (!string.IsNullOrWhiteSpace(configuration.Program.WorkDir))
             rdpClient.WorkDir = configuration.Program.WorkDir;
-        rdpClient.MaximizeShell = configuration.Program.MaximizeShell;
 
         if (configuration.Gateway.GatewayUsageMethod != GatewayUsageMethod.Never)
         {

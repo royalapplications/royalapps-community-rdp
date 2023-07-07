@@ -157,6 +157,10 @@ internal static class RdpClientExtensions
         if (!string.IsNullOrWhiteSpace(configuration.Program.StartProgram))
         {
             rdpClient.StartProgram = configuration.Program.StartProgram;
+            // ATTENTION:
+            // only touch the 'MaximizeShell' property when a StartProgram is defined
+            // xrdp server do not like this if you set this to true or false and the connection
+            // will be closed immediately
             rdpClient.MaximizeShell = configuration.Program.MaximizeShell;
         }
         if (!string.IsNullOrWhiteSpace(configuration.Program.WorkDir))

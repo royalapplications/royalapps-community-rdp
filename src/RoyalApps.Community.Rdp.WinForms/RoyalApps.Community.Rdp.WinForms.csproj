@@ -11,7 +11,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>RoyalApps_1024.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>0.9.4</Version>
+        <Version>0.9.5</Version>
     </PropertyGroup>
     
     <PropertyGroup>
@@ -26,7 +26,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Devolutions.MsRdpEx" Version="2023.4.28" />
+      <PackageReference Include="Devolutions.MsRdpEx" Version="2023.9.19" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
       <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.18-beta">
         <PrivateAssets>all</PrivateAssets>

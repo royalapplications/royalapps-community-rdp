@@ -55,8 +55,10 @@ internal static class RdpClientExtensions
         }
 
         TraceConfigurationData(logger, configuration.Credentials);
-        rdpClient.UserName = string.IsNullOrEmpty(configuration.Credentials.Username) ? null : configuration.Credentials.Username;
-        rdpClient.Domain = string.IsNullOrEmpty(configuration.Credentials.Domain) ? null : configuration.Credentials.Domain;
+        if (!string.IsNullOrEmpty(configuration.Credentials.Username))
+            rdpClient.UserName = configuration.Credentials.Username;
+        if (!string.IsNullOrEmpty(configuration.Credentials.Domain))
+            rdpClient.Domain = configuration.Credentials.Domain;
         var password = configuration.Credentials.Password?.GetValue();
         if (!string.IsNullOrEmpty(password))
             rdpClient.Password = password;

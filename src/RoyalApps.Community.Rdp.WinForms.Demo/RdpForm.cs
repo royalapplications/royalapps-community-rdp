@@ -123,9 +123,10 @@ public partial class RdpForm : Form
             Items = { remoteDesktopMenu, changeMenu }
         };
 
-        _rdpControl.RdpConfiguration.Server = "10.0.0.200";
-        _rdpControl.RdpConfiguration.Credentials.Username = "Administrator";
-        _rdpControl.RdpConfiguration.Credentials.Password = "Administrator";
+        // Sample Connection
+        // _rdpControl.RdpConfiguration.Server = "10.0.0.200";
+        // _rdpControl.RdpConfiguration.Credentials.Username = "Administrator";
+        // _rdpControl.RdpConfiguration.Credentials.Password = new SensitiveString("Administrator");
 
 
         _rdpControl.OnConnected += (_, _) =>

@@ -52,6 +52,26 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-loadbalanceinfo</cref>
     /// </seealso>
     public string? LoadBalanceInfo { get; set; }
+
+    /// <summary>
+    /// If true, the session will be kept-alive through periodic, non-intrusive input simulation preventing idle-time disconnects based on GPO settings.
+    /// </summary>
+    public bool KeepAlive { get; set; }
+
+    /// <summary>
+    /// Interval in seconds when keep alive-action is performed
+    /// </summary>
+    public int KeepAliveInterval { get; set; } = 60;
+
+    /// <summary>
+    /// The method used to perform the keep-alive action
+    /// </summary>
+    public KeepAliveMethod KeepAliveMethod { get; set; } = KeepAliveMethod.MouseMove;
+    
+    /// <summary>
+    /// Determines whether the client will use Microsoft Entra ID to authenticate to the remote PC. In Azure Virtual Desktop, this provides a single sign-on experience.
+    /// </summary>
+    public bool EnableRdsAadAuth { get; set; }
     
     /// <summary>
     /// ToString

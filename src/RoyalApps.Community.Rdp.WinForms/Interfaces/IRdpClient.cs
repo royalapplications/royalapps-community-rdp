@@ -402,6 +402,26 @@ public interface IRdpClient : IDisposable
     /// </seealso>
     bool RestrictedAdminMode { get; set; }
 
+    /// <summary>
+    /// If true, the session will be kept-alive through periodic, non-intrusive input simulation preventing idle-time disconnects based on GPO settings.
+    /// </summary>
+    bool EnableMouseJiggler { get; set; }
+
+    /// <summary>
+    /// Interval in seconds when keep alive-action is performed
+    /// </summary>
+    int MouseJigglerInterval { get; set; }
+
+    /// <summary>
+    /// 0 = mouse move, 1 = keyboard input (F15 key)
+    /// </summary>
+    KeepAliveMethod MouseJigglerMethod { get; set; }
+    
+    /// <summary>
+    /// Determines whether the client will use Microsoft Entra ID to authenticate to the remote PC. In Azure Virtual Desktop, this provides a single sign-on experience.
+    /// </summary>
+    bool EnableRdsAadAuth { get; set; }
+    
     #endregion
 
     #region ::: Performance :::

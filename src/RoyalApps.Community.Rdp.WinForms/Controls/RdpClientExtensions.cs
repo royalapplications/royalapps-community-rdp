@@ -17,6 +17,10 @@ internal static class RdpClientExtensions
     public static readonly string DeviceScaleFactor = "DeviceScaleFactor";
     public static readonly string DisableCredentialsDelegation = "DisableCredentialsDelegation";
     public static readonly string DisableUdpTransport = "DisableUDPTransport";
+    public static readonly string EnableMouseJiggler = "EnableMouseJiggler";
+    public static readonly string MouseJigglerInterval = "MouseJigglerInterval";
+    public static readonly string MouseJigglerMethod = "MouseJigglerMethod";
+    public static readonly string EnableRdsAadAuth = "EnableRdsAadAuth";
     public static readonly string EnableHardwareMode = "EnableHardwareMode";
     public static readonly string PasswordContainsSmartcardPin = "PasswordContainsSCardPin";
     public static readonly string RestrictedLogon = "RestrictedLogon";
@@ -107,6 +111,15 @@ internal static class RdpClientExtensions
             rdpClient.LoadBalanceInfo = configuration.Connection.LoadBalanceInfo;
         rdpClient.MaxReconnectAttempts = configuration.Connection.MaxReconnectAttempts;
         rdpClient.UseRedirectionServerName = configuration.Connection.UseRedirectionServerName;
+        if (configuration.Connection.KeepAlive)
+        {
+            rdpClient.EnableMouseJiggler = configuration.Connection.KeepAlive;
+            rdpClient.MouseJigglerInterval = configuration.Connection.KeepAliveInterval;
+            rdpClient.MouseJigglerMethod = configuration.Connection.KeepAliveMethod;
+        }
+
+        if (configuration.Connection.EnableRdsAadAuth)
+            rdpClient.EnableRdsAadAuth = true;
 
         TraceConfigurationData(logger, configuration.Performance);
         rdpClient.BitmapCaching = configuration.Performance.BitmapCaching;
@@ -133,7 +146,8 @@ internal static class RdpClientExtensions
         };
 
         TraceConfigurationData(logger, configuration.Input);
-        rdpClient.AllowBackgroundInput = configuration.Input.AllowBackgroundInput;
+        // in order to make keep-alive work, AllowBackgroundInput must be set
+        rdpClient.AllowBackgroundInput = configuration.Input.AllowBackgroundInput || configuration.Connection.KeepAlive;
         rdpClient.GrabFocusOnConnect = configuration.Input.GrabFocusOnConnect;
         rdpClient.RelativeMouseMode = configuration.Input.RelativeMouseMode;
         rdpClient.AcceleratorPassthrough = configuration.Input.AcceleratorPassthrough;

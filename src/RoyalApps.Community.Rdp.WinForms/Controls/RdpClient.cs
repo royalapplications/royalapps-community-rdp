@@ -373,6 +373,74 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         set => LogFeatureNotSupported(nameof(RestrictedAdminMode));
     }
 
+    /// <inheritdoc cref="EnableMouseJiggler"/>
+    public bool EnableMouseJiggler
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableMouseJiggler, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableMouseJiggler);
+            return value;
+        }
+        set
+        {
+            object enableMouseJiggler = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableMouseJiggler, ref enableMouseJiggler, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableMouseJiggler, enableMouseJiggler);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerInterval"/>
+    public int MouseJigglerInterval
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerInterval, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerInterval);
+            return value;
+        }
+        set
+        {
+            object mouseJigglerInterval = value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerInterval, ref mouseJigglerInterval, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerInterval, mouseJigglerInterval);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerMethod"/>
+    public KeepAliveMethod MouseJigglerMethod
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerMethod, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerMethod);
+            return (KeepAliveMethod)value;
+        }
+        set
+        {
+            object mouseJigglerMethod = (int)value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerMethod, ref mouseJigglerMethod, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerMethod, mouseJigglerMethod);
+        }
+    }
+
+    /// <inheritdoc cref="EnableRdsAadAuth"/>
+    public bool EnableRdsAadAuth
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableRdsAadAuth, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableRdsAadAuth);
+            return value;
+        }
+        set
+        {
+            object enableRdsAadAuth = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableRdsAadAuth, ref enableRdsAadAuth, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableRdsAadAuth, enableRdsAadAuth);
+        }
+    }
+
     #endregion
 
     #region ::: Performance :::
@@ -1144,6 +1212,74 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         }
     }
 
+        /// <inheritdoc cref="EnableMouseJiggler"/>
+    public bool EnableMouseJiggler
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableMouseJiggler, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableMouseJiggler);
+            return value;
+        }
+        set
+        {
+            object enableMouseJiggler = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableMouseJiggler, ref enableMouseJiggler, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableMouseJiggler, enableMouseJiggler);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerInterval"/>
+    public int MouseJigglerInterval
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerInterval, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerInterval);
+            return value;
+        }
+        set
+        {
+            object mouseJigglerInterval = value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerInterval, ref mouseJigglerInterval, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerInterval, mouseJigglerInterval);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerMethod"/>
+    public KeepAliveMethod MouseJigglerMethod
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerMethod, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerMethod);
+            return (KeepAliveMethod)value;
+        }
+        set
+        {
+            object mouseJigglerMethod = (int)value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerMethod, ref mouseJigglerMethod, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerMethod, mouseJigglerMethod);
+        }
+    }
+
+    /// <inheritdoc cref="EnableRdsAadAuth"/>
+    public bool EnableRdsAadAuth
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableRdsAadAuth, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableRdsAadAuth);
+            return value;
+        }
+        set
+        {
+            object enableRdsAadAuth = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableRdsAadAuth, ref enableRdsAadAuth, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableRdsAadAuth, enableRdsAadAuth);
+        }
+    }
+
     #endregion
 
     #region ::: Performance :::
@@ -1832,6 +1968,74 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         {
             RestrictedLogon = value;
             DisableCredentialsDelegation = value;
+        }
+    }
+
+        /// <inheritdoc cref="EnableMouseJiggler"/>
+    public bool EnableMouseJiggler
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableMouseJiggler, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableMouseJiggler);
+            return value;
+        }
+        set
+        {
+            object enableMouseJiggler = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableMouseJiggler, ref enableMouseJiggler, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableMouseJiggler, enableMouseJiggler);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerInterval"/>
+    public int MouseJigglerInterval
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerInterval, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerInterval);
+            return value;
+        }
+        set
+        {
+            object mouseJigglerInterval = value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerInterval, ref mouseJigglerInterval, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerInterval, mouseJigglerInterval);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerMethod"/>
+    public KeepAliveMethod MouseJigglerMethod
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerMethod, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerMethod);
+            return (KeepAliveMethod)value;
+        }
+        set
+        {
+            object mouseJigglerMethod = (int)value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerMethod, ref mouseJigglerMethod, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerMethod, mouseJigglerMethod);
+        }
+    }
+
+    /// <inheritdoc cref="EnableRdsAadAuth"/>
+    public bool EnableRdsAadAuth
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableRdsAadAuth, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableRdsAadAuth);
+            return value;
+        }
+        set
+        {
+            object enableRdsAadAuth = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableRdsAadAuth, ref enableRdsAadAuth, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableRdsAadAuth, enableRdsAadAuth);
         }
     }
 
@@ -2601,6 +2805,74 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         }
     }
 
+        /// <inheritdoc cref="EnableMouseJiggler"/>
+    public bool EnableMouseJiggler
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableMouseJiggler, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableMouseJiggler);
+            return value;
+        }
+        set
+        {
+            object enableMouseJiggler = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableMouseJiggler, ref enableMouseJiggler, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableMouseJiggler, enableMouseJiggler);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerInterval"/>
+    public int MouseJigglerInterval
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerInterval, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerInterval);
+            return value;
+        }
+        set
+        {
+            object mouseJigglerInterval = value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerInterval, ref mouseJigglerInterval, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerInterval, mouseJigglerInterval);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerMethod"/>
+    public KeepAliveMethod MouseJigglerMethod
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerMethod, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerMethod);
+            return (KeepAliveMethod)value;
+        }
+        set
+        {
+            object mouseJigglerMethod = (int)value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerMethod, ref mouseJigglerMethod, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerMethod, mouseJigglerMethod);
+        }
+    }
+
+    /// <inheritdoc cref="EnableRdsAadAuth"/>
+    public bool EnableRdsAadAuth
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableRdsAadAuth, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableRdsAadAuth);
+            return value;
+        }
+        set
+        {
+            object enableRdsAadAuth = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableRdsAadAuth, ref enableRdsAadAuth, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableRdsAadAuth, enableRdsAadAuth);
+        }
+    }
+
     #endregion
 
     #region ::: Performance :::
@@ -3303,6 +3575,74 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         {
             RestrictedLogon = value;
             DisableCredentialsDelegation = value;
+        }
+    }
+
+        /// <inheritdoc cref="EnableMouseJiggler"/>
+    public bool EnableMouseJiggler
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableMouseJiggler, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableMouseJiggler);
+            return value;
+        }
+        set
+        {
+            object enableMouseJiggler = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableMouseJiggler, ref enableMouseJiggler, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableMouseJiggler, enableMouseJiggler);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerInterval"/>
+    public int MouseJigglerInterval
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerInterval, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerInterval);
+            return value;
+        }
+        set
+        {
+            object mouseJigglerInterval = value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerInterval, ref mouseJigglerInterval, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerInterval, mouseJigglerInterval);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerMethod"/>
+    public KeepAliveMethod MouseJigglerMethod
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerMethod, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerMethod);
+            return (KeepAliveMethod)value;
+        }
+        set
+        {
+            object mouseJigglerMethod = (int)value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerMethod, ref mouseJigglerMethod, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerMethod, mouseJigglerMethod);
+        }
+    }
+
+    /// <inheritdoc cref="EnableRdsAadAuth"/>
+    public bool EnableRdsAadAuth
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableRdsAadAuth, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableRdsAadAuth);
+            return value;
+        }
+        set
+        {
+            object enableRdsAadAuth = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableRdsAadAuth, ref enableRdsAadAuth, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableRdsAadAuth, enableRdsAadAuth);
         }
     }
 

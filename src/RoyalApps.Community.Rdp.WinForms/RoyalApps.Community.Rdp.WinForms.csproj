@@ -15,7 +15,7 @@
     </PropertyGroup>
     
     <PropertyGroup>
-        <TargetFramework>net7.0-windows</TargetFramework>
+        <TargetFrameworks>net7.0-windows;net8.0-windows</TargetFrameworks>
         <RuntimeIdentifier Condition="$(Platform) == 'x64'">win10-x64</RuntimeIdentifier>
         <RuntimeIdentifier Condition="$(Platform) == 'ARM64'">win10-arm64</RuntimeIdentifier>
         <UseWindowsForms>true</UseWindowsForms>
@@ -29,8 +29,8 @@
 
     <ItemGroup>
       <PackageReference Include="Devolutions.MsRdpEx" Version="2023.9.28" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
-      <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.46-beta">
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>

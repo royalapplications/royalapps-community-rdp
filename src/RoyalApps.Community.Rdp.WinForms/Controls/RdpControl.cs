@@ -546,7 +546,7 @@ public class RdpControl : UserControl
                 Logger.LogDebug("Searching file {SearchPath}", searchPath);
                 if (!Path.Exists(searchPath))
                     continue;
-                msRdcAxLibrary = path;
+                msRdcAxLibrary = searchPath;
                 break;
             }
 

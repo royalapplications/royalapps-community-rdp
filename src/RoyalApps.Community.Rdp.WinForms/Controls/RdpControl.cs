@@ -1,5 +1,5 @@
-﻿#nullable enable
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -14,6 +14,7 @@ using MSTSCLib;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
 using RoyalApps.Community.Rdp.WinForms.Logging;
+using Timer = System.Windows.Forms.Timer;
 
 namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
@@ -33,7 +34,14 @@ public class RdpControl : UserControl
     private int _currentZoomLevel = 100;
     private Size _previousClientSize = Size.Empty;
     
-    private readonly System.Windows.Forms.Timer _timerResizeInProgress;
+    private readonly Timer _timerResizeInProgress;
+    private readonly HashSet<string> _rdClientSearchPaths = new()
+    {
+        @"%ProgramFiles%\Remote Desktop",
+        @"%ProgramFiles(x86)%\Remote Desktop",
+        @"%ProgramFiles(ARM)%\Remote Desktop",
+        @"%LocalAppData%\Apps\Remote Desktop"
+    };
 
     /// <summary>
     /// Access to the RDP client and their events, methods and properties.
@@ -98,7 +106,7 @@ public class RdpControl : UserControl
     {
         RdpConfiguration = new();
         
-        _timerResizeInProgress = new System.Windows.Forms.Timer
+        _timerResizeInProgress = new Timer
         {
             Interval = 1000
         };
@@ -531,21 +539,15 @@ public class RdpControl : UserControl
 
         if (RdpConfiguration.UseMsRdc)
         {
-            // check path
-            var rdClientAxGlobal = Environment.ExpandEnvironmentVariables("%ProgramFiles%\\Remote Desktop\\rdclientax.dll");
-            Logger.LogDebug("Searching rdclientax.dll in {RdClientAxGlobal}", rdClientAxGlobal);
-
-            var rdClientAxLocal = Environment.ExpandEnvironmentVariables("%LocalAppData%\\Apps\\Remote Desktop\\rdclientax.dll");
-            Logger.LogDebug("Then searching rdclientax.dll in {RdClientAxLocal}", rdClientAxLocal);
-
             string? msRdcAxLibrary = null;
-            if (File.Exists(rdClientAxGlobal))
+            foreach (var path in _rdClientSearchPaths)
             {
-                msRdcAxLibrary = rdClientAxGlobal;
-            }
-            else if (File.Exists(rdClientAxLocal))
-            {
-                msRdcAxLibrary = rdClientAxLocal;
+                var searchPath = Path.Combine(Environment.ExpandEnvironmentVariables(path), "rdclientax.dll");
+                Logger.LogDebug("Searching file {SearchPath}", searchPath);
+                if (!Path.Exists(searchPath))
+                    continue;
+                msRdcAxLibrary = path;
+                break;
             }
 
             if (string.IsNullOrWhiteSpace(msRdcAxLibrary))

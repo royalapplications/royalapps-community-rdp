@@ -18,13 +18,14 @@ internal static class RdpClientExtensions
     public static readonly string DisableCredentialsDelegation = "DisableCredentialsDelegation";
     public static readonly string DisableUdpTransport = "DisableUDPTransport";
     public static readonly string EnableMouseJiggler = "EnableMouseJiggler";
-    public static readonly string MouseJigglerInterval = "MouseJigglerInterval";
-    public static readonly string MouseJigglerMethod = "MouseJigglerMethod";
     public static readonly string EnableRdsAadAuth = "EnableRdsAadAuth";
     public static readonly string EnableHardwareMode = "EnableHardwareMode";
+    public static readonly string MouseJigglerInterval = "MouseJigglerInterval";
+    public static readonly string MouseJigglerMethod = "MouseJigglerMethod";
     public static readonly string PasswordContainsSmartcardPin = "PasswordContainsSCardPin";
     public static readonly string RestrictedLogon = "RestrictedLogon";
     public static readonly string RedirectedAuthentication = "RedirectedAuthentication";
+    public static readonly string ShowConnectionInformation = "ShowConnectionInformation";
 
     /// <summary>
     /// Applies the RdpClientConfiguration to the RdpClient.

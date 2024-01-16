@@ -780,6 +780,23 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         set => LogFeatureNotSupported(nameof(NegotiateSecurityLayer));
     }
 
+    /// <inheritdoc cref="ShowConnectionInformation"/>
+    public bool ShowConnectionInformation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.ShowConnectionInformation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.ShowConnectionInformation);
+            return value;
+        }
+        set
+        {
+            object showConnectionInformation = value;
+            if (!this.TrySetProperty(RdpClientExtensions.ShowConnectionInformation, ref showConnectionInformation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.ShowConnectionInformation, showConnectionInformation);
+        }
+    }
+
     #endregion
 
     #region ::: Misc :::
@@ -1564,6 +1581,23 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="ShowConnectionInformation"/>
+    public bool ShowConnectionInformation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.ShowConnectionInformation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.ShowConnectionInformation);
+            return value;
+        }
+        set
+        {
+            object showConnectionInformation = value;
+            if (!this.TrySetProperty(RdpClientExtensions.ShowConnectionInformation, ref showConnectionInformation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.ShowConnectionInformation, showConnectionInformation);
+        }
+    }
+
     #endregion
 
     #region ::: Misc :::
@@ -2327,6 +2361,23 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         {
             try { this.GetNonScriptable5().NegotiateSecurityLayer = value; }
             catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "NegotiateSecurityLayer", value); }
+        }
+    }
+
+    /// <inheritdoc cref="ShowConnectionInformation"/>
+    public bool ShowConnectionInformation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.ShowConnectionInformation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.ShowConnectionInformation);
+            return value;
+        }
+        set
+        {
+            object showConnectionInformation = value;
+            if (!this.TrySetProperty(RdpClientExtensions.ShowConnectionInformation, ref showConnectionInformation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.ShowConnectionInformation, showConnectionInformation);
         }
     }
 
@@ -3158,6 +3209,23 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="ShowConnectionInformation"/>
+    public bool ShowConnectionInformation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.ShowConnectionInformation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.ShowConnectionInformation);
+            return value;
+        }
+        set
+        {
+            object showConnectionInformation = value;
+            if (!this.TrySetProperty(RdpClientExtensions.ShowConnectionInformation, ref showConnectionInformation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.ShowConnectionInformation, showConnectionInformation);
+        }
+    }
+
     #endregion
 
     #region ::: Misc :::
@@ -3929,6 +3997,23 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         {
             try { this.GetNonScriptable5().NegotiateSecurityLayer = value; }
             catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "NegotiateSecurityLayer", value); }
+        }
+    }
+
+    /// <inheritdoc cref="ShowConnectionInformation"/>
+    public bool ShowConnectionInformation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.ShowConnectionInformation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.ShowConnectionInformation);
+            return value;
+        }
+        set
+        {
+            object showConnectionInformation = value;
+            if (!this.TrySetProperty(RdpClientExtensions.ShowConnectionInformation, ref showConnectionInformation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.ShowConnectionInformation, showConnectionInformation);
         }
     }
 

@@ -731,6 +731,11 @@ public interface IRdpClient : IDisposable
     #region ::: Misc :::
 
     /// <summary>
+    /// Shows the Connection Information dialog.
+    /// </summary>
+    bool ShowConnectionInformation { get; set; }
+
+    /// <summary>
     /// ILogger instance. If not set, a default debug logger is used during debug mode.
     /// </summary>
     ILogger Logger { get; set; }

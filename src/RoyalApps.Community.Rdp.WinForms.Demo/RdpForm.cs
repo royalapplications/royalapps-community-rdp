@@ -82,6 +82,12 @@ public partial class RdpForm : Form
             _rdpControl.SetResizeBehavior(ResizeBehavior.SmartReconnect);
         };
 
+        var connectionInfo = new ToolStripMenuItem("Show Connection Info");
+        connectionInfo.Click += (_, _) =>
+        {
+            _rdpControl.ShowConnectionInfo();
+        };
+
         var zoomIn = new ToolStripMenuItem("Zoom In");
         zoomIn.Click += (_, _) => _rdpControl.ZoomIn();
         var zoomOut = new ToolStripMenuItem("Zoom Out");
@@ -93,6 +99,8 @@ public partial class RdpForm : Form
             {
                 connect, 
                 disconnect, 
+                new ToolStripSeparator(),
+                connectionInfo,
                 new ToolStripSeparator(), 
                 settings
             }

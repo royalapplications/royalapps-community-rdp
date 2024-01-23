@@ -283,6 +283,16 @@ public class RdpControl : UserControl
             return;
         RdpClient.SmartSizing = resizeBehavior == ResizeBehavior.SmartSizing;
     }
+
+    /// <summary>
+    /// Shows the connection information dialog.
+    /// </summary>
+    public void ShowConnectionInfo()
+    {
+        if (RdpClient is null)
+            return;
+        RdpClient.ShowConnectionInformation = true;
+    }
     
     /// <summary>
     /// Ensure the ActiveX control updates the client size according to the control size.

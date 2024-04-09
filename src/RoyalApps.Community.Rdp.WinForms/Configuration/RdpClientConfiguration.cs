@@ -1,20 +1,12 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+﻿using System;
+
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// The remote desktop client configuration.
 /// </summary>
 public class RdpClientConfiguration
 {
-    /// <summary>
-    /// The client version to use. By default (value is 0) the highest available client will be used.
-    /// </summary>
-    public int ClientVersion { get; set; }
-
-    /// <summary>
-    /// If true, Microsoft's Remote Desktop Client is used (when installed) instead of the legacy MSTSC ActiveX control.
-    /// </summary>
-    public bool UseMsRdc { get; set; }
-    
     /// <summary>
     /// Specifies the name of the server to which the current control is connected.
     /// The new server name. This parameter can be a DNS name or IP address.
@@ -34,6 +26,11 @@ public class RdpClientConfiguration
     public int Port { get; set; } = 3389;
 
     /// <summary>
+    /// The client version to use. By default (value is 0) the highest available client will be used.
+    /// </summary>
+    public int ClientVersion { get; set; }
+
+    /// <summary>
     /// Specifies the names of virtual channel client DLLs to be loaded. Virtual channel client DLLs are also referred to as Plug-in DLLs.
     /// Comma-separated list of the names of the virtual channel client DLLs to be loaded. The DLL names must contain only alphanumeric characters.
     /// </summary>
@@ -41,6 +38,31 @@ public class RdpClientConfiguration
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imstscadvancedsettings-plugindlls</cref>
     /// </seealso>
     public string? PluginDlls { get; set; }
+
+    /// <summary>
+    /// If true, Microsoft's Remote Desktop Client is used (when installed) instead of the legacy MSTSC ActiveX control.
+    /// </summary>
+    public bool UseMsRdc { get; set; }
+
+    /// <summary>
+    /// If set, the Microsoft Remote Desktop Client files (rdclientax.dll) will be searched here at first.
+    /// </summary>
+    public string? MsRdcPath { get; set; }
+
+    /// <summary>
+    /// If true, a detailed log file will be written to the file system (see: LogFilePath)
+    /// </summary>
+    public bool LogEnabled { get; set; }
+
+    /// <summary>
+    /// The following log levels are available: TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+    /// </summary>
+    public string LogLevel { get; set; } = "TRACE";
+
+    /// <summary>
+    /// The file path to the log file when LogEnabled is set to true.
+    /// </summary>
+    public string LogFilePath { get; set; } = Environment.ExpandEnvironmentVariables(@"%TEMP%\MsRdpEx.log");
     
     /// <summary>
     /// The credential configuration used to log on to the remote desktop session.

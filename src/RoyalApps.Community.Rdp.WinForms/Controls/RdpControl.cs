@@ -35,13 +35,13 @@ public class RdpControl : UserControl
     private Size _previousClientSize = Size.Empty;
     
     private readonly Timer _timerResizeInProgress;
-    private readonly HashSet<string> _rdClientSearchPaths = new()
-    {
+    private readonly HashSet<string> _rdClientSearchPaths =
+    [
         @"%ProgramFiles%\Remote Desktop",
         @"%ProgramFiles(x86)%\Remote Desktop",
         @"%ProgramFiles(ARM)%\Remote Desktop",
         @"%LocalAppData%\Apps\Remote Desktop"
-    };
+    ];
 
     /// <summary>
     /// Access to the RDP client and their events, methods and properties.
@@ -541,6 +541,10 @@ public class RdpControl : UserControl
     {
         RdpClient = RdpClientFactory.Create(RdpConfiguration.ClientVersion);
 
+        Environment.SetEnvironmentVariable("MSRDPEX_LOG_ENABLED", RdpConfiguration.LogEnabled ? "1" : "0");
+        Environment.SetEnvironmentVariable("MSRDPEX_LOG_LEVEL", RdpConfiguration.LogLevel);
+        Environment.SetEnvironmentVariable("MSRDPEX_LOG_FILE_PATH", RdpConfiguration.LogFilePath);
+        
         var control = (Control) RdpClient;
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
@@ -550,14 +554,21 @@ public class RdpControl : UserControl
         if (RdpConfiguration.UseMsRdc)
         {
             string? msRdcAxLibrary = null;
-            foreach (var path in _rdClientSearchPaths)
+
+            if (!string.IsNullOrWhiteSpace(RdpConfiguration.MsRdcPath) && File.Exists(RdpConfiguration.MsRdcPath))
+                msRdcAxLibrary = RdpConfiguration.MsRdcPath;
+
+            if (string.IsNullOrWhiteSpace(msRdcAxLibrary))
             {
-                var searchPath = Path.Combine(Environment.ExpandEnvironmentVariables(path), "rdclientax.dll");
-                Logger.LogDebug("Searching file {SearchPath}", searchPath);
-                if (!Path.Exists(searchPath))
-                    continue;
-                msRdcAxLibrary = searchPath;
-                break;
+                foreach (var path in _rdClientSearchPaths)
+                {
+                    var searchPath = Path.Combine(Environment.ExpandEnvironmentVariables(path), "rdclientax.dll");
+                    Logger.LogDebug("Searching file {SearchPath}", searchPath);
+                    if (!Path.Exists(searchPath))
+                        continue;
+                    msRdcAxLibrary = searchPath;
+                    break;
+                }
             }
 
             if (string.IsNullOrWhiteSpace(msRdcAxLibrary))
@@ -568,6 +579,7 @@ public class RdpControl : UserControl
             else
             {
                 Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxLibrary);
+                Environment.SetEnvironmentVariable("MSRDPEX_AXNAME", "msrdc");
                 Logger.LogInformation("Microsoft Remote Desktop Client will be used");
                 
                 RdpClient.AxName = "msrdc";

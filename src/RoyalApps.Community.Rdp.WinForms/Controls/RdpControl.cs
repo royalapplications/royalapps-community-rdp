@@ -199,7 +199,7 @@ public class RdpControl : UserControl
     /// </summary>
     public void Disconnect()
     {
-        if (RdpClient == null || RdpClient.ConnectionState == ConnectionState.Disconnected) 
+        if (RdpClient == null || RdpClient.GetOcx() == null || RdpClient.ConnectionState == ConnectionState.Disconnected) 
             return;
 
         try

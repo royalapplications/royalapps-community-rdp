@@ -86,7 +86,12 @@ public class RdpControl : UserControl
     /// <summary>
     /// Raised when the client calls the RequestClose method.
     /// </summary>
-    public event EventHandler<IMsTscAxEvents_OnConfirmCloseEvent>? OnConfirmClose; 
+    public event EventHandler<IMsTscAxEvents_OnConfirmCloseEvent>? OnConfirmClose;
+
+    /// <summary>
+    /// This event is raised when a user clicks into a remote desktop session and DisableClickDetection is not set. 
+    /// </summary>
+    public event EventHandler? OnClientAreaClicked;
 
     /// <summary>
     /// Raised before the remote desktop size is going to change.
@@ -171,6 +176,7 @@ public class RdpControl : UserControl
         RdpClient.OnRequestContainerMinimize -= RdpClient_OnRequestContainerMinimize;
         RdpClient.OnRequestLeaveFullScreen -= RdpClient_OnRequestLeaveFullScreen;
         RdpClient.OnConfirmClose -= RdpClient_OnConfirmClose;
+        RdpClient.OnClientAreaClicked -= RdpClient_OnClientAreaClicked;
     }
 
     /// <summary>
@@ -496,6 +502,11 @@ public class RdpControl : UserControl
         OnConfirmClose?.Invoke(sender, e);
     }
 
+    private void RdpClient_OnClientAreaClicked(object? sender, EventArgs e)
+    {
+        OnClientAreaClicked?.Invoke(sender, e);
+    }
+
     private void ApplyInitialScaling()
     {
         _currentZoomLevel = RdpConfiguration.Display.AutoScaling 
@@ -624,6 +635,7 @@ public class RdpControl : UserControl
         RdpClient.OnRequestContainerMinimize += RdpClient_OnRequestContainerMinimize;
         RdpClient.OnRequestLeaveFullScreen += RdpClient_OnRequestLeaveFullScreen;
         RdpClient.OnConfirmClose += RdpClient_OnConfirmClose;
+        RdpClient.OnClientAreaClicked += RdpClient_OnClientAreaClicked;
     }
 
     private bool SetZoomLevel(int desiredZoomLevel)

@@ -1,15 +1,15 @@
-# FreeRDP Control
+# RDP Control
 
-[![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Rdp.WinForms.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.FreeRdp.WinForms)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Rdp.WinForms.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.FreeRdp.WinForms)
-[![.NET](https://img.shields.io/badge/.NET-%3E%3D%20%207.0-blueviolet)](https://dotnet.microsoft.com/download)
+[![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Rdp.WinForms.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.Rdp.WinForms)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Rdp.WinForms.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.Rdp.WinForms)
+[![.NET](https://img.shields.io/badge/.NET-%3E%3D%20%208.0-blueviolet)](https://dotnet.microsoft.com/download)
 
 RoyalApps.Community.RDP contains projects/packages to easily embed/use Microsoft RDP ActiveX wrapped in [MsRdpEx](https://github.com/Devolutions/MsRdpEx) in a Windows (WinForms) application.
 ![Screenshot](https://raw.githubusercontent.com/royalapplications/royalapps-community-rdp/main/docs/assets/Screenshot.png)
 
 ## Getting Started
 ### Installation
-You should install the RoyalApps.Community.FreeRDP.WinForms with NuGet:
+You should install the RoyalApps.Community.RDP.WinForms with NuGet:
 ```
 Install-Package RoyalApps.Community.RDP.WinForms
 ```
@@ -18,7 +18,7 @@ or via the command line interface:
 dotnet add package RoyalApps.Community.RDP.WinForms
 ```
 
-### Using the FreeRdpControl
+### Using the RdpControl
 #### Add Control
 Place the `RdpControl` on a form or in a container control (user control, tab control, etc.) and set the `Dock` property to `DockStyle.Fill`
 

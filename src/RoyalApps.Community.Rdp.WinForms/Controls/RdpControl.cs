@@ -583,16 +583,17 @@ public class RdpControl : UserControl
                 }
             }
 
+            if (MsRdpExManager.Instance.AxHookEnabled)
+                RdpClient.RdpExDll = MsRdpExManager.Instance.CoreApi.MsRdpExDllPath;
+
             if (string.IsNullOrWhiteSpace(msRdcAxLibrary))
             {
                 Logger.LogWarning("Microsoft Remote Desktop Client cannot be used, rdclientax.dll was not found");
 
                 Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxLibrary);
-                Environment.SetEnvironmentVariable("MSRDPEX_AXNAME", "mstsc");
                 
                 RdpConfiguration.UseMsRdc = false;
                 RdpClient.AxName = "mstsc";
-                RdpClient.RdpExDll = null!;
             }
             else
             {
@@ -602,7 +603,6 @@ public class RdpControl : UserControl
                 Environment.SetEnvironmentVariable("MSRDPEX_AXNAME", "msrdc");
                 
                 RdpClient.AxName = "msrdc";
-                RdpClient.RdpExDll = MsRdpExManager.Instance.CoreApi.MsRdpExDllPath;
             }
         }
 

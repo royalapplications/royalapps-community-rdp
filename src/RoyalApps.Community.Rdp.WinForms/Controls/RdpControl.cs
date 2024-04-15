@@ -562,9 +562,10 @@ public class RdpControl : UserControl
 
         this.ApplyRdpClientConfiguration(RdpConfiguration);
 
+        var msTscAxLibrary = Environment.ExpandEnvironmentVariables("%SystemRoot%\\System32\\mstscax.dll");
+
         if (RdpConfiguration.UseMsRdc)
         {
-            var msTscAxLibrary = Environment.ExpandEnvironmentVariables("%SystemRoot%\\System32\\mstscax.dll");
 
             string? msRdcAxLibrary = null;
             if (!string.IsNullOrWhiteSpace(RdpConfiguration.MsRdcPath) && File.Exists(RdpConfiguration.MsRdcPath))
@@ -600,10 +601,21 @@ public class RdpControl : UserControl
                 Logger.LogInformation("Microsoft Remote Desktop Client will be used");
 
                 Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxLibrary);
-                Environment.SetEnvironmentVariable("MSRDPEX_AXNAME", "msrdc");
                 
                 RdpClient.AxName = "msrdc";
             }
+        }
+        else
+        {
+            if (MsRdpExManager.Instance.AxHookEnabled)
+                RdpClient.RdpExDll = MsRdpExManager.Instance.CoreApi.MsRdpExDllPath;
+
+            Logger.LogWarning("Microsoft Remote Desktop Client cannot be used, rdclientax.dll was not found");
+
+            Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxLibrary);
+                
+            RdpConfiguration.UseMsRdc = false;
+            RdpClient.AxName = "mstsc";
         }
 
         // workaround to ensure msrdcax.dll can be used even when hooking not enabled:

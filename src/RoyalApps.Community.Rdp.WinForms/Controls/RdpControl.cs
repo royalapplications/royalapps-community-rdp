@@ -564,8 +564,9 @@ public class RdpControl : UserControl
 
         if (RdpConfiguration.UseMsRdc)
         {
-            string? msRdcAxLibrary = null;
+            var msTscAxLibrary = Environment.ExpandEnvironmentVariables("%SystemRoot%\\System32\\mstscax.dll");
 
+            string? msRdcAxLibrary = null;
             if (!string.IsNullOrWhiteSpace(RdpConfiguration.MsRdcPath) && File.Exists(RdpConfiguration.MsRdcPath))
                 msRdcAxLibrary = RdpConfiguration.MsRdcPath;
 
@@ -585,13 +586,20 @@ public class RdpControl : UserControl
             if (string.IsNullOrWhiteSpace(msRdcAxLibrary))
             {
                 Logger.LogWarning("Microsoft Remote Desktop Client cannot be used, rdclientax.dll was not found");
+
+                Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxLibrary);
+                Environment.SetEnvironmentVariable("MSRDPEX_AXNAME", "mstsc");
+                
                 RdpConfiguration.UseMsRdc = false;
+                RdpClient.AxName = "mstsc";
+                RdpClient.RdpExDll = null!;
             }
             else
             {
+                Logger.LogInformation("Microsoft Remote Desktop Client will be used");
+
                 Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxLibrary);
                 Environment.SetEnvironmentVariable("MSRDPEX_AXNAME", "msrdc");
-                Logger.LogInformation("Microsoft Remote Desktop Client will be used");
                 
                 RdpClient.AxName = "msrdc";
                 RdpClient.RdpExDll = MsRdpExManager.Instance.CoreApi.MsRdpExDllPath;

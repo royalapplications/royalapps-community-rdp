@@ -28,7 +28,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Devolutions.MsRdpEx" Version="2024.4.19" />
+      <PackageReference Include="Devolutions.MsRdpEx" Version="2024.6.10" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
       <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
         <PrivateAssets>all</PrivateAssets>

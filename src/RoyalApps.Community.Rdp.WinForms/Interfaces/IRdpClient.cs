@@ -564,6 +564,14 @@ public interface IRdpClient : IDisposable
     ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7-cameraredirconfigcollection</cref>
     /// </see>
     bool RedirectCameras { get; set; }
+    
+    /// <summary>
+    /// Specifies if redirection of location is allowed.
+    /// </summary>
+    /// <see>
+    ///     EnableLocationRedirection <cref>https://learn.microsoft.com/de-de/windows/win32/termserv/imsrdpextendedsettings-property#property-value</cref>
+    /// </see>
+    bool RedirectLocation { get; set; }
 
     #endregion
 

@@ -26,6 +26,7 @@ internal static class RdpClientExtensions
     public static readonly string RestrictedLogon = "RestrictedLogon";
     public static readonly string RedirectedAuthentication = "RedirectedAuthentication";
     public static readonly string ShowConnectionInformation = "ShowConnectionInformation";
+    public static readonly string EnableLocationRedirection = "EnableLocationRedirection";
 
     /// <summary>
     /// Applies the RdpClientConfiguration to the RdpClient.
@@ -170,6 +171,7 @@ internal static class RdpClientExtensions
         if (!string.IsNullOrWhiteSpace(configuration.Redirection.RedirectDriveLetters))
             rdpClient.RedirectDriveLetters = configuration.Redirection.RedirectDriveLetters;
         rdpClient.RedirectCameras = configuration.Redirection.RedirectCameras;
+        rdpClient.RedirectLocation = configuration.Redirection.RedirectLocation;
 
         TraceConfigurationData(logger, configuration.Program);
         if (!string.IsNullOrWhiteSpace(configuration.Program.StartProgram))

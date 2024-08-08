@@ -93,6 +93,14 @@ public class RedirectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7-cameraredirconfigcollection</cref>
     /// </see>
     public bool RedirectCameras { get; set; }
+    
+    /// <summary>
+    /// Specifies if redirection of location is allowed.
+    /// </summary>
+    /// <see>
+    ///     EnableLocationRedirection <cref>https://learn.microsoft.com/de-de/windows/win32/termserv/imsrdpextendedsettings-property#property-value</cref>
+    /// </see>
+    public bool RedirectLocation { get; set; }
 
     /// <summary>
     /// ToString

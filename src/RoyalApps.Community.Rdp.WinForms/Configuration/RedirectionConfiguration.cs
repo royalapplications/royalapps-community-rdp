@@ -87,6 +87,14 @@ public class RedirectionConfiguration : ExpandableObjectConverter
     public string? RedirectDriveLetters { get; set; }
     
     /// <summary>
+    /// Specifies if redirection of cameras is allowed.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7-cameraredirconfigcollection</cref>
+    /// </see>
+    public bool RedirectCameras { get; set; }
+
+    /// <summary>
     /// ToString
     /// </summary>
     /// <returns>Empty string.</returns>

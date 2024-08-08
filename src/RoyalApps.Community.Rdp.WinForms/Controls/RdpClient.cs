@@ -605,6 +605,22 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         }
     }
 
+
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
     #endregion
 
     #region ::: Keyboard :::
@@ -1433,6 +1449,21 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         }
     }
 
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
     #endregion
 
     #region ::: Keyboard :::
@@ -2212,6 +2243,21 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
             if (RedirectDrives && !this.SetupDriveRedirection(_redirectDriveLetters, out var ex))
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
+            }
+        }
+    }
+
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
             }
         }
     }
@@ -3061,6 +3107,21 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         }
     }
 
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
     #endregion
 
     #region ::: Keyboard :::
@@ -3848,6 +3909,21 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
             if (RedirectDrives && !this.SetupDriveRedirection(_redirectDriveLetters, out var ex))
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
+            }
+        }
+    }
+
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
             }
         }
     }

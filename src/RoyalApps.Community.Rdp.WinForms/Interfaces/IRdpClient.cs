@@ -556,6 +556,22 @@ public interface IRdpClient : IDisposable
     /// If empty, all drives are redirected when RedirectDrives property is true.
     /// </summary>
     string RedirectDriveLetters { get; set; }
+    
+    /// <summary>
+    /// Specifies if redirection of cameras is allowed.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7-cameraredirconfigcollection</cref>
+    /// </see>
+    bool RedirectCameras { get; set; }
+    
+    /// <summary>
+    /// Specifies if redirection of location is allowed.
+    /// </summary>
+    /// <see>
+    ///     EnableLocationRedirection <cref>https://learn.microsoft.com/de-de/windows/win32/termserv/imsrdpextendedsettings-property#property-value</cref>
+    /// </see>
+    bool RedirectLocation { get; set; }
 
     #endregion
 

@@ -605,6 +605,39 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         }
     }
 
+
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
+        }
+    }
+
     #endregion
 
     #region ::: Keyboard :::
@@ -1433,6 +1466,38 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         }
     }
 
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
+        }
+    }
+
     #endregion
 
     #region ::: Keyboard :::
@@ -2213,6 +2278,38 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
             }
+        }
+    }
+
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
         }
     }
 
@@ -3061,6 +3158,38 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         }
     }
 
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
+        }
+    }
+
     #endregion
 
     #region ::: Keyboard :::
@@ -3849,6 +3978,38 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
             }
+        }
+    }
+
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(value, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
         }
     }
 

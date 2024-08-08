@@ -26,6 +26,7 @@ internal static class RdpClientExtensions
     public static readonly string RestrictedLogon = "RestrictedLogon";
     public static readonly string RedirectedAuthentication = "RedirectedAuthentication";
     public static readonly string ShowConnectionInformation = "ShowConnectionInformation";
+    public static readonly string EnableLocationRedirection = "EnableLocationRedirection";
 
     /// <summary>
     /// Applies the RdpClientConfiguration to the RdpClient.
@@ -169,6 +170,8 @@ internal static class RdpClientExtensions
         rdpClient.RedirectDrives = configuration.Redirection.RedirectDrives;
         if (!string.IsNullOrWhiteSpace(configuration.Redirection.RedirectDriveLetters))
             rdpClient.RedirectDriveLetters = configuration.Redirection.RedirectDriveLetters;
+        rdpClient.RedirectCameras = configuration.Redirection.RedirectCameras;
+        rdpClient.RedirectLocation = configuration.Redirection.RedirectLocation;
 
         TraceConfigurationData(logger, configuration.Program);
         if (!string.IsNullOrWhiteSpace(configuration.Program.StartProgram))
@@ -263,6 +266,19 @@ internal static class RdpClientExtensions
     public static IMsRdpClientNonScriptable5 GetNonScriptable5(this IRdpClient rdpClient)
     {
         return (IMsRdpClientNonScriptable5)rdpClient.GetOcx();
+    }
+
+    /// <summary>
+    /// Provides access to the non-scriptable properties (version 7) of a client's remote session on the Remote Desktop ActiveX control.
+    /// </summary>
+    /// <param name="rdpClient">The RDP client instance.</param>
+    /// <returns>IMsRdpClientNonScriptable7</returns>
+    /// <seealso>
+    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7</cref>
+    /// </seealso>
+    public static IMsRdpClientNonScriptable7 GetNonScriptable7(this IRdpClient rdpClient)
+    {
+        return (IMsRdpClientNonScriptable7)rdpClient.GetOcx();
     }
 
     /// <summary>
@@ -440,6 +456,46 @@ internal static class RdpClientExtensions
                     logMessage.AppendFormat("Redirection{0}set.{1}", redirectionState ? " " : " not ", Environment.NewLine);
                 }
                 logMessage.AppendLine();
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                logMessage.AppendLine(ex.Message);
+                logMessage.AppendLine();
+            }
+        }
+
+        exception = success ? null : new Exception(logMessage.ToString());
+        return success;
+    }
+
+    public static bool SetupCameraRedirection(this IRdpClient rdpClient, bool redirect, out Exception? exception)
+    {
+        var logMessage = new StringBuilder();
+        var nonScriptable = rdpClient.GetNonScriptable7();
+
+        logMessage.AppendLine("Setup camera redirection.");
+
+        try
+        {
+            nonScriptable.CameraRedirConfigCollection.Rescan();
+            logMessage.AppendLine("Successfully scanned local cameras.");
+        }
+        catch (Exception ex)
+        {
+            exception = ex;
+            return false;
+        }
+
+        var success = true;
+        for (uint i = 0; i < nonScriptable.CameraRedirConfigCollection.Count; i++)
+        {
+            try
+            {
+                logMessage.AppendLine($"Processing camera: {i}");
+                var cameraRedirectConfig = nonScriptable.CameraRedirConfigCollection.ByIndex[i];
+                if (cameraRedirectConfig is not null)
+                    cameraRedirectConfig.Redirected = redirect;
             }
             catch (Exception ex)
             {

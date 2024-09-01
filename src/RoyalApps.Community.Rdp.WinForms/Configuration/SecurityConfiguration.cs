@@ -51,11 +51,6 @@ public class SecurityConfiguration : ExpandableObjectConverter
     public bool RestrictedAdminMode { get; set; }
     
     /// <summary>
-    /// Determines whether the client will use Microsoft Entra ID to authenticate to the remote PC. In Azure Virtual Desktop, this provides a single sign-on experience.
-    /// </summary>
-    public bool EnableRdsAadAuth { get; set; }
-    
-    /// <summary>
     /// ToString
     /// </summary>
     /// <returns>Empty string.</returns>

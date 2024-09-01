@@ -134,7 +134,8 @@ internal static class RdpClientExtensions
             NetworkConnectionType.BroadbandHigh => 4,
             NetworkConnectionType.WAN => 5,
             NetworkConnectionType.LAN => 6,
-            _ => 4
+            NetworkConnectionType.Automatic => 7,
+            _ => 7
         };
         rdpClient.PerformanceFlags = configuration.Performance.GetPerformanceFlags();
         rdpClient.RedirectDirectX = configuration.Performance.RedirectDirectX;

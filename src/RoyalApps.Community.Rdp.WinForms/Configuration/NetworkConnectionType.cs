@@ -32,5 +32,9 @@ public enum NetworkConnectionType
     /// <summary>
     /// Local area network (LAN) (10 Mbps or higher).
     /// </summary>
-    LAN
+    LAN,
+    /// <summary>
+    /// Automatically detect the network connection type.
+    /// </summary>
+    Automatic,
 }

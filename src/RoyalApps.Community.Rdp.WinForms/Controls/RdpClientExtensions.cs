@@ -163,6 +163,9 @@ internal static class RdpClientExtensions
         rdpClient.AudioRedirectionMode = configuration.Redirection.AudioRedirectionMode;
         rdpClient.AudioQualityMode = configuration.Redirection.AudioQualityMode;
         rdpClient.AudioCaptureRedirectionMode = configuration.Redirection.AudioCaptureRedirectionMode;
+        rdpClient.VideoPlaybackMode = configuration.Redirection.RedirectVideoRendering
+            ? VideoPlaybackMode.DecodeAndRenderOnClient
+            : VideoPlaybackMode.DecodeAndRenderOnServer;
         rdpClient.RedirectPrinters = configuration.Redirection.RedirectPrinters;
         rdpClient.RedirectClipboard = configuration.Redirection.RedirectClipboard;
         rdpClient.RedirectSmartCards = configuration.Redirection.RedirectSmartCards;

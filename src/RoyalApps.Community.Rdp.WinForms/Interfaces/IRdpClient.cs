@@ -509,6 +509,14 @@ public interface IRdpClient : IDisposable
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audiocaptureredirectionmode</cref>
     /// </see>
     bool AudioCaptureRedirectionMode { get; set; }
+    
+    /// <summary>
+    /// Specifies if video decoding and rendering is redirected to the client.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-videoplaybackmode</cref>
+    /// </see>
+    VideoPlaybackMode VideoPlaybackMode { get; set; }
 
     /// <summary>
     /// Specifies if redirection of printers is allowed.

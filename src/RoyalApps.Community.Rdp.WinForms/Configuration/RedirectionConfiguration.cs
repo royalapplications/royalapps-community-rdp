@@ -31,6 +31,14 @@ public class RedirectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audiocaptureredirectionmode</cref>
     /// </see>
     public bool AudioCaptureRedirectionMode { get; set; }
+    
+    /// <summary>
+    /// Specifies if video decoding and rendering is redirected to the client.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-videoplaybackmode</cref>
+    /// </see>
+    public bool RedirectVideoRendering { get; set; }
 
     /// <summary>
     /// Specifies if redirection of printers is allowed.

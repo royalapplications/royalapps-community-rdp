@@ -549,6 +549,15 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         set => LogFeatureNotSupported(nameof(AudioCaptureRedirectionMode));
     }
 
+    /// <summary>
+    /// This client does not support this feature. 
+    /// </summary>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => VideoPlaybackMode.DecodeAndRenderOnServer;
+        set => LogFeatureNotSupported(nameof(VideoPlaybackMode));
+    }
+
     /// <inheritdoc cref="RedirectPrinters"/>
     public bool RedirectPrinters
     {
@@ -1425,6 +1434,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         get => false;
         set => LogFeatureNotSupported(nameof(AudioCaptureRedirectionMode));
     }
+    
+    /// <summary>
+    /// This client does not support this feature. 
+    /// </summary>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => VideoPlaybackMode.DecodeAndRenderOnServer;
+        set => LogFeatureNotSupported(nameof(VideoPlaybackMode));
+    }
 
     /// <inheritdoc cref="RedirectPrinters"/>
     public bool RedirectPrinters
@@ -2245,6 +2263,13 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get => AdvancedSettings8.AudioCaptureRedirectionMode;
         set => AdvancedSettings8.AudioCaptureRedirectionMode = value;
+    }
+
+    /// <inheritdoc cref="VideoPlaybackMode"/>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
+        set => AdvancedSettings8.VideoPlaybackMode = (uint)value;
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
@@ -3130,6 +3155,13 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         set => AdvancedSettings9.AudioCaptureRedirectionMode = value;
     }
 
+    /// <inheritdoc cref="VideoPlaybackMode"/>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
+        set => AdvancedSettings8.VideoPlaybackMode = (uint)value;
+    }
+
     /// <inheritdoc cref="RedirectPrinters"/>
     public bool RedirectPrinters
     {
@@ -3958,6 +3990,13 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         set => AdvancedSettings9.AudioCaptureRedirectionMode = value;
     }
 
+    /// <inheritdoc cref="VideoPlaybackMode"/>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
+        set => AdvancedSettings8.VideoPlaybackMode = (uint)value;
+    }
+
     /// <inheritdoc cref="RedirectPrinters"/>
     public bool RedirectPrinters
     {
@@ -4779,6 +4818,13 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     {
         get => AdvancedSettings9.AudioCaptureRedirectionMode;
         set => AdvancedSettings9.AudioCaptureRedirectionMode = value;
+    }
+
+    /// <inheritdoc cref="VideoPlaybackMode"/>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
+        set => AdvancedSettings8.VideoPlaybackMode = (uint)value;
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>

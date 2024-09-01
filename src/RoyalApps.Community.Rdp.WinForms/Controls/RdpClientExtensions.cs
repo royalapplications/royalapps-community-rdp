@@ -161,6 +161,7 @@ internal static class RdpClientExtensions
 
         TraceConfigurationData(logger, configuration.Redirection);
         rdpClient.AudioRedirectionMode = configuration.Redirection.AudioRedirectionMode;
+        rdpClient.AudioQualityMode = configuration.Redirection.AudioQualityMode;
         rdpClient.AudioCaptureRedirectionMode = configuration.Redirection.AudioCaptureRedirectionMode;
         rdpClient.RedirectPrinters = configuration.Redirection.RedirectPrinters;
         rdpClient.RedirectClipboard = configuration.Redirection.RedirectClipboard;

@@ -493,6 +493,14 @@ public interface IRdpClient : IDisposable
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientsecuredsettings-autoredirectionmode</cref>
     /// </see>
     AudioRedirectionMode AudioRedirectionMode { get; set; }
+    
+    /// <summary>
+    /// Specifies the audio quality mode.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audioqualitymode</cref>
+    /// </see>
+    AudioQualityMode AudioQualityMode { get; set; }
 
     /// <summary>
     /// Specifies or retrieves a Boolean value that indicates whether the default audio input device is redirected from the client to the remote session.

@@ -533,6 +533,15 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// <summary>
     /// This client does not support this feature. 
     /// </summary>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => AudioQualityMode.Dynamic;
+        set => LogFeatureNotSupported(nameof(AudioQualityMode));
+    }
+
+    /// <summary>
+    /// This client does not support this feature. 
+    /// </summary>
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
@@ -1401,6 +1410,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         set => SecuredSettings2.AudioRedirectionMode = (int)value;
     }
 
+    /// <summary>
+    /// This client does not support this feature. 
+    /// </summary>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => AudioQualityMode.Dynamic;
+        set => LogFeatureNotSupported(nameof(AudioQualityMode));
+    }
+
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
@@ -2213,6 +2231,13 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get => (AudioRedirectionMode)SecuredSettings3.AudioRedirectionMode;
         set => SecuredSettings3.AudioRedirectionMode = (int)value;
+    }
+
+    /// <inheritdoc cref="AudioQualityMode"/>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
+        set => AdvancedSettings8.AudioQualityMode = (uint)value;
     }
 
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
@@ -3091,6 +3116,13 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         set => SecuredSettings3.AudioRedirectionMode = (int)value;
     }
 
+    /// <inheritdoc cref="AudioQualityMode"/>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
+        set => AdvancedSettings8.AudioQualityMode = (uint)value;
+    }
+
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
@@ -3912,6 +3944,13 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         set => SecuredSettings3.AudioRedirectionMode = (int)value;
     }
 
+    /// <inheritdoc cref="AudioQualityMode"/>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
+        set => AdvancedSettings8.AudioQualityMode = (uint)value;
+    }
+
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
@@ -4726,6 +4765,13 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     {
         get => (AudioRedirectionMode)SecuredSettings3.AudioRedirectionMode;
         set => SecuredSettings3.AudioRedirectionMode = (int)value;
+    }
+
+    /// <inheritdoc cref="AudioQualityMode"/>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
+        set => AdvancedSettings8.AudioQualityMode = (uint)value;
     }
 
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>

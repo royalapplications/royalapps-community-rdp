@@ -333,6 +333,14 @@ public interface IRdpClient : IDisposable
     bool UseRedirectionServerName { get; set; }
 
     /// <summary>
+    /// The interval in milliseconds between keep-alive packets.
+    /// </summary>
+    /// <seealso>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-keepaliveinterval</cref>
+    /// </seealso>
+    int KeepAliveInterval { get; set; }
+
+    /// <summary>
     /// Specifies the load balancing cookie that will be placed in the X.224 Connection Request packet in the Remote Desktop Session Host (RD Session Host) server protocol connection sequence.
     /// </summary>
     /// <seealso>

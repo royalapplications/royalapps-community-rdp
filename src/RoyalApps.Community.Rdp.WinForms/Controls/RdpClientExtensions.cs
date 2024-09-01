@@ -113,6 +113,7 @@ internal static class RdpClientExtensions
             rdpClient.LoadBalanceInfo = configuration.Connection.LoadBalanceInfo;
         rdpClient.MaxReconnectAttempts = configuration.Connection.MaxReconnectAttempts;
         rdpClient.UseRedirectionServerName = configuration.Connection.UseRedirectionServerName;
+        rdpClient.KeepAliveInterval = configuration.Connection.ConnectionKeepAliveInterval.GetValueOrDefault() * 1000; //Convert seconds to milliseconds, use 0 for disabled
         if (configuration.Connection.KeepAlive)
         {
             rdpClient.EnableMouseJiggler = configuration.Connection.KeepAlive;

@@ -290,6 +290,13 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
+
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
     {
@@ -1158,6 +1165,13 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
             catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "UseRedirectionServerName", value); }
         }
     }
+    
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
@@ -1957,6 +1971,13 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
             try { this.GetPreferredRedirectionInfo().UseRedirectionServerName = value; }
             catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "UseRedirectionServerName", value); }
         }
+    }
+
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
     }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
@@ -2834,6 +2855,13 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
+
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
     {
@@ -3648,6 +3676,13 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
+
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
     {
@@ -4455,6 +4490,13 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
             try { this.GetPreferredRedirectionInfo().UseRedirectionServerName = value; }
             catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "UseRedirectionServerName", value); }
         }
+    }
+
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
     }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>

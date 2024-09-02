@@ -52,6 +52,14 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-loadbalanceinfo</cref>
     /// </seealso>
     public string? LoadBalanceInfo { get; set; }
+    
+    /// <summary>
+    /// The interval in seconds between keep-alive packets.
+    /// </summary>
+    /// <seealso>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-keepaliveinterval</cref>
+    /// </seealso>
+    public int? ConnectionKeepAliveInterval { get; set; }
 
     /// <summary>
     /// If true, the session will be kept-alive through periodic, non-intrusive input simulation preventing idle-time disconnects based on GPO settings.

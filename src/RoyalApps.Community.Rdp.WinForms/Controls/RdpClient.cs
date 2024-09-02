@@ -290,6 +290,13 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
+
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
     {
@@ -526,11 +533,29 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// <summary>
     /// This client does not support this feature. 
     /// </summary>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => AudioQualityMode.Dynamic;
+        set => LogFeatureNotSupported(nameof(AudioQualityMode));
+    }
+
+    /// <summary>
+    /// This client does not support this feature. 
+    /// </summary>
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
         get => false;
         set => LogFeatureNotSupported(nameof(AudioCaptureRedirectionMode));
+    }
+
+    /// <summary>
+    /// This client does not support this feature. 
+    /// </summary>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => VideoPlaybackMode.DecodeAndRenderOnServer;
+        set => LogFeatureNotSupported(nameof(VideoPlaybackMode));
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
@@ -602,6 +627,30 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
             }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras 
+    {
+        get => false;
+        set => LogFeatureNotSupported(nameof(RedirectCameras));
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
         }
     }
 
@@ -1134,6 +1183,13 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
             catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "UseRedirectionServerName", value); }
         }
     }
+    
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
@@ -1363,11 +1419,29 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         set => SecuredSettings2.AudioRedirectionMode = (int)value;
     }
 
+    /// <summary>
+    /// This client does not support this feature. 
+    /// </summary>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => AudioQualityMode.Dynamic;
+        set => LogFeatureNotSupported(nameof(AudioQualityMode));
+    }
+
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
         get => false;
         set => LogFeatureNotSupported(nameof(AudioCaptureRedirectionMode));
+    }
+    
+    /// <summary>
+    /// This client does not support this feature. 
+    /// </summary>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => VideoPlaybackMode.DecodeAndRenderOnServer;
+        set => LogFeatureNotSupported(nameof(VideoPlaybackMode));
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
@@ -1430,6 +1504,30 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
             }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras 
+    {
+        get => false;
+        set => LogFeatureNotSupported(nameof(RedirectCameras));
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
         }
     }
 
@@ -1911,6 +2009,13 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
+
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
     {
@@ -2146,11 +2251,25 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         set => SecuredSettings3.AudioRedirectionMode = (int)value;
     }
 
+    /// <inheritdoc cref="AudioQualityMode"/>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
+        set => AdvancedSettings8.AudioQualityMode = (uint)value;
+    }
+
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
         get => AdvancedSettings8.AudioCaptureRedirectionMode;
         set => AdvancedSettings8.AudioCaptureRedirectionMode = value;
+    }
+
+    /// <inheritdoc cref="VideoPlaybackMode"/>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
+        set => AdvancedSettings8.VideoPlaybackMode = (uint)value;
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
@@ -2213,6 +2332,30 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
             }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras 
+    {
+        get => false;
+        set => LogFeatureNotSupported(nameof(RedirectCameras));
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
         }
     }
 
@@ -2762,6 +2905,13 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
+
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
     {
@@ -2991,11 +3141,25 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         set => SecuredSettings3.AudioRedirectionMode = (int)value;
     }
 
+    /// <inheritdoc cref="AudioQualityMode"/>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
+        set => AdvancedSettings8.AudioQualityMode = (uint)value;
+    }
+
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
         get => AdvancedSettings9.AudioCaptureRedirectionMode;
         set => AdvancedSettings9.AudioCaptureRedirectionMode = value;
+    }
+
+    /// <inheritdoc cref="VideoPlaybackMode"/>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
+        set => AdvancedSettings8.VideoPlaybackMode = (uint)value;
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
@@ -3058,6 +3222,30 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
             }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras 
+    {
+        get => false;
+        set => LogFeatureNotSupported(nameof(RedirectCameras));
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
         }
     }
 
@@ -3552,6 +3740,13 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         }
     }
 
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
+
     /// <inheritdoc cref="LoadBalanceInfo"/>
     public string LoadBalanceInfo
     {
@@ -3781,11 +3976,25 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         set => SecuredSettings3.AudioRedirectionMode = (int)value;
     }
 
+    /// <inheritdoc cref="AudioQualityMode"/>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
+        set => AdvancedSettings8.AudioQualityMode = (uint)value;
+    }
+
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     public bool AudioCaptureRedirectionMode
     {
         get => AdvancedSettings9.AudioCaptureRedirectionMode;
         set => AdvancedSettings9.AudioCaptureRedirectionMode = value;
+    }
+
+    /// <inheritdoc cref="VideoPlaybackMode"/>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
+        set => AdvancedSettings8.VideoPlaybackMode = (uint)value;
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
@@ -3849,6 +4058,868 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
             {
                 Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
             }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras 
+    {
+        get => false;
+        set => LogFeatureNotSupported(nameof(RedirectCameras));
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
+        }
+    }
+
+    #endregion
+
+    #region ::: Keyboard :::
+
+    /// <inheritdoc cref="AcceleratorPassthrough"/>
+    public bool AcceleratorPassthrough
+    {
+        get => AdvancedSettings9.AcceleratorPassthrough != 0;
+        set => AdvancedSettings9.AcceleratorPassthrough = value ? 1 : 0;
+    }
+
+    /// <inheritdoc cref="EnableWindowsKey"/>
+    public bool EnableWindowsKey
+    {
+        get => AdvancedSettings9.EnableWindowsKey != 0;
+        set => AdvancedSettings9.EnableWindowsKey = value ? 1 : 0;
+    }
+
+    /// <inheritdoc cref="KeyboardHookMode"/>
+    public int KeyboardHookMode
+    {
+        get => SecuredSettings3.KeyboardHookMode;
+        set => SecuredSettings3.KeyboardHookMode = value;
+    }
+
+    /// <inheritdoc cref="KeyBoardLayoutStr"/>
+    public string KeyBoardLayoutStr
+    {
+        set => AdvancedSettings9.KeyBoardLayoutStr = value;
+    }
+
+    #endregion
+
+    #region ::: Program :::
+
+    /// <inheritdoc cref="StartProgram"/>
+    public string StartProgram
+    {
+        get => SecuredSettings3.StartProgram;
+        set => SecuredSettings3.StartProgram = value;
+    }
+
+    /// <inheritdoc cref="WorkDir"/>
+    public string WorkDir
+    {
+        get => SecuredSettings3.WorkDir;
+        set => SecuredSettings3.WorkDir = value;
+    }
+
+    /// <inheritdoc cref="MaximizeShell"/>
+    public bool MaximizeShell
+    {
+        get => AdvancedSettings9.MaximizeShell != 0;
+        set => AdvancedSettings9.MaximizeShell = value ? 1 : 0;
+    }
+
+    #endregion
+
+    #region ::: Gateway :::
+
+    /// <inheritdoc cref="GatewayUsageMethod"/>
+    public GatewayUsageMethod GatewayUsageMethod 
+    {
+        get => (GatewayUsageMethod)TransportSettings4.GatewayUsageMethod;
+        set => TransportSettings4.GatewayUsageMethod = (uint) value;
+    }
+    /// <inheritdoc cref="GatewayProfileUsageMethod"/>
+    public GatewayProfileUsageMethod GatewayProfileUsageMethod
+    {
+        get => (GatewayProfileUsageMethod)TransportSettings4.GatewayProfileUsageMethod;
+        set => TransportSettings4.GatewayProfileUsageMethod = (uint)value;
+    }
+    /// <inheritdoc cref="GatewayCredsSource"/>
+    public GatewayCredentialSource GatewayCredsSource
+    {
+        get => (GatewayCredentialSource)TransportSettings4.GatewayCredsSource;
+        set => TransportSettings4.GatewayCredsSource = (uint)value;
+    }
+    /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
+    public GatewayCredentialSource GatewayUserSelectedCredsSource
+    {
+        get => (GatewayCredentialSource)TransportSettings4.GatewayUserSelectedCredsSource;
+        set => TransportSettings4.GatewayUserSelectedCredsSource = (uint)value;
+    }
+    /// <inheritdoc cref="GatewayCredSharing"/>
+    public bool GatewayCredSharing
+    {
+        get => TransportSettings4.GatewayCredSharing != 0;
+        set => TransportSettings4.GatewayCredSharing = value ? 1U : 0U;
+    }
+    /// <inheritdoc cref="GatewayHostname"/>
+    public string GatewayHostname
+    {
+        get => TransportSettings4.GatewayHostname;
+        set => TransportSettings4.GatewayHostname = value;
+    }
+    /// <inheritdoc cref="GatewayUsername"/>
+    public string GatewayUsername
+    {
+        get => TransportSettings4.GatewayUsername;
+        set => TransportSettings4.GatewayUsername = value;
+    }
+    /// <inheritdoc cref="GatewayDomain"/>
+    public string GatewayDomain
+    {
+        get => TransportSettings4.GatewayDomain;
+        set => TransportSettings4.GatewayDomain = value;
+    }
+    /// <inheritdoc cref="GatewayPassword"/>
+    public string GatewayPassword
+    {
+        set => TransportSettings4.GatewayPassword = value;
+    }
+
+    #endregion
+
+    #region ::: HyperV :::
+
+    /// <inheritdoc cref="AuthenticationServiceClass"/>
+    public string AuthenticationServiceClass
+    {
+        get => AdvancedSettings9.AuthenticationServiceClass;
+        set => AdvancedSettings9.AuthenticationServiceClass = value;
+    }
+
+    /// <inheritdoc cref="PCB"/>
+    public string PCB
+    {
+        get => AdvancedSettings9.PCB;
+        set => AdvancedSettings9.PCB = value;
+    }
+
+    /// <inheritdoc cref="NegotiateSecurityLayer"/>
+    public bool NegotiateSecurityLayer
+    {
+        get
+        {
+            try { return this.GetNonScriptable5().NegotiateSecurityLayer; }
+            catch (Exception ex) { Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", "NegotiateSecurityLayer"); }
+            return false;
+        }
+        set
+        {
+            try { this.GetNonScriptable5().NegotiateSecurityLayer = value; }
+            catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "NegotiateSecurityLayer", value); }
+        }
+    }
+
+    /// <inheritdoc cref="ShowConnectionInformation"/>
+    public bool ShowConnectionInformation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.ShowConnectionInformation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.ShowConnectionInformation);
+            return value;
+        }
+        set
+        {
+            object showConnectionInformation = value;
+            if (!this.TrySetProperty(RdpClientExtensions.ShowConnectionInformation, ref showConnectionInformation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.ShowConnectionInformation, showConnectionInformation);
+        }
+    }
+
+    #endregion
+
+    #region ::: Misc :::
+
+    /// <inheritdoc cref="Logger"/>
+    public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
+
+    /// <inheritdoc cref="DisableClickDetection"/>
+    public bool DisableClickDetection { get; set; }
+
+    /// <inheritdoc cref="RaiseClientAreaClicked"/>
+    public void RaiseClientAreaClicked() => OnClientAreaClicked?.Invoke(this, EventArgs.Empty);
+
+    #endregion
+
+    #region ::: MsRdpEx :::
+
+    /// <inheritdoc cref="AxName"/>
+    public string AxName
+    {
+        get => axName;
+        set => axName = value;
+    }
+
+    /// <inheritdoc cref="RdpExDll"/>
+    public string RdpExDll
+    {
+        get => rdpExDll;
+        set => rdpExDll = value;
+    }
+
+    #endregion
+        
+    #endregion
+
+    #region --- Public Methods ---
+
+    /// <inheritdoc cref="GetRemoteMonitorsBoundingBox"/>
+    public void GetRemoteMonitorsBoundingBox(out int left, out int top, out int right, out int bottom)
+    {
+        try
+        {
+            this.GetNonScriptable5().GetRemoteMonitorsBoundingBox(out left, out top, out right, out bottom);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Failed to call RDP client method: {MethodName}", "GetRemoteMonitorsBoundingBox");
+            left = 0;
+            top = 0;
+            right = 0;
+            bottom = 0;
+        }
+    }
+
+    /// <inheritdoc cref="GetErrorDescription"/>
+    public string GetErrorDescription(int disconnectReasonCode) => GetErrorDescription((uint)disconnectReasonCode, (uint)ExtendedDisconnectReason);
+
+    /// <inheritdoc cref="LogFeatureNotSupported"/>
+    public void LogFeatureNotSupported(string feature)
+    {
+        Logger.LogDebug("The feature '{Feature}' is not supported in Rdp Client V10", feature);
+    }
+
+    #endregion
+
+    #region --- Message Processing ---
+
+    /// <inheritdoc cref="WndProc"/>
+    protected override void WndProc(ref Message m)
+    {
+        if (MessageFilter.Filter(this, ref m))
+            return;
+        base.WndProc(ref m);
+    }
+    
+    #endregion
+}
+
+/// <inheritdoc cref="IRdpClient"/>
+public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
+{
+    #region --- Events ---
+    
+    /// <inheritdoc cref="OnClientAreaClicked"/>
+    public event EventHandler? OnClientAreaClicked;
+
+    #endregion
+
+    #region --- Rdp Settings ---
+
+    #region ::: General :::
+
+    // public string Server { get; set; }
+
+    /// <inheritdoc cref="Port"/>
+    public int Port { get => AdvancedSettings9.RDPPort; set => AdvancedSettings9.RDPPort = value; }
+
+    /// <inheritdoc cref="ConnectionState"/>
+    public ConnectionState ConnectionState => (ConnectionState)Connected;
+
+    #endregion
+
+    #region ::: Credentials :::
+
+    // public string UserName { get; set; }
+
+    // public string Domain { get; set; }
+
+    /// <inheritdoc cref="Password"/>
+    public string? Password { set => AdvancedSettings9.ClearTextPassword = value; }
+
+    /// <inheritdoc cref="NetworkLevelAuthentication"/>
+    public bool NetworkLevelAuthentication { get => AdvancedSettings9.EnableCredSspSupport; set => AdvancedSettings9.EnableCredSspSupport = value; }
+
+    /// <inheritdoc cref="PasswordContainsSmartCardPin"/>
+    public bool PasswordContainsSmartCardPin
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.PasswordContainsSmartcardPin, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.PasswordContainsSmartcardPin);
+            return value;
+        }
+        set
+        {
+            object passwordContainsSCardPin = value;
+            if (!this.TrySetProperty(RdpClientExtensions.PasswordContainsSmartcardPin, ref passwordContainsSCardPin, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.PasswordContainsSmartcardPin, passwordContainsSCardPin);
+        }
+    }
+
+    #endregion
+
+    #region ::: Display Settings :::
+
+    // public int ColorDepth { get; set; }
+
+    // public int DesktopWidth { get; set; }
+
+    // public int DesktopHeight { get; set; }
+
+    /// <inheritdoc cref="SmartSizing"/>
+    public bool SmartSizing { get => AdvancedSettings9.SmartSizing; set => AdvancedSettings9.SmartSizing = value; }
+
+    // public bool FullScreen { get; set; }
+
+    // public string FullScreenTitle { set; }
+
+    /// <inheritdoc cref="ContainerHandledFullScreen"/>
+    public int ContainerHandledFullScreen
+    {
+        get => AdvancedSettings9.ContainerHandledFullScreen;
+        set => AdvancedSettings9.ContainerHandledFullScreen = value;
+    }
+
+    /// <inheritdoc cref="DisplayConnectionBar"/>
+    public bool DisplayConnectionBar { get => AdvancedSettings9.DisplayConnectionBar; set => AdvancedSettings9.DisplayConnectionBar = value; }
+
+    /// <inheritdoc cref="PinConnectionBar"/>
+    public bool PinConnectionBar { get => AdvancedSettings9.PinConnectionBar; set => AdvancedSettings9.PinConnectionBar = value; }
+
+    /// <inheritdoc cref="UseMultimon"/>
+    public bool UseMultimon
+    {
+        get
+        {
+            try { return this.GetNonScriptable5().UseMultimon; }
+            catch (Exception ex) { Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", "UseMultimon"); }
+            return false;
+        }
+        set
+        {
+            try { this.GetNonScriptable5().UseMultimon = value; }
+            catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "UseMultimon", value); }
+        }
+    }
+
+    /// <inheritdoc cref="RemoteMonitorCount"/>
+    public uint RemoteMonitorCount
+    {
+        get
+        {
+            try { return this.GetNonScriptable5().RemoteMonitorCount; }
+            catch (Exception ex) { Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", "RemoteMonitorCount"); }
+            return 1;
+        }
+    }
+
+    /// <inheritdoc cref="DeviceScaleFactor"/>
+    public uint DeviceScaleFactor
+    {
+        get
+        {
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DeviceScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DeviceScaleFactor);
+            return value;
+        }
+        set
+        {
+            object deviceScaleFactor = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DeviceScaleFactor, ref deviceScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DeviceScaleFactor, deviceScaleFactor);
+        }
+    }
+
+    /// <inheritdoc cref="DesktopScaleFactor"/>
+    public uint DesktopScaleFactor
+    {
+        get
+        {
+            if (!this.TryGetProperty<uint>(RdpClientExtensions.DesktopScaleFactor, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DesktopScaleFactor);
+            return value;
+        }
+        set
+        {
+            object desktopScaleFactor = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DesktopScaleFactor, ref desktopScaleFactor, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DesktopScaleFactor, desktopScaleFactor);
+        }
+    }
+
+
+    #endregion
+
+    #region ::: Advanced :::
+
+    /// <inheritdoc cref="AuthenticationLevel"/>
+    public AuthenticationLevel AuthenticationLevel
+    {
+        get => (AuthenticationLevel)AdvancedSettings9.AuthenticationLevel;
+        set => AdvancedSettings9.AuthenticationLevel = (uint)value;
+    }
+
+    /// <inheritdoc cref="Compression"/>
+    public bool Compression
+    {
+        get => AdvancedSettings9.Compress > 0;
+        set => AdvancedSettings9.Compress = value ? 1 : 0;
+    }
+
+    /// <inheritdoc cref="BitmapCaching"/>
+    public bool BitmapCaching
+    {
+        get => AdvancedSettings9.BitmapPersistence > 0;
+        set
+        {
+            AdvancedSettings9.BitmapPersistence = value ? 1 : 0;
+            AdvancedSettings9.BitmapPeristence = value ? 1 : 0;
+        }
+    }
+
+    /// <inheritdoc cref="PublicMode"/>
+    public bool PublicMode
+    {
+        get => AdvancedSettings9.PublicMode;
+        set => AdvancedSettings9.PublicMode = value;
+    }
+
+    /// <inheritdoc cref="AllowBackgroundInput"/>
+    public bool AllowBackgroundInput
+    {
+        get => AdvancedSettings9.allowBackgroundInput > 0;
+        set => AdvancedSettings9.allowBackgroundInput = value ? 1 : 0;
+    }
+
+    /// <inheritdoc cref="DisableUdpTransport"/>>
+    public bool DisableUdpTransport
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableUdpTransport, out var value, out var ex))
+                Logger.LogWarning(ex,"Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableUdpTransport);
+            return value;
+        }
+        set
+        {
+            object disableUdpTransport = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DisableUdpTransport, ref disableUdpTransport, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableUdpTransport, disableUdpTransport);
+        }
+    }
+
+    /// <inheritdoc cref="EnableAutoReconnect"/>
+    public bool EnableAutoReconnect
+    {
+        get => AdvancedSettings9.EnableAutoReconnect;
+        set => AdvancedSettings9.EnableAutoReconnect = value;
+    }
+
+    /// <inheritdoc cref="MaxReconnectAttempts"/>
+    public int MaxReconnectAttempts
+    {
+        get => AdvancedSettings9.MaxReconnectAttempts;
+        set => AdvancedSettings9.MaxReconnectAttempts = value;
+    }
+
+    /// <inheritdoc cref="ConnectToAdministerServer"/>
+    public bool ConnectToAdministerServer
+    {
+        get => AdvancedSettings9.ConnectToAdministerServer;
+        set => AdvancedSettings9.ConnectToAdministerServer = value;
+    }
+
+    /// <inheritdoc cref="UseRedirectionServerName"/>
+    public bool UseRedirectionServerName
+    {
+        get
+        {
+            try { return this.GetPreferredRedirectionInfo().UseRedirectionServerName; }
+            catch (Exception ex) { Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", "UseRedirectionServerName"); }
+            return false;
+        }
+        set
+        {
+            try { this.GetPreferredRedirectionInfo().UseRedirectionServerName = value; }
+            catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "UseRedirectionServerName", value); }
+        }
+    }
+
+    /// <inheritdoc cref="KeepAliveInterval"/>
+    public int KeepAliveInterval
+    {
+        get => AdvancedSettings2.keepAliveInterval;
+        set => AdvancedSettings2.keepAliveInterval = value;
+    }
+
+    /// <inheritdoc cref="LoadBalanceInfo"/>
+    public string LoadBalanceInfo
+    {
+        get => AdvancedSettings9.LoadBalanceInfo;
+        set => RdpClientExtensions.SetLoadBalanceInfo(value, AdvancedSettings9);
+    }
+
+    /// <inheritdoc cref="PluginDlls"/>
+    public string PluginDlls { set => AdvancedSettings9.PluginDlls = value; }
+
+    /// <inheritdoc cref="GrabFocusOnConnect"/>
+    public bool GrabFocusOnConnect
+    {
+        get => AdvancedSettings9.GrabFocusOnConnect;
+        set => AdvancedSettings9.GrabFocusOnConnect = value;
+    }
+
+    /// <inheritdoc cref="RelativeMouseMode"/>
+    public bool RelativeMouseMode { get => AdvancedSettings9.RelativeMouseMode; set => AdvancedSettings9.RelativeMouseMode = value; }
+
+    /// <inheritdoc cref="DisableCredentialsDelegation"/>
+    public bool DisableCredentialsDelegation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.DisableCredentialsDelegation, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DisableCredentialsDelegation);
+            return value;
+        }
+        set
+        {
+            object disableCredentialsDelegation = value;
+            if (!this.TrySetProperty(RdpClientExtensions.DisableCredentialsDelegation, ref disableCredentialsDelegation, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.DisableCredentialsDelegation, disableCredentialsDelegation);
+        }
+    }
+
+    /// <inheritdoc cref="RedirectedAuthentication"/>
+    public bool RedirectedAuthentication
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RedirectedAuthentication, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RedirectedAuthentication);
+            return value;
+        }
+        set
+        {
+            object redirectedAuthentication = value;
+            if (!this.TrySetProperty(RdpClientExtensions.RedirectedAuthentication, ref redirectedAuthentication, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RedirectedAuthentication, redirectedAuthentication);
+        }
+    }
+
+    /// <inheritdoc cref="RestrictedLogon"/>
+    public bool RestrictedLogon
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.RestrictedLogon, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.RestrictedLogon);
+            return value;
+        }
+        set
+        {
+            object restrictedLogon = value;
+            if (!this.TrySetProperty(RdpClientExtensions.RestrictedLogon, ref restrictedLogon, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.RestrictedLogon, restrictedLogon);
+        }
+    }
+
+
+    /// <inheritdoc cref="RemoteCredentialGuard"/>
+    public bool RemoteCredentialGuard
+    {
+        get => DisableCredentialsDelegation && RedirectedAuthentication;
+        set
+        {
+            RedirectedAuthentication = value;
+            DisableCredentialsDelegation = value;
+        }
+    }
+
+    /// <inheritdoc cref="RestrictedAdminMode"/>
+    public bool RestrictedAdminMode
+    {
+        get => DisableCredentialsDelegation && RestrictedLogon;
+        set
+        {
+            RestrictedLogon = value;
+            DisableCredentialsDelegation = value;
+        }
+    }
+
+        /// <inheritdoc cref="EnableMouseJiggler"/>
+    public bool EnableMouseJiggler
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableMouseJiggler, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableMouseJiggler);
+            return value;
+        }
+        set
+        {
+            object enableMouseJiggler = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableMouseJiggler, ref enableMouseJiggler, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableMouseJiggler, enableMouseJiggler);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerInterval"/>
+    public int MouseJigglerInterval
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerInterval, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerInterval);
+            return value;
+        }
+        set
+        {
+            object mouseJigglerInterval = value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerInterval, ref mouseJigglerInterval, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerInterval, mouseJigglerInterval);
+        }
+    }
+
+    /// <inheritdoc cref="MouseJigglerMethod"/>
+    public KeepAliveMethod MouseJigglerMethod
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.MouseJigglerMethod, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.MouseJigglerMethod);
+            return (KeepAliveMethod)value;
+        }
+        set
+        {
+            object mouseJigglerMethod = (int)value;
+            if (!this.TrySetProperty(RdpClientExtensions.MouseJigglerMethod, ref mouseJigglerMethod, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.MouseJigglerMethod, mouseJigglerMethod);
+        }
+    }
+
+    /// <inheritdoc cref="EnableRdsAadAuth"/>
+    public bool EnableRdsAadAuth
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableRdsAadAuth, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableRdsAadAuth);
+            return value;
+        }
+        set
+        {
+            object enableRdsAadAuth = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableRdsAadAuth, ref enableRdsAadAuth, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableRdsAadAuth, enableRdsAadAuth);
+        }
+    }
+
+    #endregion
+
+    #region ::: Performance :::
+
+    /// <inheritdoc cref="NetworkConnectionType"/>
+    public uint NetworkConnectionType
+    {
+        get => AdvancedSettings9.NetworkConnectionType;
+        set => AdvancedSettings9.NetworkConnectionType = value;
+    }
+
+    /// <inheritdoc cref="PerformanceFlags"/>
+    public int PerformanceFlags
+    {
+        get => AdvancedSettings9.PerformanceFlags;
+        set => AdvancedSettings9.PerformanceFlags = value;
+    }
+
+    /// <inheritdoc cref="RedirectDirectX"/>
+    public bool RedirectDirectX
+    {
+        get => AdvancedSettings9.RedirectDirectX;
+        set => AdvancedSettings9.RedirectDirectX = value;
+    }
+
+    /// <inheritdoc cref="BandwidthDetection"/>
+    public bool BandwidthDetection
+    {
+        get => AdvancedSettings9.BandwidthDetection;
+        set => AdvancedSettings9.BandwidthDetection = value;
+    }
+
+    /// <inheritdoc cref="EnableHardwareMode"/>
+    public bool EnableHardwareMode
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableHardwareMode, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableHardwareMode);
+            return value;
+        }
+        set
+        {
+            object enableHardwareMode = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableHardwareMode, ref enableHardwareMode, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableHardwareMode, enableHardwareMode);
+        }
+    }
+
+    /// <inheritdoc cref="ClientProtocolSpec"/>
+    public ClientSpec ClientProtocolSpec
+    {
+        get => AdvancedSettings9.ClientProtocolSpec;
+        set => AdvancedSettings9.ClientProtocolSpec = value;
+    }
+
+    #endregion
+
+    #region ::: Redirection :::
+
+    /// <inheritdoc cref="AudioRedirectionMode"/>
+    public AudioRedirectionMode AudioRedirectionMode
+    {
+        get => (AudioRedirectionMode)SecuredSettings3.AudioRedirectionMode;
+        set => SecuredSettings3.AudioRedirectionMode = (int)value;
+    }
+
+    /// <inheritdoc cref="AudioQualityMode"/>
+    public AudioQualityMode AudioQualityMode
+    {
+        get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
+        set => AdvancedSettings8.AudioQualityMode = (uint)value;
+    }
+
+    /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
+    public bool AudioCaptureRedirectionMode
+    {
+        get => AdvancedSettings9.AudioCaptureRedirectionMode;
+        set => AdvancedSettings9.AudioCaptureRedirectionMode = value;
+    }
+
+    /// <inheritdoc cref="VideoPlaybackMode"/>
+    public VideoPlaybackMode VideoPlaybackMode
+    {
+        get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
+        set => AdvancedSettings8.VideoPlaybackMode = (uint)value;
+    }
+
+    /// <inheritdoc cref="RedirectPrinters"/>
+    public bool RedirectPrinters
+    {
+        get => AdvancedSettings9.RedirectPrinters;
+        set => AdvancedSettings9.RedirectPrinters = value;
+    }
+
+    /// <inheritdoc cref="RedirectClipboard"/>
+    public bool RedirectClipboard
+    {
+        get => AdvancedSettings9.RedirectClipboard;
+        set => AdvancedSettings9.RedirectClipboard = value;
+    }
+
+    /// <inheritdoc cref="RedirectSmartCards"/>
+    public bool RedirectSmartCards
+    {
+        get => AdvancedSettings9.RedirectSmartCards;
+        set => AdvancedSettings9.RedirectSmartCards = value;
+    }
+    /// <inheritdoc cref="RedirectPorts"/>
+    public bool RedirectPorts
+    {
+        get => AdvancedSettings9.RedirectPorts;
+        set => AdvancedSettings9.RedirectPorts = value;
+    }
+
+    /// <inheritdoc cref="RedirectDevices"/>
+    public bool RedirectDevices
+    {
+        get => AdvancedSettings9.RedirectDevices;
+        set => AdvancedSettings9.RedirectDevices = value;
+    }
+
+    /// <inheritdoc cref="RedirectPOSDevices"/>
+    public bool RedirectPOSDevices
+    {
+        get => AdvancedSettings9.RedirectPOSDevices;
+        set => AdvancedSettings9.RedirectPOSDevices = value;
+    }
+
+    /// <inheritdoc cref="RedirectDrives"/>
+    public bool RedirectDrives
+    {
+        get => AdvancedSettings9.RedirectDrives;
+        set => AdvancedSettings9.RedirectDrives = value;
+    }
+
+    private string _redirectDriveLetters = string.Empty;
+        
+    /// <inheritdoc cref="RedirectDriveLetters"/>
+    public string RedirectDriveLetters
+    {
+        get => _redirectDriveLetters;
+        set
+        {
+            _redirectDriveLetters = value;
+            if (RedirectDrives && !this.SetupDriveRedirection(_redirectDriveLetters, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
+            }
+        }
+    }
+
+    private bool _redirectCameras;
+    /// <inheritdoc cref="RedirectCameras"/>
+    public bool RedirectCameras 
+    {
+        get => _redirectCameras;
+        set
+        {
+            _redirectCameras = value;
+            if (!this.SetupCameraRedirection(_redirectCameras, out var ex))
+            {
+                Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+            }
+        }
+    }
+
+    /// <inheritdoc cref="RedirectLocation"/>
+    public bool RedirectLocation
+    {
+        get
+        {
+            if (!this.TryGetProperty<bool>(RdpClientExtensions.EnableLocationRedirection, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.EnableLocationRedirection);
+            return value;
+        }
+        set
+        {
+            object enableLocationRedirect = value;
+            if (!this.TrySetProperty(RdpClientExtensions.EnableLocationRedirection, ref enableLocationRedirect, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.EnableLocationRedirection, enableLocationRedirect);
         }
     }
 

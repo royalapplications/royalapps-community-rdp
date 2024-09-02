@@ -333,6 +333,14 @@ public interface IRdpClient : IDisposable
     bool UseRedirectionServerName { get; set; }
 
     /// <summary>
+    /// The interval in milliseconds between keep-alive packets.
+    /// </summary>
+    /// <seealso>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-keepaliveinterval</cref>
+    /// </seealso>
+    int KeepAliveInterval { get; set; }
+
+    /// <summary>
     /// Specifies the load balancing cookie that will be placed in the X.224 Connection Request packet in the Remote Desktop Session Host (RD Session Host) server protocol connection sequence.
     /// </summary>
     /// <seealso>
@@ -485,6 +493,14 @@ public interface IRdpClient : IDisposable
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientsecuredsettings-autoredirectionmode</cref>
     /// </see>
     AudioRedirectionMode AudioRedirectionMode { get; set; }
+    
+    /// <summary>
+    /// Specifies the audio quality mode.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audioqualitymode</cref>
+    /// </see>
+    AudioQualityMode AudioQualityMode { get; set; }
 
     /// <summary>
     /// Specifies or retrieves a Boolean value that indicates whether the default audio input device is redirected from the client to the remote session.
@@ -493,6 +509,14 @@ public interface IRdpClient : IDisposable
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audiocaptureredirectionmode</cref>
     /// </see>
     bool AudioCaptureRedirectionMode { get; set; }
+    
+    /// <summary>
+    /// Specifies if video decoding and rendering is redirected to the client.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-videoplaybackmode</cref>
+    /// </see>
+    VideoPlaybackMode VideoPlaybackMode { get; set; }
 
     /// <summary>
     /// Specifies if redirection of printers is allowed.
@@ -556,6 +580,22 @@ public interface IRdpClient : IDisposable
     /// If empty, all drives are redirected when RedirectDrives property is true.
     /// </summary>
     string RedirectDriveLetters { get; set; }
+
+    /// <summary>
+    /// Specifies if redirection of cameras is allowed.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7-cameraredirconfigcollection</cref>
+    /// </see>
+    bool RedirectCameras { get; set; }
+
+    /// <summary>
+    /// Specifies if redirection of location is allowed.
+    /// </summary>
+    /// <see>
+    ///     EnableLocationRedirection <cref>https://learn.microsoft.com/de-de/windows/win32/termserv/imsrdpextendedsettings-property#property-value</cref>
+    /// </see>
+    bool RedirectLocation { get; set; }
 
     #endregion
 

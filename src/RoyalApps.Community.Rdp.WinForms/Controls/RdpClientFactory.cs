@@ -16,7 +16,10 @@ public class RdpClientFactory
     /// <exception cref="Exception">Throws an exception if no RDP client </exception>
     public static IRdpClient Create(int rdpClientVersion = 0)
     {
-        if (rdpClientVersion is 0 or >= 10 && Create<RdpClient10>(out var rdpClient, out var exception))
+        if (rdpClientVersion is 0 or >= 12 && Create<RdpClient12>(out var rdpClient, out var exception))
+            return rdpClient!;
+        
+        if (rdpClientVersion is 0 or >= 10 && Create<RdpClient10>(out rdpClient, out exception))
             return rdpClient!;
 
         if (rdpClientVersion is 0 or >= 9 && Create<RdpClient9>(out rdpClient, out exception))

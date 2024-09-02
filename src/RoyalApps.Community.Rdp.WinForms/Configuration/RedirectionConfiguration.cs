@@ -17,12 +17,28 @@ public class RedirectionConfiguration : ExpandableObjectConverter
     public AudioRedirectionMode AudioRedirectionMode { get; set; }
 
     /// <summary>
+    /// Specifies the audio quality mode.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audioqualitymode</cref>
+    /// </see>
+    public AudioQualityMode AudioQualityMode { get; set; }
+
+    /// <summary>
     /// Specifies or retrieves a Boolean value that indicates whether the default audio input device is redirected from the client to the remote session.
     /// </summary>
     /// <see>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audiocaptureredirectionmode</cref>
     /// </see>
     public bool AudioCaptureRedirectionMode { get; set; }
+    
+    /// <summary>
+    /// Specifies if video decoding and rendering is redirected to the client.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-videoplaybackmode</cref>
+    /// </see>
+    public bool RedirectVideoRendering { get; set; }
 
     /// <summary>
     /// Specifies if redirection of printers is allowed.
@@ -86,6 +102,22 @@ public class RedirectionConfiguration : ExpandableObjectConverter
     /// </summary>
     public string? RedirectDriveLetters { get; set; }
     
+    /// <summary>
+    /// Specifies if redirection of cameras is allowed.
+    /// </summary>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7-cameraredirconfigcollection</cref>
+    /// </see>
+    public bool RedirectCameras { get; set; }
+
+    /// <summary>
+    /// Specifies if redirection of location is allowed.
+    /// </summary>
+    /// <see>
+    ///     EnableLocationRedirection <cref>https://learn.microsoft.com/de-de/windows/win32/termserv/imsrdpextendedsettings-property#property-value</cref>
+    /// </see>
+    public bool RedirectLocation { get; set; }
+
     /// <summary>
     /// ToString
     /// </summary>

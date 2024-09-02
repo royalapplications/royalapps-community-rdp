@@ -105,6 +105,12 @@ public class RdpControl : UserControl
     public event EventHandler? RemoteDesktopSizeChanged;
 
     /// <summary>
+    /// Raised after the <see cref="IRdpClient"/> was created and configured, but before the connection is established.
+    /// This event allows users to customize the RdpClient in extra ways not covered by the <see cref="RdpConfiguration"/>.
+    /// </summary>
+    public event EventHandler? RdpClientConfigured;
+
+    /// <summary>
     /// Creates a new instance of the RdpControl.
     /// </summary>
     public RdpControl()
@@ -190,6 +196,8 @@ public class RdpControl : UserControl
         _canScale = false;
 
         ApplyInitialScaling();
+
+        this.RdpClientConfigured?.Invoke(this, EventArgs.Empty);
 
         RdpClient!.Connect();
     }

@@ -288,19 +288,6 @@ internal static class RdpClientExtensions
     }
 
     /// <summary>
-    /// Provides access to the non-scriptable properties (version 7) of a client's remote session on the Remote Desktop ActiveX control.
-    /// </summary>
-    /// <param name="rdpClient">The RDP client instance.</param>
-    /// <returns>IMsRdpClientNonScriptable7</returns>
-    /// <seealso>
-    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7</cref>
-    /// </seealso>
-    public static IMsRdpClientNonScriptable7 GetNonScriptable7(this IRdpClient rdpClient)
-    {
-        return (IMsRdpClientNonScriptable7)rdpClient.GetOcx();
-    }
-
-    /// <summary>
     /// Provides access to the extended settings interface of a client's remote session on the Remote Desktop ActiveX control.
     /// </summary>
     /// <param name="rdpClient">The RDP client instance.</param>

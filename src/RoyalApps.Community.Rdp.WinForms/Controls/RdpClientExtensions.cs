@@ -258,7 +258,7 @@ internal static class RdpClientExtensions
     /// </seealso>
     public static IMsRdpClientNonScriptable4 GetNonScriptable4(this IRdpClient rdpClient)
     {
-        return (IMsRdpClientNonScriptable4)rdpClient.GetOcx();
+        return (IMsRdpClientNonScriptable4)rdpClient.GetOcx()!;
     }
 
     /// <summary>
@@ -271,7 +271,20 @@ internal static class RdpClientExtensions
     /// </seealso>
     public static IMsRdpClientNonScriptable5 GetNonScriptable5(this IRdpClient rdpClient)
     {
-        return (IMsRdpClientNonScriptable5)rdpClient.GetOcx();
+        return (IMsRdpClientNonScriptable5)rdpClient.GetOcx()!;
+    }
+
+    /// <summary>
+    /// Provides access to the non-scriptable properties (version 7) of a client's remote session on the Remote Desktop ActiveX control.
+    /// </summary>
+    /// <param name="rdpClient">The RDP client instance.</param>
+    /// <returns>IMsRdpClientNonScriptable7</returns>
+    /// <seealso>
+    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7</cref>
+    /// </seealso>
+    public static IMsRdpClientNonScriptable7 GetNonScriptable7(this IRdpClient rdpClient)
+    {
+        return (IMsRdpClientNonScriptable7)rdpClient.GetOcx()!;
     }
 
     /// <summary>
@@ -297,7 +310,7 @@ internal static class RdpClientExtensions
     /// </seealso>
     public static IMsRdpExtendedSettings GetExtendedSettings(this IRdpClient rdpClient)
     {
-        return (IMsRdpExtendedSettings)rdpClient.GetOcx();
+        return (IMsRdpExtendedSettings)rdpClient.GetOcx()!;
     }
 
     /// <summary>
@@ -362,7 +375,7 @@ internal static class RdpClientExtensions
     /// </seealso>
     public static IMsRdpPreferredRedirectionInfo GetPreferredRedirectionInfo(this IRdpClient rdpClient)
     {
-        return (IMsRdpPreferredRedirectionInfo) rdpClient.GetOcx();
+        return (IMsRdpPreferredRedirectionInfo) rdpClient.GetOcx()!;
     }
 
     /// <summary>

@@ -836,7 +836,7 @@ public interface IRdpClient : IDisposable
     /// Retrieves a reference to the underlying ActiveX control.
     /// </summary>
     /// <returns>The ActiveX control.</returns>
-    object GetOcx();
+    object? GetOcx();
 
     /// <summary>
     /// Specifies the bounding rectangle of the remote monitor.

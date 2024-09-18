@@ -6,6 +6,7 @@ using MSTSCLib;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
 using RoyalApps.Community.Rdp.WinForms.Logging;
+using System.ComponentModel;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable ValueParameterNotUsed
@@ -31,6 +32,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     // public string Server { get; set; }
 
     /// <inheritdoc cref="Port"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int Port
     {
         get => AdvancedSettings2.RDPPort;
@@ -49,6 +51,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     // public string Domain { get; set; }
 
     /// <inheritdoc cref="Password"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string? Password
     {
         set => AdvancedSettings2.ClearTextPassword = value;
@@ -59,6 +62,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this property. 
     /// </summary>
     /// <inheritdoc cref="NetworkLevelAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NetworkLevelAuthentication
     {
         get
@@ -70,6 +74,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PasswordContainsSmartCardPin"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PasswordContainsSmartCardPin
     {
         get
@@ -97,6 +102,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     // public long DesktopHeight { get; set; }
 
     /// <inheritdoc cref="SmartSizing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool SmartSizing
     {
         get => AdvancedSettings2.SmartSizing;
@@ -108,6 +114,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     // public string FullScreenTitle { set; }
 
     /// <inheritdoc cref="ContainerHandledFullScreen"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int ContainerHandledFullScreen
     {
         get => AdvancedSettings2.ContainerHandledFullScreen;
@@ -115,15 +122,18 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisplayConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisplayConnectionBar { get => AdvancedSettings2.DisplayConnectionBar; set => AdvancedSettings2.DisplayConnectionBar = value; }
 
     /// <inheritdoc cref="PinConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PinConnectionBar { get => AdvancedSettings2.PinConnectionBar; set => AdvancedSettings2.PinConnectionBar = value; }
 
     /// <summary>
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="UseMultimon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseMultimon
     {
         get
@@ -148,6 +158,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DeviceScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DeviceScaleFactor
     {
         get
@@ -165,6 +176,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DesktopScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DesktopScaleFactor
     {
         get
@@ -189,6 +201,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="AuthenticationLevel"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AuthenticationLevel AuthenticationLevel
     {
         get => AuthenticationLevel.NoAuthenticationOfServer;
@@ -196,6 +209,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="Compression"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Compression
     {
         get => AdvancedSettings2.Compress > 0;
@@ -203,6 +217,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BitmapCaching"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BitmapCaching
     {
         get => AdvancedSettings2.BitmapPersistence > 0;
@@ -217,6 +232,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="PublicMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PublicMode
     {
         get => false;
@@ -224,6 +240,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AllowBackgroundInput"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AllowBackgroundInput
     {
         get => AdvancedSettings2.allowBackgroundInput > 0;
@@ -231,6 +248,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisableUdpTransport"/>>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableUdpTransport
     {
         get
@@ -251,6 +269,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="EnableAutoReconnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableAutoReconnect
     {
         get => false;
@@ -261,6 +280,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="MaxReconnectAttempts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MaxReconnectAttempts
     {
         get => 0;
@@ -268,6 +288,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ConnectToAdministerServer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ConnectToAdministerServer
     {
         get => AdvancedSettings2.ConnectToServerConsole;
@@ -275,6 +296,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="UseRedirectionServerName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseRedirectionServerName
     {
         get
@@ -291,6 +313,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeepAliveInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeepAliveInterval
     {
         get => AdvancedSettings2.keepAliveInterval;
@@ -298,6 +321,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string LoadBalanceInfo
     {
         get => AdvancedSettings2.LoadBalanceInfo;
@@ -305,9 +329,11 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PluginDlls"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PluginDlls { set => AdvancedSettings2.PluginDlls = value; }
 
     /// <inheritdoc cref="GrabFocusOnConnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GrabFocusOnConnect
     {
         get => AdvancedSettings2.GrabFocusOnConnect;
@@ -318,6 +344,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RelativeMouseMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RelativeMouseMode
     {
         get
@@ -333,6 +360,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="DisableCredentialsDelegation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableCredentialsDelegation
     {
         get => false;
@@ -343,6 +371,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RedirectedAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectedAuthentication
     {
         get => false;
@@ -353,6 +382,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RestrictedLogon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedLogon
     {
         get => false;
@@ -364,6 +394,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RemoteCredentialGuard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RemoteCredentialGuard
     {
         get => false;
@@ -374,6 +405,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RestrictedAdminMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedAdminMode
     {
         get => false;
@@ -381,6 +413,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableMouseJiggler"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableMouseJiggler
     {
         get
@@ -398,6 +431,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MouseJigglerInterval
     {
         get
@@ -415,6 +449,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public KeepAliveMethod MouseJigglerMethod
     {
         get
@@ -432,6 +467,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableRdsAadAuth"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableRdsAadAuth
     {
         get
@@ -456,6 +492,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="NetworkConnectionType"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint NetworkConnectionType
     {
         get => 0;
@@ -463,6 +500,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PerformanceFlags"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int PerformanceFlags
     {
         get => AdvancedSettings2.PerformanceFlags;
@@ -473,6 +511,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RedirectDirectX"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDirectX
     {
         get => false;
@@ -483,6 +522,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="BandwidthDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BandwidthDetection
     {
         get => false;
@@ -490,6 +530,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableHardwareMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableHardwareMode
     {
         get
@@ -510,6 +551,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="ClientProtocolSpec"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ClientSpec ClientProtocolSpec
     {
         get => ClientSpec.FullMode;
@@ -524,6 +566,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="AudioRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioRedirectionMode AudioRedirectionMode
     {
         get => AudioRedirectionMode.RedirectToClient;
@@ -533,6 +576,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// <summary>
     /// This client does not support this feature. 
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioQualityMode AudioQualityMode
     {
         get => AudioQualityMode.Dynamic;
@@ -543,6 +587,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AudioCaptureRedirectionMode
     {
         get => false;
@@ -552,6 +597,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// <summary>
     /// This client does not support this feature. 
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public VideoPlaybackMode VideoPlaybackMode
     {
         get => VideoPlaybackMode.DecodeAndRenderOnServer;
@@ -559,6 +605,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPrinters
     {
         get => AdvancedSettings2.RedirectPrinters;
@@ -569,6 +616,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RedirectClipboard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectClipboard
     {
         get => false;
@@ -576,12 +624,14 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectSmartCards"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectSmartCards
     {
         get => AdvancedSettings2.RedirectSmartCards;
         set => AdvancedSettings2.RedirectSmartCards = value;
     }
     /// <inheritdoc cref="RedirectPorts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPorts
     {
         get => AdvancedSettings2.RedirectPorts;
@@ -592,6 +642,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RedirectDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDevices
     {
         get => false;
@@ -602,6 +653,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature. 
     /// </summary>
     /// <inheritdoc cref="RedirectPOSDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPOSDevices
     {
         get => false;
@@ -609,6 +661,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDrives"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDrives
     {
         get => AdvancedSettings2.RedirectDrives;
@@ -617,6 +670,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 
     private string _redirectDriveLetters = string.Empty;
     /// <inheritdoc cref="RedirectDriveLetters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RedirectDriveLetters
     {
         get => _redirectDriveLetters;
@@ -631,6 +685,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectCameras"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectCameras 
     {
         get => false;
@@ -638,6 +693,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectLocation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectLocation
     {
         get
@@ -659,6 +715,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     #region ::: Keyboard :::
 
     /// <inheritdoc cref="AcceleratorPassthrough"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AcceleratorPassthrough
     {
         get => AdvancedSettings2.AcceleratorPassthrough != 0;
@@ -666,6 +723,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableWindowsKey"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableWindowsKey
     {
         get => AdvancedSettings2.EnableWindowsKey != 0;
@@ -673,6 +731,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyboardHookMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeyboardHookMode
     {
         get => SecuredSettings2.KeyboardHookMode;
@@ -680,6 +739,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
     {
         set => AdvancedSettings2.KeyBoardLayoutStr = value;
@@ -690,6 +750,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     #region ::: Program :::
 
     /// <inheritdoc cref="StartProgram"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string StartProgram
     {
         get => SecuredSettings2.StartProgram;
@@ -697,6 +758,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="WorkDir"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string WorkDir
     {
         get => SecuredSettings2.WorkDir;
@@ -704,6 +766,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaximizeShell"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool MaximizeShell
     {
         get => AdvancedSettings2.MaximizeShell != 0;
@@ -718,6 +781,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayUsageMethod GatewayUsageMethod
     {
         get => GatewayUsageMethod.Never;
@@ -727,6 +791,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayProfileUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayProfileUsageMethod GatewayProfileUsageMethod
     {
         get => GatewayProfileUsageMethod.Default;
@@ -736,6 +801,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayCredsSource
     {
         get => GatewayCredentialSource.Any;
@@ -745,6 +811,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
         get => GatewayCredentialSource.Any;
@@ -754,6 +821,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayCredSharing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GatewayCredSharing
     {
         get => false;
@@ -763,6 +831,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayHostname"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayHostname
     {
         get => string.Empty;
@@ -772,6 +841,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayUsername"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayUsername
     {
         get => string.Empty;
@@ -781,6 +851,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayDomain"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayDomain
     {
         get => string.Empty;
@@ -790,6 +861,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GatewayPassword"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayPassword
     {
         set => LogFeatureNotSupported(nameof(GatewayPassword));
@@ -803,6 +875,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="AuthenticationServiceClass"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AuthenticationServiceClass
     {
         get => string.Empty;
@@ -813,6 +886,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="PCB"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PCB
     {
         get => string.Empty;
@@ -823,6 +897,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="NegotiateSecurityLayer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NegotiateSecurityLayer
     {
         get => false;
@@ -830,6 +905,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ShowConnectionInformation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ShowConnectionInformation
     {
         get
@@ -851,9 +927,11 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     #region ::: Misc :::
 
     /// <inheritdoc cref="Logger"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
 
     /// <inheritdoc cref="DisableClickDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableClickDetection { get; set; }
 
     /// <inheritdoc cref="RaiseClientAreaClicked"/>
@@ -864,6 +942,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     #region ::: MsRdpEx :::
 
     /// <inheritdoc cref="AxName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AxName
     {
         get => axName;
@@ -871,6 +950,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RdpExDll"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RdpExDll
     {
         get => rdpExDll;
@@ -962,6 +1042,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     // public string Server { get; set; }
 
     /// <inheritdoc cref="Port"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int Port { get => AdvancedSettings7.RDPPort; set => AdvancedSettings7.RDPPort = value; }
 
     /// <inheritdoc cref="ConnectionState"/>
@@ -976,12 +1057,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     // public string Domain { get; set; }
 
     /// <inheritdoc cref="Password"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string? Password { set => AdvancedSettings7.ClearTextPassword = value; }
 
     /// <inheritdoc cref="NetworkLevelAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NetworkLevelAuthentication { get => AdvancedSettings7.EnableCredSspSupport; set => AdvancedSettings7.EnableCredSspSupport = value; }
 
     /// <inheritdoc cref="PasswordContainsSmartCardPin"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PasswordContainsSmartCardPin
     {
         get
@@ -1009,11 +1093,13 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     // public int DesktopHeight { get; set; }
 
     /// <inheritdoc cref="SmartSizing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool SmartSizing { get => AdvancedSettings7.SmartSizing; set => AdvancedSettings7.SmartSizing = value; }
 
     // public bool FullScreen { get; set; }
 
     /// <inheritdoc cref="ContainerHandledFullScreen"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int ContainerHandledFullScreen
     {
         get => AdvancedSettings7.ContainerHandledFullScreen;
@@ -1021,12 +1107,15 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisplayConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisplayConnectionBar { get => AdvancedSettings7.DisplayConnectionBar; set => AdvancedSettings7.DisplayConnectionBar = value; }
 
     /// <inheritdoc cref="PinConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PinConnectionBar { get => AdvancedSettings7.PinConnectionBar; set => AdvancedSettings7.PinConnectionBar = value; }
 
     /// <inheritdoc cref="UseMultimon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseMultimon
     {
         get
@@ -1054,6 +1143,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DeviceScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DeviceScaleFactor
     {
         get
@@ -1071,6 +1161,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DesktopScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DesktopScaleFactor
     {
         get
@@ -1092,6 +1183,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: Advanced :::
 
     /// <inheritdoc cref="AuthenticationLevel"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AuthenticationLevel AuthenticationLevel
     {
         get => (AuthenticationLevel)AdvancedSettings7.AuthenticationLevel;
@@ -1099,6 +1191,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="Compression"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Compression
     {
         get => AdvancedSettings7.Compress > 0;
@@ -1106,6 +1199,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BitmapCaching"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BitmapCaching
     {
         get => AdvancedSettings7.BitmapPersistence > 0;
@@ -1117,6 +1211,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PublicMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PublicMode
     {
         get => AdvancedSettings7.PublicMode;
@@ -1124,6 +1219,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AllowBackgroundInput"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AllowBackgroundInput
     {
         get => AdvancedSettings7.allowBackgroundInput > 0;
@@ -1131,6 +1227,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisableUdpTransport"/>>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableUdpTransport
     {
         get
@@ -1148,6 +1245,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableAutoReconnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableAutoReconnect
     {
         get => AdvancedSettings7.EnableAutoReconnect;
@@ -1155,6 +1253,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaxReconnectAttempts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MaxReconnectAttempts
     {
         get => AdvancedSettings7.MaxReconnectAttempts;
@@ -1162,6 +1261,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ConnectToAdministerServer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ConnectToAdministerServer
     {
         get => AdvancedSettings7.ConnectToAdministerServer;
@@ -1169,6 +1269,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="UseRedirectionServerName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseRedirectionServerName
     {
         get
@@ -1185,6 +1286,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
     
     /// <inheritdoc cref="KeepAliveInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeepAliveInterval
     {
         get => AdvancedSettings2.keepAliveInterval;
@@ -1192,6 +1294,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string LoadBalanceInfo
     {
         get => AdvancedSettings7.LoadBalanceInfo;
@@ -1199,9 +1302,11 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PluginDlls"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PluginDlls { set => AdvancedSettings7.PluginDlls = value; }
 
     /// <inheritdoc cref="GrabFocusOnConnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GrabFocusOnConnect
     {
         get => AdvancedSettings7.GrabFocusOnConnect;
@@ -1209,9 +1314,11 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RelativeMouseMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RelativeMouseMode { get => AdvancedSettings7.RelativeMouseMode; set => AdvancedSettings7.RelativeMouseMode = value; }
 
     /// <inheritdoc cref="DisableCredentialsDelegation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableCredentialsDelegation
     {
         get
@@ -1229,6 +1336,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectedAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectedAuthentication
     {
         get
@@ -1246,6 +1354,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedLogon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedLogon
     {
         get
@@ -1264,6 +1373,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
 
 
     /// <inheritdoc cref="RemoteCredentialGuard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RemoteCredentialGuard
     {
         get => DisableCredentialsDelegation && RedirectedAuthentication;
@@ -1275,6 +1385,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedAdminMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedAdminMode
     {
         get => DisableCredentialsDelegation && RestrictedLogon;
@@ -1285,7 +1396,8 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         }
     }
 
-        /// <inheritdoc cref="EnableMouseJiggler"/>
+    /// <inheritdoc cref="EnableMouseJiggler"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableMouseJiggler
     {
         get
@@ -1303,6 +1415,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MouseJigglerInterval
     {
         get
@@ -1320,6 +1433,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public KeepAliveMethod MouseJigglerMethod
     {
         get
@@ -1337,6 +1451,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableRdsAadAuth"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableRdsAadAuth
     {
         get
@@ -1358,6 +1473,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: Performance :::
 
     /// <inheritdoc cref="NetworkConnectionType"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint NetworkConnectionType
     {
         get => 0;
@@ -1365,12 +1481,14 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PerformanceFlags"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int PerformanceFlags
     {
         get => AdvancedSettings7.PerformanceFlags;
         set => AdvancedSettings7.PerformanceFlags = value;
     }
     /// <inheritdoc cref="RedirectDirectX"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDirectX
     {
         get => false;
@@ -1378,6 +1496,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BandwidthDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BandwidthDetection
     {
         get => false;
@@ -1385,6 +1504,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableHardwareMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableHardwareMode
     {
         get
@@ -1402,6 +1522,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ClientProtocolSpec"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ClientSpec ClientProtocolSpec
     {
         get => ClientSpec.FullMode;
@@ -1413,6 +1534,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: Redirection :::
 
     /// <inheritdoc cref="AudioRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioRedirectionMode AudioRedirectionMode
     {
         get => (AudioRedirectionMode)SecuredSettings2.AudioRedirectionMode;
@@ -1422,6 +1544,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     /// <summary>
     /// This client does not support this feature. 
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioQualityMode AudioQualityMode
     {
         get => AudioQualityMode.Dynamic;
@@ -1429,6 +1552,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AudioCaptureRedirectionMode
     {
         get => false;
@@ -1438,6 +1562,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     /// <summary>
     /// This client does not support this feature. 
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public VideoPlaybackMode VideoPlaybackMode
     {
         get => VideoPlaybackMode.DecodeAndRenderOnServer;
@@ -1445,6 +1570,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPrinters
     {
         get => AdvancedSettings7.RedirectPrinters;
@@ -1452,6 +1578,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectClipboard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectClipboard
     {
         get => AdvancedSettings7.RedirectClipboard;
@@ -1459,12 +1586,14 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectSmartCards"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectSmartCards
     {
         get => AdvancedSettings7.RedirectSmartCards;
         set => AdvancedSettings7.RedirectSmartCards = value;
     }
     /// <inheritdoc cref="RedirectPorts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPorts
     {
         get => AdvancedSettings7.RedirectPorts;
@@ -1472,6 +1601,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDevices
     {
         get => AdvancedSettings7.RedirectDevices;
@@ -1479,6 +1609,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPOSDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPOSDevices
     {
         get => AdvancedSettings7.RedirectPOSDevices;
@@ -1486,6 +1617,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDrives"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDrives
     {
         get => AdvancedSettings7.RedirectDrives;
@@ -1494,6 +1626,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
 
     private string _redirectDriveLetters = string.Empty;
     /// <inheritdoc cref="RedirectDriveLetters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RedirectDriveLetters
     {
         get => _redirectDriveLetters;
@@ -1508,6 +1641,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectCameras"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectCameras 
     {
         get => false;
@@ -1515,6 +1649,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectLocation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectLocation
     {
         get
@@ -1536,6 +1671,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: Keyboard :::
 
     /// <inheritdoc cref="AcceleratorPassthrough"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AcceleratorPassthrough
     {
         get => AdvancedSettings7.AcceleratorPassthrough != 0;
@@ -1543,6 +1679,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableWindowsKey"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableWindowsKey
     {
         get => AdvancedSettings7.EnableWindowsKey != 0;
@@ -1550,6 +1687,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyboardHookMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeyboardHookMode
     {
         get => SecuredSettings2.KeyboardHookMode;
@@ -1557,6 +1695,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
     {
         set => AdvancedSettings7.KeyBoardLayoutStr = value;
@@ -1567,6 +1706,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: Program :::
 
     /// <inheritdoc cref="StartProgram"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string StartProgram
     {
         get => SecuredSettings2.StartProgram;
@@ -1574,6 +1714,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="WorkDir"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string WorkDir
     {
         get => SecuredSettings2.WorkDir;
@@ -1581,6 +1722,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaximizeShell"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool MaximizeShell
     {
         get => AdvancedSettings7.MaximizeShell != 0;
@@ -1592,54 +1734,63 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: Gateway :::
 
     /// <inheritdoc cref="GatewayUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayUsageMethod GatewayUsageMethod
     {
         get => (GatewayUsageMethod)TransportSettings2.GatewayUsageMethod;
         set => TransportSettings2.GatewayUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayProfileUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayProfileUsageMethod GatewayProfileUsageMethod
     {
         get => (GatewayProfileUsageMethod)TransportSettings2.GatewayProfileUsageMethod;
         set => TransportSettings2.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings2.GatewayCredsSource;
         set => TransportSettings2.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings2.GatewayUserSelectedCredsSource;
         set => TransportSettings2.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GatewayCredSharing
     {
         get => TransportSettings2.GatewayCredSharing != 0;
         set => TransportSettings2.GatewayCredSharing = value ? 1U : 0U;
     }
     /// <inheritdoc cref="GatewayHostname"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayHostname
     {
         get => TransportSettings2.GatewayHostname;
         set => TransportSettings2.GatewayHostname = value;
     }
     /// <inheritdoc cref="GatewayUsername"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayUsername
     {
         get => TransportSettings2.GatewayUsername;
         set => TransportSettings2.GatewayUsername = value;
     }
     /// <inheritdoc cref="GatewayDomain"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayDomain
     {
         get => TransportSettings2.GatewayDomain;
         set => TransportSettings2.GatewayDomain = value;
     }
     /// <inheritdoc cref="GatewayPassword"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayPassword
     {
         set => TransportSettings2.GatewayPassword = value;
@@ -1650,6 +1801,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: HyperV :::
 
     /// <inheritdoc cref="AuthenticationServiceClass"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AuthenticationServiceClass
     {
         get => AdvancedSettings7.AuthenticationServiceClass;
@@ -1657,6 +1809,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PCB"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PCB
     {
         get => AdvancedSettings7.PCB;
@@ -1664,6 +1817,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="NegotiateSecurityLayer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NegotiateSecurityLayer
     {
         get
@@ -1680,6 +1834,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ShowConnectionInformation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ShowConnectionInformation
     {
         get
@@ -1701,9 +1856,11 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: Misc :::
 
     /// <inheritdoc cref="Logger"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
 
     /// <inheritdoc cref="DisableClickDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableClickDetection { get; set; }
 
     /// <inheritdoc cref="RaiseClientAreaClicked"/>
@@ -1717,6 +1874,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region ::: MsRdpEx :::
 
     /// <inheritdoc cref="AxName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AxName
     {
         get => axName;
@@ -1724,6 +1882,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RdpExDll"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RdpExDll
     {
         get => rdpExDll;
@@ -1819,6 +1978,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     // public string Server { get; set; }
 
     /// <inheritdoc cref="Port"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int Port { get => AdvancedSettings8.RDPPort; set => AdvancedSettings8.RDPPort = value; }
 
     /// <inheritdoc cref="ConnectionState"/>
@@ -1833,12 +1993,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     // public string Domain { get; set; }
 
     /// <inheritdoc cref="Password"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string? Password { set => AdvancedSettings8.ClearTextPassword = value; }
 
     /// <inheritdoc cref="NetworkLevelAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NetworkLevelAuthentication { get => AdvancedSettings8.EnableCredSspSupport; set => AdvancedSettings8.EnableCredSspSupport = value; }
 
     /// <inheritdoc cref="PasswordContainsSmartCardPin"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PasswordContainsSmartCardPin
     {
         get
@@ -1866,6 +2029,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     // public int DesktopHeight { get; set; }
 
     /// <inheritdoc cref="SmartSizing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool SmartSizing { get => AdvancedSettings8.SmartSizing; set => AdvancedSettings8.SmartSizing = value; }
 
     // public bool FullScreen { get; set; }
@@ -1873,6 +2037,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     // public string FullScreenTitle { set; }
 
     /// <inheritdoc cref="ContainerHandledFullScreen"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int ContainerHandledFullScreen
     {
         get => AdvancedSettings8.ContainerHandledFullScreen;
@@ -1880,12 +2045,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisplayConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisplayConnectionBar { get => AdvancedSettings8.DisplayConnectionBar; set => AdvancedSettings8.DisplayConnectionBar = value; }
 
     /// <inheritdoc cref="PinConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PinConnectionBar { get => AdvancedSettings8.PinConnectionBar; set => AdvancedSettings8.PinConnectionBar = value; }
 
     /// <inheritdoc cref="UseMultimon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseMultimon
     {
         get
@@ -1917,6 +2085,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: Advanced :::
 
     /// <inheritdoc cref="AuthenticationLevel"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AuthenticationLevel AuthenticationLevel
     {
         get => (AuthenticationLevel)AdvancedSettings8.AuthenticationLevel;
@@ -1924,6 +2093,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="Compression"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Compression
     {
         get => AdvancedSettings8.Compress > 0;
@@ -1931,6 +2101,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BitmapCaching"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BitmapCaching
     {
         get => AdvancedSettings8.BitmapPersistence > 0;
@@ -1942,6 +2113,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PublicMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PublicMode
     {
         get => AdvancedSettings8.PublicMode;
@@ -1949,6 +2121,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AllowBackgroundInput"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AllowBackgroundInput
     {
         get => AdvancedSettings8.allowBackgroundInput > 0;
@@ -1956,6 +2129,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisableUdpTransport"/>>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableUdpTransport
     {
         get
@@ -1973,6 +2147,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableAutoReconnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableAutoReconnect
     {
         get => AdvancedSettings8.EnableAutoReconnect;
@@ -1980,6 +2155,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaxReconnectAttempts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MaxReconnectAttempts
     {
         get => AdvancedSettings8.MaxReconnectAttempts;
@@ -1987,6 +2163,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ConnectToAdministerServer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ConnectToAdministerServer
     {
         get => AdvancedSettings8.ConnectToAdministerServer;
@@ -1994,6 +2171,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="UseRedirectionServerName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseRedirectionServerName
     {
         get
@@ -2010,6 +2188,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeepAliveInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeepAliveInterval
     {
         get => AdvancedSettings2.keepAliveInterval;
@@ -2017,6 +2196,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string LoadBalanceInfo
     {
         get => AdvancedSettings8.LoadBalanceInfo;
@@ -2024,6 +2204,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="GrabFocusOnConnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GrabFocusOnConnect
     {
         get => AdvancedSettings8.GrabFocusOnConnect;
@@ -2031,12 +2212,15 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PluginDlls"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PluginDlls { set => AdvancedSettings8.PluginDlls = value; }
 
     /// <inheritdoc cref="RelativeMouseMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RelativeMouseMode { get => AdvancedSettings8.RelativeMouseMode; set => AdvancedSettings8.RelativeMouseMode = value; }
 
     /// <inheritdoc cref="DisableCredentialsDelegation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableCredentialsDelegation
     {
         get
@@ -2054,6 +2238,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectedAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectedAuthentication
     {
         get
@@ -2071,6 +2256,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedLogon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedLogon
     {
         get
@@ -2089,6 +2275,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 
 
     /// <inheritdoc cref="RemoteCredentialGuard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RemoteCredentialGuard
     {
         get => DisableCredentialsDelegation && RedirectedAuthentication;
@@ -2100,6 +2287,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedAdminMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedAdminMode
     {
         get => DisableCredentialsDelegation && RestrictedLogon;
@@ -2110,7 +2298,8 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
         }
     }
 
-        /// <inheritdoc cref="EnableMouseJiggler"/>
+    /// <inheritdoc cref="EnableMouseJiggler"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableMouseJiggler
     {
         get
@@ -2128,6 +2317,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MouseJigglerInterval
     {
         get
@@ -2145,6 +2335,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public KeepAliveMethod MouseJigglerMethod
     {
         get
@@ -2162,6 +2353,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableRdsAadAuth"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableRdsAadAuth
     {
         get
@@ -2183,6 +2375,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: Performance :::
 
     /// <inheritdoc cref="NetworkConnectionType"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint NetworkConnectionType
     {
         get => AdvancedSettings8.NetworkConnectionType;
@@ -2190,6 +2383,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PerformanceFlags"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int PerformanceFlags
     {
         get => AdvancedSettings8.PerformanceFlags;
@@ -2197,6 +2391,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDirectX
     {
         get => AdvancedSettings8.RedirectDirectX;
@@ -2207,6 +2402,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="BandwidthDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BandwidthDetection
     {
         get => false;
@@ -2214,6 +2410,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableHardwareMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableHardwareMode
     {
         get
@@ -2234,6 +2431,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="ClientProtocolSpec"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ClientSpec ClientProtocolSpec
     {
         get => ClientSpec.FullMode;
@@ -2245,6 +2443,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: Redirection :::
 
     /// <inheritdoc cref="AudioRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioRedirectionMode AudioRedirectionMode
     {
         get => (AudioRedirectionMode)SecuredSettings3.AudioRedirectionMode;
@@ -2252,6 +2451,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioQualityMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioQualityMode AudioQualityMode
     {
         get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
@@ -2259,6 +2459,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AudioCaptureRedirectionMode
     {
         get => AdvancedSettings8.AudioCaptureRedirectionMode;
@@ -2266,6 +2467,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="VideoPlaybackMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public VideoPlaybackMode VideoPlaybackMode
     {
         get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
@@ -2273,6 +2475,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPrinters
     {
         get => AdvancedSettings8.RedirectPrinters;
@@ -2280,6 +2483,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectClipboard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectClipboard
     {
         get => AdvancedSettings8.RedirectClipboard;
@@ -2287,12 +2491,14 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectSmartCards"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectSmartCards
     {
         get => AdvancedSettings8.RedirectSmartCards;
         set => AdvancedSettings8.RedirectSmartCards = value;
     }
     /// <inheritdoc cref="RedirectPorts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPorts
     {
         get => AdvancedSettings8.RedirectPorts;
@@ -2300,6 +2506,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDevices
     {
         get => AdvancedSettings8.RedirectDevices;
@@ -2307,6 +2514,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPOSDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPOSDevices
     {
         get => AdvancedSettings8.RedirectPOSDevices;
@@ -2314,6 +2522,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDrives"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDrives
     {
         get => AdvancedSettings8.RedirectDrives;
@@ -2322,6 +2531,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 
     private string _redirectDriveLetters = string.Empty;
     /// <inheritdoc cref="RedirectDriveLetters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RedirectDriveLetters
     {
         get => _redirectDriveLetters;
@@ -2336,6 +2546,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectCameras"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectCameras 
     {
         get => false;
@@ -2343,6 +2554,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectLocation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectLocation
     {
         get
@@ -2364,6 +2576,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: Keyboard :::
 
     /// <inheritdoc cref="AcceleratorPassthrough"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AcceleratorPassthrough
     {
         get => AdvancedSettings8.AcceleratorPassthrough != 0;
@@ -2371,6 +2584,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableWindowsKey"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableWindowsKey
     {
         get => AdvancedSettings8.EnableWindowsKey != 0;
@@ -2378,6 +2592,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyboardHookMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeyboardHookMode
     {
         get => SecuredSettings3.KeyboardHookMode;
@@ -2385,6 +2600,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
     {
         set => AdvancedSettings8.KeyBoardLayoutStr = value;
@@ -2395,6 +2611,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: Program :::
 
     /// <inheritdoc cref="StartProgram"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string StartProgram
     {
         get => SecuredSettings3.StartProgram;
@@ -2402,6 +2619,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="WorkDir"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string WorkDir
     {
         get => SecuredSettings3.WorkDir;
@@ -2409,6 +2627,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaximizeShell"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool MaximizeShell
     {
         get => AdvancedSettings8.MaximizeShell != 0;
@@ -2420,54 +2639,63 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: Gateway :::
 
     /// <inheritdoc cref="GatewayUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayUsageMethod GatewayUsageMethod
     {
         get => (GatewayUsageMethod)TransportSettings3.GatewayUsageMethod;
         set => TransportSettings3.GatewayUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayProfileUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayProfileUsageMethod GatewayProfileUsageMethod
     {
         get => (GatewayProfileUsageMethod)TransportSettings3.GatewayProfileUsageMethod;
         set => TransportSettings3.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings3.GatewayCredsSource;
         set => TransportSettings3.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings3.GatewayUserSelectedCredsSource;
         set => TransportSettings3.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GatewayCredSharing
     {
         get => TransportSettings3.GatewayCredSharing != 0;
         set => TransportSettings3.GatewayCredSharing = value ? 1U : 0U;
     }
     /// <inheritdoc cref="GatewayHostname"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayHostname
     {
         get => TransportSettings3.GatewayHostname;
         set => TransportSettings3.GatewayHostname = value;
     }
     /// <inheritdoc cref="GatewayUsername"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayUsername
     {
         get => TransportSettings3.GatewayUsername;
         set => TransportSettings3.GatewayUsername = value;
     }
     /// <inheritdoc cref="GatewayDomain"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayDomain
     {
         get => TransportSettings3.GatewayDomain;
         set => TransportSettings3.GatewayDomain = value;
     }
     /// <inheritdoc cref="GatewayPassword"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayPassword
     {
         set => TransportSettings3.GatewayPassword = value;
@@ -2478,6 +2706,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: HyperV :::
 
     /// <inheritdoc cref="AuthenticationServiceClass"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AuthenticationServiceClass
     {
         get => AdvancedSettings8.AuthenticationServiceClass;
@@ -2485,6 +2714,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PCB"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PCB
     {
         get => AdvancedSettings8.PCB;
@@ -2492,6 +2722,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="NegotiateSecurityLayer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NegotiateSecurityLayer
     {
         get
@@ -2508,6 +2739,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ShowConnectionInformation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ShowConnectionInformation
     {
         get
@@ -2529,9 +2761,11 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: Misc :::
 
     /// <inheritdoc cref="Logger"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
 
     /// <inheritdoc cref="DisableClickDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableClickDetection { get; set; }
 
     /// <inheritdoc cref="RaiseClientAreaClicked"/>
@@ -2542,6 +2776,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region ::: MsRdpEx :::
 
     /// <inheritdoc cref="AxName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AxName
     {
         get => axName;
@@ -2549,6 +2784,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RdpExDll"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RdpExDll
     {
         get => rdpExDll;
@@ -2616,6 +2852,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DeviceScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DeviceScaleFactor
     {
         get
@@ -2633,6 +2870,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DesktopScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DesktopScaleFactor
     {
         get
@@ -2681,6 +2919,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     // public string Server { get; set; }
 
     /// <inheritdoc cref="Port"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int Port { get => AdvancedSettings9.RDPPort; set => AdvancedSettings9.RDPPort = value; }
 
     /// <inheritdoc cref="ConnectionState"/>
@@ -2695,12 +2934,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     // public string Domain { get; set; }
 
     /// <inheritdoc cref="Password"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string? Password { set => AdvancedSettings9.ClearTextPassword = value; }
 
     /// <inheritdoc cref="NetworkLevelAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NetworkLevelAuthentication { get => AdvancedSettings9.EnableCredSspSupport; set => AdvancedSettings9.EnableCredSspSupport = value; }
 
     /// <inheritdoc cref="PasswordContainsSmartCardPin"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PasswordContainsSmartCardPin
     {
         get
@@ -2728,6 +2970,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     // public int DesktopHeight { get; set; }
 
     /// <inheritdoc cref="SmartSizing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool SmartSizing { get => AdvancedSettings9.SmartSizing; set => AdvancedSettings9.SmartSizing = value; }
 
     // public bool FullScreen { get; set; }
@@ -2735,6 +2978,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     // public string FullScreenTitle { set; }
 
     /// <inheritdoc cref="ContainerHandledFullScreen"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int ContainerHandledFullScreen
     {
         get => AdvancedSettings9.ContainerHandledFullScreen;
@@ -2742,12 +2986,15 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisplayConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisplayConnectionBar { get => AdvancedSettings9.DisplayConnectionBar; set => AdvancedSettings9.DisplayConnectionBar = value; }
 
     /// <inheritdoc cref="PinConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PinConnectionBar { get => AdvancedSettings9.PinConnectionBar; set => AdvancedSettings9.PinConnectionBar = value; }
 
     /// <inheritdoc cref="UseMultimon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseMultimon
     {
         get
@@ -2775,6 +3022,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DeviceScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DeviceScaleFactor
     {
         get
@@ -2792,6 +3040,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DesktopScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DesktopScaleFactor
     {
         get
@@ -2813,6 +3062,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: Advanced :::
 
     /// <inheritdoc cref="AuthenticationLevel"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AuthenticationLevel AuthenticationLevel
     {
         get => (AuthenticationLevel)AdvancedSettings9.AuthenticationLevel;
@@ -2820,6 +3070,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="Compression"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Compression
     {
         get => AdvancedSettings9.Compress > 0;
@@ -2827,6 +3078,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BitmapCaching"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BitmapCaching
     {
         get => AdvancedSettings9.BitmapPersistence > 0;
@@ -2838,6 +3090,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PublicMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PublicMode
     {
         get => AdvancedSettings9.PublicMode;
@@ -2845,6 +3098,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AllowBackgroundInput"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AllowBackgroundInput
     {
         get => AdvancedSettings9.allowBackgroundInput > 0;
@@ -2852,6 +3106,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisableUdpTransport"/>>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableUdpTransport
     {
         get
@@ -2869,6 +3124,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableAutoReconnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableAutoReconnect
     {
         get => AdvancedSettings9.EnableAutoReconnect;
@@ -2876,6 +3132,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaxReconnectAttempts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MaxReconnectAttempts
     {
         get => AdvancedSettings9.MaxReconnectAttempts;
@@ -2883,6 +3140,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ConnectToAdministerServer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ConnectToAdministerServer
     {
         get => AdvancedSettings9.ConnectToAdministerServer;
@@ -2890,6 +3148,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="UseRedirectionServerName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseRedirectionServerName
     {
         get
@@ -2906,6 +3165,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeepAliveInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeepAliveInterval
     {
         get => AdvancedSettings2.keepAliveInterval;
@@ -2913,6 +3173,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string LoadBalanceInfo
     {
         get => AdvancedSettings9.LoadBalanceInfo;
@@ -2920,9 +3181,11 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PluginDlls"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PluginDlls { set => AdvancedSettings9.PluginDlls = value; }
 
     /// <inheritdoc cref="GrabFocusOnConnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GrabFocusOnConnect
     {
         get => AdvancedSettings9.GrabFocusOnConnect;
@@ -2930,9 +3193,11 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RelativeMouseMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RelativeMouseMode { get => AdvancedSettings9.RelativeMouseMode; set => AdvancedSettings9.RelativeMouseMode = value; }
 
     /// <inheritdoc cref="DisableCredentialsDelegation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableCredentialsDelegation
     {
         get
@@ -2950,6 +3215,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectedAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectedAuthentication
     {
         get
@@ -2967,6 +3233,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedLogon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedLogon
     {
         get
@@ -2985,6 +3252,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 
 
     /// <inheritdoc cref="RemoteCredentialGuard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RemoteCredentialGuard
     {
         get => DisableCredentialsDelegation && RedirectedAuthentication;
@@ -2996,6 +3264,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedAdminMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedAdminMode
     {
         get => DisableCredentialsDelegation && RestrictedLogon;
@@ -3006,7 +3275,8 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         }
     }
 
-        /// <inheritdoc cref="EnableMouseJiggler"/>
+    /// <inheritdoc cref="EnableMouseJiggler"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableMouseJiggler
     {
         get
@@ -3024,6 +3294,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MouseJigglerInterval
     {
         get
@@ -3041,6 +3312,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public KeepAliveMethod MouseJigglerMethod
     {
         get
@@ -3058,6 +3330,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableRdsAadAuth"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableRdsAadAuth
     {
         get
@@ -3079,6 +3352,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: Performance :::
 
     /// <inheritdoc cref="NetworkConnectionType"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint NetworkConnectionType
     {
         get => AdvancedSettings9.NetworkConnectionType;
@@ -3086,6 +3360,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PerformanceFlags"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int PerformanceFlags
     {
         get => AdvancedSettings9.PerformanceFlags;
@@ -3093,6 +3368,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDirectX
     {
         get => AdvancedSettings9.RedirectDirectX;
@@ -3100,6 +3376,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BandwidthDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BandwidthDetection
     {
         get => AdvancedSettings9.BandwidthDetection;
@@ -3107,6 +3384,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableHardwareMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableHardwareMode
     {
         get
@@ -3124,6 +3402,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ClientProtocolSpec"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ClientSpec ClientProtocolSpec
     {
         get => AdvancedSettings9.ClientProtocolSpec;
@@ -3135,6 +3414,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: Redirection :::
 
     /// <inheritdoc cref="AudioRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioRedirectionMode AudioRedirectionMode
     {
         get => (AudioRedirectionMode)SecuredSettings3.AudioRedirectionMode;
@@ -3142,6 +3422,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioQualityMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioQualityMode AudioQualityMode
     {
         get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
@@ -3149,6 +3430,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AudioCaptureRedirectionMode
     {
         get => AdvancedSettings9.AudioCaptureRedirectionMode;
@@ -3156,6 +3438,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="VideoPlaybackMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public VideoPlaybackMode VideoPlaybackMode
     {
         get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
@@ -3163,6 +3446,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPrinters
     {
         get => AdvancedSettings9.RedirectPrinters;
@@ -3170,6 +3454,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectClipboard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectClipboard
     {
         get => AdvancedSettings9.RedirectClipboard;
@@ -3177,12 +3462,14 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectSmartCards"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectSmartCards
     {
         get => AdvancedSettings9.RedirectSmartCards;
         set => AdvancedSettings9.RedirectSmartCards = value;
     }
     /// <inheritdoc cref="RedirectPorts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPorts
     {
         get => AdvancedSettings9.RedirectPorts;
@@ -3190,6 +3477,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDevices
     {
         get => AdvancedSettings9.RedirectDevices;
@@ -3197,6 +3485,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPOSDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPOSDevices
     {
         get => AdvancedSettings9.RedirectPOSDevices;
@@ -3204,6 +3493,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDrives"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDrives
     {
         get => AdvancedSettings9.RedirectDrives;
@@ -3212,6 +3502,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 
     private string _redirectDriveLetters = string.Empty;
     /// <inheritdoc cref="RedirectDriveLetters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RedirectDriveLetters
     {
         get => _redirectDriveLetters;
@@ -3226,6 +3517,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectCameras"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectCameras 
     {
         get => false;
@@ -3233,6 +3525,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectLocation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectLocation
     {
         get
@@ -3254,6 +3547,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: Keyboard :::
 
     /// <inheritdoc cref="AcceleratorPassthrough"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AcceleratorPassthrough
     {
         get => AdvancedSettings9.AcceleratorPassthrough != 0;
@@ -3261,6 +3555,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableWindowsKey"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableWindowsKey
     {
         get => AdvancedSettings9.EnableWindowsKey != 0;
@@ -3268,6 +3563,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyboardHookMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeyboardHookMode
     {
         get => SecuredSettings3.KeyboardHookMode;
@@ -3275,6 +3571,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
     {
         set => AdvancedSettings9.KeyBoardLayoutStr = value;
@@ -3285,6 +3582,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: Program :::
 
     /// <inheritdoc cref="StartProgram"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string StartProgram
     {
         get => SecuredSettings3.StartProgram;
@@ -3292,6 +3590,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="WorkDir"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string WorkDir
     {
         get => SecuredSettings3.WorkDir;
@@ -3299,6 +3598,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaximizeShell"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool MaximizeShell
     {
         get => AdvancedSettings9.MaximizeShell != 0;
@@ -3310,54 +3610,63 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: Gateway :::
 
     /// <inheritdoc cref="GatewayUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayUsageMethod GatewayUsageMethod
     {
         get => (GatewayUsageMethod)TransportSettings3.GatewayUsageMethod;
         set => TransportSettings3.GatewayUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayProfileUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayProfileUsageMethod GatewayProfileUsageMethod
     {
         get => (GatewayProfileUsageMethod)TransportSettings3.GatewayProfileUsageMethod;
         set => TransportSettings3.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings3.GatewayCredsSource;
         set => TransportSettings3.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings3.GatewayUserSelectedCredsSource;
         set => TransportSettings3.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GatewayCredSharing
     {
         get => TransportSettings3.GatewayCredSharing != 0;
         set => TransportSettings3.GatewayCredSharing = value ? 1U : 0U;
     }
     /// <inheritdoc cref="GatewayHostname"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayHostname
     {
         get => TransportSettings3.GatewayHostname;
         set => TransportSettings3.GatewayHostname = value;
     }
     /// <inheritdoc cref="GatewayUsername"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayUsername
     {
         get => TransportSettings3.GatewayUsername;
         set => TransportSettings3.GatewayUsername = value;
     }
     /// <inheritdoc cref="GatewayDomain"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayDomain
     {
         get => TransportSettings3.GatewayDomain;
         set => TransportSettings3.GatewayDomain = value;
     }
     /// <inheritdoc cref="GatewayPassword"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayPassword
     {
         set => TransportSettings3.GatewayPassword = value;
@@ -3368,6 +3677,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: HyperV :::
 
     /// <inheritdoc cref="AuthenticationServiceClass"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AuthenticationServiceClass
     {
         get => AdvancedSettings9.AuthenticationServiceClass;
@@ -3375,6 +3685,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PCB"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PCB
     {
         get => AdvancedSettings9.PCB;
@@ -3382,6 +3693,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="NegotiateSecurityLayer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NegotiateSecurityLayer
     {
         get
@@ -3398,6 +3710,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ShowConnectionInformation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ShowConnectionInformation
     {
         get
@@ -3419,9 +3732,11 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: Misc :::
 
     /// <inheritdoc cref="Logger"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
 
     /// <inheritdoc cref="DisableClickDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableClickDetection { get; set; }
 
     /// <inheritdoc cref="RaiseClientAreaClicked"/>
@@ -3432,6 +3747,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     #region ::: MsRdpEx :::
 
     /// <inheritdoc cref="AxName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AxName
     {
         get => axName;
@@ -3439,6 +3755,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RdpExDll"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RdpExDll
     {
         get => rdpExDll;
@@ -3515,6 +3832,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     // public string Server { get; set; }
 
     /// <inheritdoc cref="Port"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int Port { get => AdvancedSettings9.RDPPort; set => AdvancedSettings9.RDPPort = value; }
 
     /// <inheritdoc cref="ConnectionState"/>
@@ -3529,12 +3847,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     // public string Domain { get; set; }
 
     /// <inheritdoc cref="Password"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string? Password { set => AdvancedSettings9.ClearTextPassword = value; }
 
     /// <inheritdoc cref="NetworkLevelAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NetworkLevelAuthentication { get => AdvancedSettings9.EnableCredSspSupport; set => AdvancedSettings9.EnableCredSspSupport = value; }
 
     /// <inheritdoc cref="PasswordContainsSmartCardPin"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PasswordContainsSmartCardPin
     {
         get
@@ -3562,6 +3883,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     // public int DesktopHeight { get; set; }
 
     /// <inheritdoc cref="SmartSizing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool SmartSizing { get => AdvancedSettings9.SmartSizing; set => AdvancedSettings9.SmartSizing = value; }
 
     // public bool FullScreen { get; set; }
@@ -3569,6 +3891,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     // public string FullScreenTitle { set; }
 
     /// <inheritdoc cref="ContainerHandledFullScreen"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int ContainerHandledFullScreen
     {
         get => AdvancedSettings9.ContainerHandledFullScreen;
@@ -3576,12 +3899,15 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisplayConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisplayConnectionBar { get => AdvancedSettings9.DisplayConnectionBar; set => AdvancedSettings9.DisplayConnectionBar = value; }
 
     /// <inheritdoc cref="PinConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PinConnectionBar { get => AdvancedSettings9.PinConnectionBar; set => AdvancedSettings9.PinConnectionBar = value; }
 
     /// <inheritdoc cref="UseMultimon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseMultimon
     {
         get
@@ -3609,6 +3935,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DeviceScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DeviceScaleFactor
     {
         get
@@ -3626,6 +3953,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DesktopScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DesktopScaleFactor
     {
         get
@@ -3648,6 +3976,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: Advanced :::
 
     /// <inheritdoc cref="AuthenticationLevel"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AuthenticationLevel AuthenticationLevel
     {
         get => (AuthenticationLevel)AdvancedSettings9.AuthenticationLevel;
@@ -3655,6 +3984,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="Compression"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Compression
     {
         get => AdvancedSettings9.Compress > 0;
@@ -3662,6 +3992,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BitmapCaching"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BitmapCaching
     {
         get => AdvancedSettings9.BitmapPersistence > 0;
@@ -3673,6 +4004,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PublicMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PublicMode
     {
         get => AdvancedSettings9.PublicMode;
@@ -3680,6 +4012,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AllowBackgroundInput"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AllowBackgroundInput
     {
         get => AdvancedSettings9.allowBackgroundInput > 0;
@@ -3687,6 +4020,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisableUdpTransport"/>>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableUdpTransport
     {
         get
@@ -3704,6 +4038,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableAutoReconnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableAutoReconnect
     {
         get => AdvancedSettings9.EnableAutoReconnect;
@@ -3711,6 +4046,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaxReconnectAttempts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MaxReconnectAttempts
     {
         get => AdvancedSettings9.MaxReconnectAttempts;
@@ -3718,6 +4054,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ConnectToAdministerServer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ConnectToAdministerServer
     {
         get => AdvancedSettings9.ConnectToAdministerServer;
@@ -3725,6 +4062,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="UseRedirectionServerName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseRedirectionServerName
     {
         get
@@ -3741,6 +4079,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeepAliveInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeepAliveInterval
     {
         get => AdvancedSettings2.keepAliveInterval;
@@ -3748,6 +4087,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string LoadBalanceInfo
     {
         get => AdvancedSettings9.LoadBalanceInfo;
@@ -3755,9 +4095,11 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PluginDlls"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PluginDlls { set => AdvancedSettings9.PluginDlls = value; }
 
     /// <inheritdoc cref="GrabFocusOnConnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GrabFocusOnConnect
     {
         get => AdvancedSettings9.GrabFocusOnConnect;
@@ -3765,9 +4107,11 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RelativeMouseMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RelativeMouseMode { get => AdvancedSettings9.RelativeMouseMode; set => AdvancedSettings9.RelativeMouseMode = value; }
 
     /// <inheritdoc cref="DisableCredentialsDelegation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableCredentialsDelegation
     {
         get
@@ -3785,6 +4129,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectedAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectedAuthentication
     {
         get
@@ -3802,6 +4147,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedLogon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedLogon
     {
         get
@@ -3820,6 +4166,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
 
 
     /// <inheritdoc cref="RemoteCredentialGuard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RemoteCredentialGuard
     {
         get => DisableCredentialsDelegation && RedirectedAuthentication;
@@ -3831,6 +4178,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedAdminMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedAdminMode
     {
         get => DisableCredentialsDelegation && RestrictedLogon;
@@ -3841,7 +4189,8 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
         }
     }
 
-        /// <inheritdoc cref="EnableMouseJiggler"/>
+    /// <inheritdoc cref="EnableMouseJiggler"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableMouseJiggler
     {
         get
@@ -3859,6 +4208,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MouseJigglerInterval
     {
         get
@@ -3876,6 +4226,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public KeepAliveMethod MouseJigglerMethod
     {
         get
@@ -3893,6 +4244,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableRdsAadAuth"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableRdsAadAuth
     {
         get
@@ -3914,6 +4266,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: Performance :::
 
     /// <inheritdoc cref="NetworkConnectionType"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint NetworkConnectionType
     {
         get => AdvancedSettings9.NetworkConnectionType;
@@ -3921,6 +4274,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PerformanceFlags"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int PerformanceFlags
     {
         get => AdvancedSettings9.PerformanceFlags;
@@ -3928,6 +4282,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDirectX
     {
         get => AdvancedSettings9.RedirectDirectX;
@@ -3935,6 +4290,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BandwidthDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BandwidthDetection
     {
         get => AdvancedSettings9.BandwidthDetection;
@@ -3942,6 +4298,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableHardwareMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableHardwareMode
     {
         get
@@ -3959,6 +4316,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ClientProtocolSpec"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ClientSpec ClientProtocolSpec
     {
         get => AdvancedSettings9.ClientProtocolSpec;
@@ -3970,6 +4328,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: Redirection :::
 
     /// <inheritdoc cref="AudioRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioRedirectionMode AudioRedirectionMode
     {
         get => (AudioRedirectionMode)SecuredSettings3.AudioRedirectionMode;
@@ -3977,6 +4336,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioQualityMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioQualityMode AudioQualityMode
     {
         get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
@@ -3984,6 +4344,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AudioCaptureRedirectionMode
     {
         get => AdvancedSettings9.AudioCaptureRedirectionMode;
@@ -3991,6 +4352,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="VideoPlaybackMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public VideoPlaybackMode VideoPlaybackMode
     {
         get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
@@ -3998,6 +4360,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPrinters
     {
         get => AdvancedSettings9.RedirectPrinters;
@@ -4005,6 +4368,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectClipboard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectClipboard
     {
         get => AdvancedSettings9.RedirectClipboard;
@@ -4012,12 +4376,14 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectSmartCards"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectSmartCards
     {
         get => AdvancedSettings9.RedirectSmartCards;
         set => AdvancedSettings9.RedirectSmartCards = value;
     }
     /// <inheritdoc cref="RedirectPorts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPorts
     {
         get => AdvancedSettings9.RedirectPorts;
@@ -4025,6 +4391,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDevices
     {
         get => AdvancedSettings9.RedirectDevices;
@@ -4032,6 +4399,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPOSDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPOSDevices
     {
         get => AdvancedSettings9.RedirectPOSDevices;
@@ -4039,6 +4407,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDrives"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDrives
     {
         get => AdvancedSettings9.RedirectDrives;
@@ -4048,6 +4417,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     private string _redirectDriveLetters = string.Empty;
         
     /// <inheritdoc cref="RedirectDriveLetters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RedirectDriveLetters
     {
         get => _redirectDriveLetters;
@@ -4062,6 +4432,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectCameras"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectCameras 
     {
         get => false;
@@ -4069,6 +4440,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectLocation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectLocation
     {
         get
@@ -4090,6 +4462,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: Keyboard :::
 
     /// <inheritdoc cref="AcceleratorPassthrough"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AcceleratorPassthrough
     {
         get => AdvancedSettings9.AcceleratorPassthrough != 0;
@@ -4097,6 +4470,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableWindowsKey"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableWindowsKey
     {
         get => AdvancedSettings9.EnableWindowsKey != 0;
@@ -4104,6 +4478,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyboardHookMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeyboardHookMode
     {
         get => SecuredSettings3.KeyboardHookMode;
@@ -4111,6 +4486,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
     {
         set => AdvancedSettings9.KeyBoardLayoutStr = value;
@@ -4121,6 +4497,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: Program :::
 
     /// <inheritdoc cref="StartProgram"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string StartProgram
     {
         get => SecuredSettings3.StartProgram;
@@ -4128,6 +4505,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="WorkDir"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string WorkDir
     {
         get => SecuredSettings3.WorkDir;
@@ -4135,6 +4513,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaximizeShell"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool MaximizeShell
     {
         get => AdvancedSettings9.MaximizeShell != 0;
@@ -4146,54 +4525,63 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: Gateway :::
 
     /// <inheritdoc cref="GatewayUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayUsageMethod GatewayUsageMethod 
     {
         get => (GatewayUsageMethod)TransportSettings4.GatewayUsageMethod;
         set => TransportSettings4.GatewayUsageMethod = (uint) value;
     }
     /// <inheritdoc cref="GatewayProfileUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayProfileUsageMethod GatewayProfileUsageMethod
     {
         get => (GatewayProfileUsageMethod)TransportSettings4.GatewayProfileUsageMethod;
         set => TransportSettings4.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings4.GatewayCredsSource;
         set => TransportSettings4.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings4.GatewayUserSelectedCredsSource;
         set => TransportSettings4.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GatewayCredSharing
     {
         get => TransportSettings4.GatewayCredSharing != 0;
         set => TransportSettings4.GatewayCredSharing = value ? 1U : 0U;
     }
     /// <inheritdoc cref="GatewayHostname"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayHostname
     {
         get => TransportSettings4.GatewayHostname;
         set => TransportSettings4.GatewayHostname = value;
     }
     /// <inheritdoc cref="GatewayUsername"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayUsername
     {
         get => TransportSettings4.GatewayUsername;
         set => TransportSettings4.GatewayUsername = value;
     }
     /// <inheritdoc cref="GatewayDomain"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayDomain
     {
         get => TransportSettings4.GatewayDomain;
         set => TransportSettings4.GatewayDomain = value;
     }
     /// <inheritdoc cref="GatewayPassword"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayPassword
     {
         set => TransportSettings4.GatewayPassword = value;
@@ -4204,6 +4592,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: HyperV :::
 
     /// <inheritdoc cref="AuthenticationServiceClass"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AuthenticationServiceClass
     {
         get => AdvancedSettings9.AuthenticationServiceClass;
@@ -4211,6 +4600,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PCB"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PCB
     {
         get => AdvancedSettings9.PCB;
@@ -4218,6 +4608,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="NegotiateSecurityLayer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NegotiateSecurityLayer
     {
         get
@@ -4234,6 +4625,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ShowConnectionInformation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ShowConnectionInformation
     {
         get
@@ -4255,9 +4647,11 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: Misc :::
 
     /// <inheritdoc cref="Logger"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
 
     /// <inheritdoc cref="DisableClickDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableClickDetection { get; set; }
 
     /// <inheritdoc cref="RaiseClientAreaClicked"/>
@@ -4268,6 +4662,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     #region ::: MsRdpEx :::
 
     /// <inheritdoc cref="AxName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AxName
     {
         get => axName;
@@ -4275,6 +4670,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RdpExDll"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RdpExDll
     {
         get => rdpExDll;
@@ -4345,6 +4741,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     // public string Server { get; set; }
 
     /// <inheritdoc cref="Port"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int Port { get => AdvancedSettings9.RDPPort; set => AdvancedSettings9.RDPPort = value; }
 
     /// <inheritdoc cref="ConnectionState"/>
@@ -4359,12 +4756,15 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     // public string Domain { get; set; }
 
     /// <inheritdoc cref="Password"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string? Password { set => AdvancedSettings9.ClearTextPassword = value; }
 
     /// <inheritdoc cref="NetworkLevelAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NetworkLevelAuthentication { get => AdvancedSettings9.EnableCredSspSupport; set => AdvancedSettings9.EnableCredSspSupport = value; }
 
     /// <inheritdoc cref="PasswordContainsSmartCardPin"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PasswordContainsSmartCardPin
     {
         get
@@ -4392,6 +4792,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     // public int DesktopHeight { get; set; }
 
     /// <inheritdoc cref="SmartSizing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool SmartSizing { get => AdvancedSettings9.SmartSizing; set => AdvancedSettings9.SmartSizing = value; }
 
     // public bool FullScreen { get; set; }
@@ -4399,6 +4800,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     // public string FullScreenTitle { set; }
 
     /// <inheritdoc cref="ContainerHandledFullScreen"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int ContainerHandledFullScreen
     {
         get => AdvancedSettings9.ContainerHandledFullScreen;
@@ -4406,12 +4808,15 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisplayConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisplayConnectionBar { get => AdvancedSettings9.DisplayConnectionBar; set => AdvancedSettings9.DisplayConnectionBar = value; }
 
     /// <inheritdoc cref="PinConnectionBar"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PinConnectionBar { get => AdvancedSettings9.PinConnectionBar; set => AdvancedSettings9.PinConnectionBar = value; }
 
     /// <inheritdoc cref="UseMultimon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseMultimon
     {
         get
@@ -4439,6 +4844,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DeviceScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DeviceScaleFactor
     {
         get
@@ -4456,6 +4862,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DesktopScaleFactor"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint DesktopScaleFactor
     {
         get
@@ -4478,6 +4885,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: Advanced :::
 
     /// <inheritdoc cref="AuthenticationLevel"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AuthenticationLevel AuthenticationLevel
     {
         get => (AuthenticationLevel)AdvancedSettings9.AuthenticationLevel;
@@ -4485,6 +4893,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="Compression"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Compression
     {
         get => AdvancedSettings9.Compress > 0;
@@ -4492,6 +4901,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BitmapCaching"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BitmapCaching
     {
         get => AdvancedSettings9.BitmapPersistence > 0;
@@ -4503,6 +4913,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PublicMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool PublicMode
     {
         get => AdvancedSettings9.PublicMode;
@@ -4510,6 +4921,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AllowBackgroundInput"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AllowBackgroundInput
     {
         get => AdvancedSettings9.allowBackgroundInput > 0;
@@ -4517,6 +4929,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="DisableUdpTransport"/>>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableUdpTransport
     {
         get
@@ -4534,6 +4947,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableAutoReconnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableAutoReconnect
     {
         get => AdvancedSettings9.EnableAutoReconnect;
@@ -4541,6 +4955,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaxReconnectAttempts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MaxReconnectAttempts
     {
         get => AdvancedSettings9.MaxReconnectAttempts;
@@ -4548,6 +4963,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ConnectToAdministerServer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ConnectToAdministerServer
     {
         get => AdvancedSettings9.ConnectToAdministerServer;
@@ -4555,6 +4971,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="UseRedirectionServerName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool UseRedirectionServerName
     {
         get
@@ -4571,6 +4988,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeepAliveInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeepAliveInterval
     {
         get => AdvancedSettings2.keepAliveInterval;
@@ -4578,6 +4996,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="LoadBalanceInfo"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string LoadBalanceInfo
     {
         get => AdvancedSettings9.LoadBalanceInfo;
@@ -4585,9 +5004,11 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PluginDlls"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PluginDlls { set => AdvancedSettings9.PluginDlls = value; }
 
     /// <inheritdoc cref="GrabFocusOnConnect"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GrabFocusOnConnect
     {
         get => AdvancedSettings9.GrabFocusOnConnect;
@@ -4595,9 +5016,11 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RelativeMouseMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RelativeMouseMode { get => AdvancedSettings9.RelativeMouseMode; set => AdvancedSettings9.RelativeMouseMode = value; }
 
     /// <inheritdoc cref="DisableCredentialsDelegation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableCredentialsDelegation
     {
         get
@@ -4615,6 +5038,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectedAuthentication"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectedAuthentication
     {
         get
@@ -4632,6 +5056,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedLogon"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedLogon
     {
         get
@@ -4650,6 +5075,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
 
 
     /// <inheritdoc cref="RemoteCredentialGuard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RemoteCredentialGuard
     {
         get => DisableCredentialsDelegation && RedirectedAuthentication;
@@ -4661,6 +5087,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RestrictedAdminMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RestrictedAdminMode
     {
         get => DisableCredentialsDelegation && RestrictedLogon;
@@ -4671,7 +5098,8 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
         }
     }
 
-        /// <inheritdoc cref="EnableMouseJiggler"/>
+    /// <inheritdoc cref="EnableMouseJiggler"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableMouseJiggler
     {
         get
@@ -4689,6 +5117,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerInterval"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int MouseJigglerInterval
     {
         get
@@ -4706,6 +5135,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MouseJigglerMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public KeepAliveMethod MouseJigglerMethod
     {
         get
@@ -4723,6 +5153,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableRdsAadAuth"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableRdsAadAuth
     {
         get
@@ -4744,6 +5175,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: Performance :::
 
     /// <inheritdoc cref="NetworkConnectionType"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public uint NetworkConnectionType
     {
         get => AdvancedSettings9.NetworkConnectionType;
@@ -4751,6 +5183,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PerformanceFlags"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int PerformanceFlags
     {
         get => AdvancedSettings9.PerformanceFlags;
@@ -4758,6 +5191,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDirectX"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDirectX
     {
         get => AdvancedSettings9.RedirectDirectX;
@@ -4765,6 +5199,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="BandwidthDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool BandwidthDetection
     {
         get => AdvancedSettings9.BandwidthDetection;
@@ -4772,6 +5207,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableHardwareMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableHardwareMode
     {
         get
@@ -4789,6 +5225,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ClientProtocolSpec"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ClientSpec ClientProtocolSpec
     {
         get => AdvancedSettings9.ClientProtocolSpec;
@@ -4800,6 +5237,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: Redirection :::
 
     /// <inheritdoc cref="AudioRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioRedirectionMode AudioRedirectionMode
     {
         get => (AudioRedirectionMode)SecuredSettings3.AudioRedirectionMode;
@@ -4807,6 +5245,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioQualityMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioQualityMode AudioQualityMode
     {
         get => (AudioQualityMode)AdvancedSettings8.AudioQualityMode;
@@ -4814,6 +5253,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AudioCaptureRedirectionMode
     {
         get => AdvancedSettings9.AudioCaptureRedirectionMode;
@@ -4821,6 +5261,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="VideoPlaybackMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public VideoPlaybackMode VideoPlaybackMode
     {
         get => (VideoPlaybackMode)AdvancedSettings8.VideoPlaybackMode;
@@ -4828,6 +5269,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPrinters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPrinters
     {
         get => AdvancedSettings9.RedirectPrinters;
@@ -4835,6 +5277,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectClipboard"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectClipboard
     {
         get => AdvancedSettings9.RedirectClipboard;
@@ -4842,12 +5285,14 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectSmartCards"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectSmartCards
     {
         get => AdvancedSettings9.RedirectSmartCards;
         set => AdvancedSettings9.RedirectSmartCards = value;
     }
     /// <inheritdoc cref="RedirectPorts"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPorts
     {
         get => AdvancedSettings9.RedirectPorts;
@@ -4855,6 +5300,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDevices
     {
         get => AdvancedSettings9.RedirectDevices;
@@ -4862,6 +5308,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectPOSDevices"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectPOSDevices
     {
         get => AdvancedSettings9.RedirectPOSDevices;
@@ -4869,6 +5316,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectDrives"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectDrives
     {
         get => AdvancedSettings9.RedirectDrives;
@@ -4878,6 +5326,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     private string _redirectDriveLetters = string.Empty;
         
     /// <inheritdoc cref="RedirectDriveLetters"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RedirectDriveLetters
     {
         get => _redirectDriveLetters;
@@ -4893,6 +5342,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
 
     private bool _redirectCameras;
     /// <inheritdoc cref="RedirectCameras"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectCameras 
     {
         get => _redirectCameras;
@@ -4907,6 +5357,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RedirectLocation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool RedirectLocation
     {
         get
@@ -4928,6 +5379,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: Keyboard :::
 
     /// <inheritdoc cref="AcceleratorPassthrough"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool AcceleratorPassthrough
     {
         get => AdvancedSettings9.AcceleratorPassthrough != 0;
@@ -4935,6 +5387,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="EnableWindowsKey"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableWindowsKey
     {
         get => AdvancedSettings9.EnableWindowsKey != 0;
@@ -4942,6 +5395,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyboardHookMode"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeyboardHookMode
     {
         get => SecuredSettings3.KeyboardHookMode;
@@ -4949,6 +5403,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
     {
         set => AdvancedSettings9.KeyBoardLayoutStr = value;
@@ -4959,6 +5414,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: Program :::
 
     /// <inheritdoc cref="StartProgram"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string StartProgram
     {
         get => SecuredSettings3.StartProgram;
@@ -4966,6 +5422,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="WorkDir"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string WorkDir
     {
         get => SecuredSettings3.WorkDir;
@@ -4973,6 +5430,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="MaximizeShell"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool MaximizeShell
     {
         get => AdvancedSettings9.MaximizeShell != 0;
@@ -4984,54 +5442,63 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: Gateway :::
 
     /// <inheritdoc cref="GatewayUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayUsageMethod GatewayUsageMethod 
     {
         get => (GatewayUsageMethod)TransportSettings4.GatewayUsageMethod;
         set => TransportSettings4.GatewayUsageMethod = (uint) value;
     }
     /// <inheritdoc cref="GatewayProfileUsageMethod"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayProfileUsageMethod GatewayProfileUsageMethod
     {
         get => (GatewayProfileUsageMethod)TransportSettings4.GatewayProfileUsageMethod;
         set => TransportSettings4.GatewayProfileUsageMethod = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings4.GatewayCredsSource;
         set => TransportSettings4.GatewayCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayUserSelectedCredsSource"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public GatewayCredentialSource GatewayUserSelectedCredsSource
     {
         get => (GatewayCredentialSource)TransportSettings4.GatewayUserSelectedCredsSource;
         set => TransportSettings4.GatewayUserSelectedCredsSource = (uint)value;
     }
     /// <inheritdoc cref="GatewayCredSharing"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool GatewayCredSharing
     {
         get => TransportSettings4.GatewayCredSharing != 0;
         set => TransportSettings4.GatewayCredSharing = value ? 1U : 0U;
     }
     /// <inheritdoc cref="GatewayHostname"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayHostname
     {
         get => TransportSettings4.GatewayHostname;
         set => TransportSettings4.GatewayHostname = value;
     }
     /// <inheritdoc cref="GatewayUsername"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayUsername
     {
         get => TransportSettings4.GatewayUsername;
         set => TransportSettings4.GatewayUsername = value;
     }
     /// <inheritdoc cref="GatewayDomain"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayDomain
     {
         get => TransportSettings4.GatewayDomain;
         set => TransportSettings4.GatewayDomain = value;
     }
     /// <inheritdoc cref="GatewayPassword"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayPassword
     {
         set => TransportSettings4.GatewayPassword = value;
@@ -5042,6 +5509,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: HyperV :::
 
     /// <inheritdoc cref="AuthenticationServiceClass"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AuthenticationServiceClass
     {
         get => AdvancedSettings9.AuthenticationServiceClass;
@@ -5049,6 +5517,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="PCB"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string PCB
     {
         get => AdvancedSettings9.PCB;
@@ -5056,6 +5525,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="NegotiateSecurityLayer"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool NegotiateSecurityLayer
     {
         get
@@ -5072,6 +5542,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="ShowConnectionInformation"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ShowConnectionInformation
     {
         get
@@ -5093,9 +5564,11 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: Misc :::
 
     /// <inheritdoc cref="Logger"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
 
     /// <inheritdoc cref="DisableClickDetection"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool DisableClickDetection { get; set; }
 
     /// <inheritdoc cref="RaiseClientAreaClicked"/>
@@ -5106,6 +5579,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     #region ::: MsRdpEx :::
 
     /// <inheritdoc cref="AxName"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string AxName
     {
         get => axName;
@@ -5113,6 +5587,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     /// <inheritdoc cref="RdpExDll"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RdpExDll
     {
         get => rdpExDll;

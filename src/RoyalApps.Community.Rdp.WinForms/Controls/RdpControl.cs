@@ -26,6 +26,7 @@ public class RdpControl : UserControl
     /// <summary>
     /// The ILogger instance used for logging. If not set, a default logger is used for debug logging.
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
 
     private bool _canScale;
@@ -46,11 +47,13 @@ public class RdpControl : UserControl
     /// <summary>
     /// Access to the RDP client and their events, methods and properties.
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public IRdpClient? RdpClient { get; private set; }
 
     /// <summary>
     /// Access to the RDP client configuration which will be used to instantiate the RdpClient.
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public RdpClientConfiguration RdpConfiguration { get; set; }
     
     /// <summary>
@@ -61,6 +64,7 @@ public class RdpControl : UserControl
     /// <summary>
     /// Returns true if a connection has been established successfully.
     /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool WasSuccessfullyConnected { get; private set; }
 
     /// <summary>

@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using AxMSTSCLib;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
 
 namespace RoyalApps.Community.Rdp.WinForms.Controls;
@@ -37,14 +41,22 @@ public class RdpClientFactory
         throw new Exception("Failed to create RDP client instance.", exception);
     }
 
-    private static bool Create<T>(out IRdpClient? rdpClient, out Exception? exception) where T : IRdpClient
+    private static bool Create<T>(out IRdpClient? rdpClient, out Exception? exception) where T : AxHostEx, IRdpClient
     {
         rdpClient = null;
         exception = null;
 
         try
         {
-            rdpClient = Activator.CreateInstance<T>();
+            // Only calling the constructor isn't enough, as the native RDP control will be created at a later point
+            var client = Activator.CreateInstance<T>();
+            
+            // Read the clsid from the AxHost, and manually create an instance of the RDP control
+            var clsid = (Guid)typeof(AxHost).GetField("_clsid", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(client)!;
+            var instance = client.RdpCreateInstance(clsid);
+            Marshal.ReleaseComObject(instance);
+
+            rdpClient = client;
             return true;
         }
         catch (Exception ex)

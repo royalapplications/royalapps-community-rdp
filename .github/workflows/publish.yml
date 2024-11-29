@@ -101,6 +101,7 @@ jobs:
         
     # Push nuget package to nuget.org
     - name: nuget push
+      if: github.ref == 'refs/heads/main'
       run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
       env:
         Configuration: ${{ matrix.configuration }}

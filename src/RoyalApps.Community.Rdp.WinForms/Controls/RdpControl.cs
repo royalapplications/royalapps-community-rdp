@@ -201,7 +201,7 @@ public class RdpControl : UserControl
 
         ApplyInitialScaling();
 
-        this.RdpClientConfigured?.Invoke(this, EventArgs.Empty);
+        RdpClientConfigured?.Invoke(this, EventArgs.Empty);
 
         RdpClient!.Connect();
     }
@@ -351,7 +351,8 @@ public class RdpControl : UserControl
             125 => 150,
             150 => 175,
             175 => 200,
-            200 => 250,
+            200 => 225,
+            225 => 250,
             250 => 300,
             300 => 350,
             350 => 400,
@@ -375,7 +376,8 @@ public class RdpControl : UserControl
             400 => 350,
             350 => 300,
             300 => 250,
-            250 => 200,
+            250 => 225,
+            225 => 200,
             200 => 175,
             175 => 150,
             150 => 125,

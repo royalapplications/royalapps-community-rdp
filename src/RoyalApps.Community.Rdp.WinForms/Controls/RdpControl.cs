@@ -574,8 +574,6 @@ public class RdpControl : UserControl
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
 
-        this.ApplyRdpClientConfiguration(RdpConfiguration);
-
         // for now AxHookEnabled is always true
         if (MsRdpExManager.Instance.AxHookEnabled)
             RdpClient.RdpExDll = MsRdpExManager.Instance.CoreApi.MsRdpExDllPath;
@@ -611,6 +609,8 @@ public class RdpControl : UserControl
         {
             // ignored
         }
+
+        this.ApplyRdpClientConfiguration(RdpConfiguration);
 
         RegisterEvents();
     }

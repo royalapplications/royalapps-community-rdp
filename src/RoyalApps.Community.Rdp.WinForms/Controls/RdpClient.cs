@@ -738,6 +738,28 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
         set => SecuredSettings2.KeyboardHookMode = value;
     }
 
+    /// <inheritdoc cref="KeyboardHookToggleShortcutEnabled"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public bool KeyboardHookToggleShortcutEnabled
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled);
+            return value == 1;
+        }
+        set
+        {
+            object keyboardHookToggleShortcutEnabled = value ? 1 : 0;
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, ref keyboardHookToggleShortcutEnabled, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled, KeyboardHookToggleShortcutEnabled);
+
+            object keyboardHookToggleShortcutKey = "space";
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutKey, ref keyboardHookToggleShortcutKey, out var ex2))
+                Logger.LogWarning(ex2, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutKey, keyboardHookToggleShortcutKey);
+        }
+    }
+
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
@@ -1694,6 +1716,28 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         set => SecuredSettings2.KeyboardHookMode = value;
     }
 
+    /// <inheritdoc cref="KeyboardHookToggleShortcutEnabled"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public bool KeyboardHookToggleShortcutEnabled
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled);
+            return value == 1;
+        }
+        set
+        {
+            object keyboardHookToggleShortcutEnabled = value ? 1 : 0;
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, ref keyboardHookToggleShortcutEnabled, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled, KeyboardHookToggleShortcutEnabled);
+
+            object keyboardHookToggleShortcutKey = "space";
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutKey, ref keyboardHookToggleShortcutKey, out var ex2))
+                Logger.LogWarning(ex2, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutKey, keyboardHookToggleShortcutKey);
+        }
+    }
+
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
@@ -2597,6 +2641,28 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     {
         get => SecuredSettings3.KeyboardHookMode;
         set => SecuredSettings3.KeyboardHookMode = value;
+    }
+
+    /// <inheritdoc cref="KeyboardHookToggleShortcutEnabled"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public bool KeyboardHookToggleShortcutEnabled
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled);
+            return value == 1;
+        }
+        set
+        {
+            object keyboardHookToggleShortcutEnabled = value ? 1 : 0;
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, ref keyboardHookToggleShortcutEnabled, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled, KeyboardHookToggleShortcutEnabled);
+
+            object keyboardHookToggleShortcutKey = "space";
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutKey, ref keyboardHookToggleShortcutKey, out var ex2))
+                Logger.LogWarning(ex2, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutKey, keyboardHookToggleShortcutKey);
+        }
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
@@ -3570,6 +3636,28 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
         set => SecuredSettings3.KeyboardHookMode = value;
     }
 
+    /// <inheritdoc cref="KeyboardHookToggleShortcutEnabled"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public bool KeyboardHookToggleShortcutEnabled
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled);
+            return value == 1;
+        }
+        set
+        {
+            object keyboardHookToggleShortcutEnabled = value ? 1 : 0;
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, ref keyboardHookToggleShortcutEnabled, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled, KeyboardHookToggleShortcutEnabled);
+
+            object keyboardHookToggleShortcutKey = "space";
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutKey, ref keyboardHookToggleShortcutKey, out var ex2))
+                Logger.LogWarning(ex2, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutKey, keyboardHookToggleShortcutKey);
+        }
+    }
+
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string KeyBoardLayoutStr
@@ -4483,6 +4571,28 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     {
         get => SecuredSettings3.KeyboardHookMode;
         set => SecuredSettings3.KeyboardHookMode = value;
+    }
+
+    /// <inheritdoc cref="KeyboardHookToggleShortcutEnabled"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public bool KeyboardHookToggleShortcutEnabled
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled);
+            return value == 1;
+        }
+        set
+        {
+            object keyboardHookToggleShortcutEnabled = value ? 1 : 0;
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, ref keyboardHookToggleShortcutEnabled, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled, KeyboardHookToggleShortcutEnabled);
+
+            object keyboardHookToggleShortcutKey = "space";
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutKey, ref keyboardHookToggleShortcutKey, out var ex2))
+                Logger.LogWarning(ex2, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutKey, keyboardHookToggleShortcutKey);
+        }
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>
@@ -5400,6 +5510,28 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     {
         get => SecuredSettings3.KeyboardHookMode;
         set => SecuredSettings3.KeyboardHookMode = value;
+    }
+
+    /// <inheritdoc cref="KeyboardHookToggleShortcutEnabled"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public bool KeyboardHookToggleShortcutEnabled
+    {
+        get
+        {
+            if (!this.TryGetProperty<int>(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, out var value, out var ex))
+                Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled);
+            return value == 1;
+        }
+        set
+        {
+            object keyboardHookToggleShortcutEnabled = value ? true : false;
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutEnabled, ref keyboardHookToggleShortcutEnabled, out var ex))
+                Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutEnabled, KeyboardHookToggleShortcutEnabled);
+
+            object keyboardHookToggleShortcutKey = "space";
+            if (!this.TrySetProperty(RdpClientExtensions.KeyboardHookToggleShortcutKey, ref keyboardHookToggleShortcutKey, out var ex2))
+                Logger.LogWarning(ex2, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", RdpClientExtensions.KeyboardHookToggleShortcutKey, keyboardHookToggleShortcutKey);
+        }
     }
 
     /// <inheritdoc cref="KeyBoardLayoutStr"/>

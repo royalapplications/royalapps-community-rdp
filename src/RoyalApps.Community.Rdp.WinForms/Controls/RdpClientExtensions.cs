@@ -22,6 +22,8 @@ internal static class RdpClientExtensions
     public static readonly string EnableHardwareMode = "EnableHardwareMode";
     public static readonly string MouseJigglerInterval = "MouseJigglerInterval";
     public static readonly string MouseJigglerMethod = "MouseJigglerMethod";
+    public static readonly string KeyboardHookToggleShortcutEnabled = "KeyboardHookToggleShortcutEnabled";
+    public static readonly string KeyboardHookToggleShortcutKey = "KeyboardHookToggleShortcutKey";
     public static readonly string PasswordContainsSmartcardPin = "PasswordContainsSCardPin";
     public static readonly string RestrictedLogon = "RestrictedLogon";
     public static readonly string RedirectedAuthentication = "RedirectedAuthentication";
@@ -157,9 +159,11 @@ internal static class RdpClientExtensions
         rdpClient.AcceleratorPassthrough = configuration.Input.AcceleratorPassthrough;
         rdpClient.EnableWindowsKey = configuration.Input.EnableWindowsKey;
         rdpClient.KeyboardHookMode = configuration.Input.KeyboardHookMode ? 1 : 0;
+        rdpClient.KeyboardHookToggleShortcutEnabled = configuration.Input.KeyboardHookToggleShortcutEnabled;
+
         if (!string.IsNullOrWhiteSpace(configuration.Input.KeyBoardLayoutStr))
             rdpClient.KeyBoardLayoutStr = configuration.Input.KeyBoardLayoutStr;
-
+        
         TraceConfigurationData(logger, configuration.Redirection);
         rdpClient.AudioRedirectionMode = configuration.Redirection.AudioRedirectionMode;
         rdpClient.AudioQualityMode = configuration.Redirection.AudioQualityMode;

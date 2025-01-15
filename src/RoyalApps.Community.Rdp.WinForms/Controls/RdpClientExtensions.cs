@@ -13,20 +13,24 @@ namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 internal static class RdpClientExtensions
 {
-    public static readonly string DesktopScaleFactor = "DesktopScaleFactor";
-    public static readonly string DeviceScaleFactor = "DeviceScaleFactor";
-    public static readonly string DisableCredentialsDelegation = "DisableCredentialsDelegation";
-    public static readonly string DisableUdpTransport = "DisableUDPTransport";
-    public static readonly string EnableMouseJiggler = "EnableMouseJiggler";
-    public static readonly string EnableRdsAadAuth = "EnableRdsAadAuth";
-    public static readonly string EnableHardwareMode = "EnableHardwareMode";
-    public static readonly string MouseJigglerInterval = "MouseJigglerInterval";
-    public static readonly string MouseJigglerMethod = "MouseJigglerMethod";
-    public static readonly string PasswordContainsSmartcardPin = "PasswordContainsSCardPin";
-    public static readonly string RestrictedLogon = "RestrictedLogon";
-    public static readonly string RedirectedAuthentication = "RedirectedAuthentication";
-    public static readonly string ShowConnectionInformation = "ShowConnectionInformation";
-    public static readonly string EnableLocationRedirection = "EnableLocationRedirection";
+    public const string BaseProperties = "BaseProperties";
+    public const string CoreProperties = "CoreProperties";
+    public const string DesktopScaleFactor = "DesktopScaleFactor";
+    public const string DeviceScaleFactor = "DeviceScaleFactor";
+    public const string DisableCredentialsDelegation = "DisableCredentialsDelegation";
+    public const string DisableUdpTransport = "DisableUDPTransport";
+    public const string EnableMouseJiggler = "EnableMouseJiggler";
+    public const string EnableRdsAadAuth = "EnableRdsAadAuth";
+    public const string EnableHardwareMode = "EnableHardwareMode";
+    public const string MouseJigglerInterval = "MouseJigglerInterval";
+    public const string MouseJigglerMethod = "MouseJigglerMethod";
+    public const string KeyboardHookToggleShortcutEnabled = "KeyboardHookToggleShortcutEnabled";
+    public const string KeyboardHookToggleShortcutKey = "KeyboardHookToggleShortcutKey";
+    public const string PasswordContainsSmartcardPin = "PasswordContainsSCardPin";
+    public const string RestrictedLogon = "RestrictedLogon";
+    public const string RedirectedAuthentication = "RedirectedAuthentication";
+    public const string ShowConnectionInformation = "ShowConnectionInformation";
+    public const string EnableLocationRedirection = "EnableLocationRedirection";
 
     /// <summary>
     /// Applies the RdpClientConfiguration to the RdpClient.
@@ -113,6 +117,7 @@ internal static class RdpClientExtensions
             rdpClient.LoadBalanceInfo = configuration.Connection.LoadBalanceInfo;
         rdpClient.MaxReconnectAttempts = configuration.Connection.MaxReconnectAttempts;
         rdpClient.UseRedirectionServerName = configuration.Connection.UseRedirectionServerName;
+        rdpClient.DisableUdpTransport = configuration.Connection.DisableUdpTransport;
         rdpClient.KeepAliveInterval = configuration.Connection.ConnectionKeepAliveInterval.GetValueOrDefault() * 1000; //Convert seconds to milliseconds, use 0 for disabled
         if (configuration.Connection.KeepAlive)
         {
@@ -157,9 +162,11 @@ internal static class RdpClientExtensions
         rdpClient.AcceleratorPassthrough = configuration.Input.AcceleratorPassthrough;
         rdpClient.EnableWindowsKey = configuration.Input.EnableWindowsKey;
         rdpClient.KeyboardHookMode = configuration.Input.KeyboardHookMode ? 1 : 0;
+        rdpClient.KeyboardHookToggleShortcutEnabled = configuration.Input.KeyboardHookToggleShortcutEnabled;
+
         if (!string.IsNullOrWhiteSpace(configuration.Input.KeyBoardLayoutStr))
             rdpClient.KeyBoardLayoutStr = configuration.Input.KeyBoardLayoutStr;
-
+        
         TraceConfigurationData(logger, configuration.Redirection);
         rdpClient.AudioRedirectionMode = configuration.Redirection.AudioRedirectionMode;
         rdpClient.AudioQualityMode = configuration.Redirection.AudioQualityMode;
@@ -316,12 +323,24 @@ internal static class RdpClientExtensions
         value = default;
         try
         {
-            value = (T)rdpClient.GetExtendedSettings().get_Property(propertyName);
+            switch (propertyName)
+            {
+                case DisableUdpTransport:
+                    value = (T)rdpClient.GetCoreProperties().get_Property(propertyName);
+                    break;
+                default:
+                    value = (T)rdpClient.GetExtendedSettings().get_Property(propertyName);
+                    break;
+            }
         }
         catch (Exception ex)
         {
             exception = ex;
+#if DEBUG
+            throw;
+#else                
             return false;
+#endif
         }
         return true;
     }
@@ -342,12 +361,24 @@ internal static class RdpClientExtensions
         exception = null;
         try
         {
-            rdpClient.GetExtendedSettings().set_Property(propertyName, ref value);
+            switch (propertyName)
+            {
+                case DisableUdpTransport:
+                    rdpClient.GetCoreProperties().set_Property(propertyName, ref value);
+                    break;
+                default:
+                    rdpClient.GetExtendedSettings().set_Property(propertyName, ref value);
+                    break;
+            }
         }
         catch (Exception ex)
         {
             exception = ex;
+#if DEBUG
+            throw;
+#else                
             return false;
+#endif
         }
         return true;
     }
@@ -513,5 +544,15 @@ internal static class RdpClientExtensions
 
         exception = success ? null : new Exception(logMessage.ToString());
         return success;
+    }
+    
+    private static IMsRdpExtendedSettings GetCoreProperties(this IRdpClient rdpClient)
+    {
+        return (IMsRdpExtendedSettings)rdpClient.GetExtendedSettings().get_Property(CoreProperties);
+    }
+    
+    private static IMsRdpExtendedSettings GetBaseProperties(this IRdpClient rdpClient)
+    {
+        return (IMsRdpExtendedSettings)rdpClient.GetExtendedSettings().get_Property(BaseProperties);
     }
 }

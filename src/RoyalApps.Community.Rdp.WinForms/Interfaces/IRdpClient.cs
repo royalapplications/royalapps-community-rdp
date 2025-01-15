@@ -626,6 +626,11 @@ public interface IRdpClient : IDisposable
     int KeyboardHookMode { get; set; }
 
     /// <summary>
+    /// When enabled, ctrl+alt+space can be used to toggle between local and remote keyboard hook modes. Only works when the session is in full screen mode.
+    /// </summary>
+    bool KeyboardHookToggleShortcutEnabled { get; set; }
+    
+    /// <summary>
     /// Specifies the name of the active input locale identifier (formerly called the keyboard layout) to use for the connection.
     /// </summary>
     /// <see>

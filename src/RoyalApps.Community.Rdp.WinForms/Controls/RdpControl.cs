@@ -564,8 +564,12 @@ public class RdpControl : UserControl
 
     private void CreateRdpClient()
     {
-        RdpClient = RdpClientFactory.Create(RdpConfiguration.ClientVersion);
-
+        RdpClient = RdpClientFactory.Create(
+            RdpConfiguration.ClientVersion, 
+            MsRdpExManager.Instance.AxHookEnabled ? MsRdpExManager.Instance.CoreApi.MsRdpExDllPath : null,
+            RdpConfiguration.UseMsRdc);
+        
+        ((ISupportInitialize)RdpClient).BeginInit();
         Environment.SetEnvironmentVariable("MSRDPEX_LOG_ENABLED", RdpConfiguration.LogEnabled ? "1" : "0");
         Environment.SetEnvironmentVariable("MSRDPEX_LOG_LEVEL", RdpConfiguration.LogLevel);
         Environment.SetEnvironmentVariable("MSRDPEX_LOG_FILE_PATH", RdpConfiguration.LogFilePath);
@@ -574,10 +578,6 @@ public class RdpControl : UserControl
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
 
-        // for now AxHookEnabled is always true
-        if (MsRdpExManager.Instance.AxHookEnabled)
-            RdpClient.RdpExDll = MsRdpExManager.Instance.CoreApi.MsRdpExDllPath;
-
         var msTscAxDllPath = GetMsTscAxDllPath();
         var msRdcAxDllPath = GetRdClientAxDllPath();
 
@@ -585,17 +585,15 @@ public class RdpControl : UserControl
         {
             Logger.LogDebug("Microsoft Remote Desktop Client (rdclientax.dll) will be used");
             Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxDllPath);
-            RdpClient.AxName = "msrdc";
         }
         else
         {
             if (string.IsNullOrWhiteSpace(msRdcAxDllPath))
                 Logger.LogDebug("Microsoft Remote Desktop Client will not be used, rdclientax.dll was not found");
-
+        
             Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxDllPath);
                 
             RdpConfiguration.UseMsRdc = false;
-            RdpClient.AxName = "mstsc";
         }
 
         // workaround to ensure msrdcax.dll can be used even when hooking not enabled:
@@ -613,6 +611,7 @@ public class RdpControl : UserControl
         this.ApplyRdpClientConfiguration(RdpConfiguration);
 
         RegisterEvents();
+        ((ISupportInitialize)RdpClient).EndInit();
     }
 
     private uint GetDesktopScaleFactor(int zoomLevel)

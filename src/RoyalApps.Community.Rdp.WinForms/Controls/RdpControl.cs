@@ -564,10 +564,14 @@ public class RdpControl : UserControl
 
     private void CreateRdpClient()
     {
+        var msTscAxDllPath = GetMsTscAxDllPath();
+        var msRdcAxDllPath = GetRdClientAxDllPath();
+        var rdcClientInstalled = !string.IsNullOrWhiteSpace(msRdcAxDllPath);
+
         RdpClient = RdpClientFactory.Create(
             RdpConfiguration.ClientVersion, 
             MsRdpExManager.Instance.AxHookEnabled ? MsRdpExManager.Instance.CoreApi.MsRdpExDllPath : null,
-            RdpConfiguration.UseMsRdc);
+            RdpConfiguration.UseMsRdc && rdcClientInstalled);
         
         ((ISupportInitialize)RdpClient).BeginInit();
         Environment.SetEnvironmentVariable("MSRDPEX_LOG_ENABLED", RdpConfiguration.LogEnabled ? "1" : "0");
@@ -577,9 +581,6 @@ public class RdpControl : UserControl
         var control = (Control) RdpClient;
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
-
-        var msTscAxDllPath = GetMsTscAxDllPath();
-        var msRdcAxDllPath = GetRdClientAxDllPath();
 
         if (RdpConfiguration.UseMsRdc && !string.IsNullOrWhiteSpace(msRdcAxDllPath))
         {

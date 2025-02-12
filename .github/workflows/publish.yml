@@ -94,7 +94,7 @@ jobs:
 
     # Upload packages
     - name: Upload managed components
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Rdp-nupkg
         path: ./*.nupkg

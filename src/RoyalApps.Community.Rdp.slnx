@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="..\README.md" />
+  </Folder>
+  <Project Path="RoyalApps.Community.Rdp.WinForms.Demo\RoyalApps.Community.Rdp.WinForms.Demo.csproj" />
+  <Project Path="RoyalApps.Community.Rdp.WinForms\RoyalApps.Community.Rdp.WinForms.csproj" />
+</Solution>

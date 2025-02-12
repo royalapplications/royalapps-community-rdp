@@ -11,7 +11,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>RoyalApps_1024.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.2.5</Version>
+        <Version>1.2.6</Version>
     </PropertyGroup>
     
     <PropertyGroup>
@@ -30,18 +30,18 @@
 
     <ItemGroup>
       <PackageReference Include="Devolutions.MsRdpEx" Version="2025.1.10" />
-      <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.162">
+      <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.183">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
     </ItemGroup>
 
     <ItemGroup>

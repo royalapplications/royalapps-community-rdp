@@ -431,10 +431,12 @@ public class RdpControl : UserControl
                 _previousClientSize = ea.Bounds.Size;
             }
         }
-        else if (RdpConfiguration.Display.UseLocalScaling)
-        {
+
+        var setLocalZoom = RdpConfiguration.Display.UseLocalScaling &&
+                           (!RdpClient.UseMultimon || RdpClient is { RemoteMonitorCount: 1 }); 
+        
+        if (setLocalZoom)
             BeginInvoke(new MethodInvoker(() => { SetZoomLevelLocal(_currentZoomLevel); }));
-        }
 
         WasSuccessfullyConnected = true;
 

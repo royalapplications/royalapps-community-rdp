@@ -1,4 +1,4 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Specifies when to use a Remote Desktop Gateway (RD Gateway) server.

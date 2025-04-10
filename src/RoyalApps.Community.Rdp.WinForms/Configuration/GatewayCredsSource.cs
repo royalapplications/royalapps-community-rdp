@@ -1,4 +1,4 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Specifies or retrieves the Remote Desktop Gateway (RD Gateway) authentication method.

@@ -1,4 +1,4 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Represents a sensitive string and prevents accidental leaking.

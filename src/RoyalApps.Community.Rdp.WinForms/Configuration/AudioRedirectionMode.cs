@@ -1,4 +1,4 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// Specifies the audio redirection settings, which specify whether to redirect sounds or play sounds at the Remote Desktop Session Host (RD Session Host) server.

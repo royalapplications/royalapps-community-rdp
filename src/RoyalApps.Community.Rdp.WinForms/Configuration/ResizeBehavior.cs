@@ -1,4 +1,4 @@
-﻿namespace RoyalApps.Community.Rdp.WinForms.Configuration;
+namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
 /// <summary>
 /// The behavior when the control is resized.

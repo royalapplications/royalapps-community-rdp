@@ -1,4 +1,4 @@
-﻿namespace RoyalApps.Community.Rdp.Demo;
+namespace RoyalApps.Community.Rdp.Demo;
 
 partial class RdpForm
 {

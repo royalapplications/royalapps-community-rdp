@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 using Windows.Win32;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
 

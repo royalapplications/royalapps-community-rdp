@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AxMSTSCLib;
 using Microsoft.Extensions.Logging;
 using MSTSCLib;

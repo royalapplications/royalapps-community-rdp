@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 
 namespace RoyalApps.Community.Rdp.WinForms.Controls;

@@ -849,7 +849,7 @@ public class RdpControl : UserControl
         if (rdpInstance.GetShadowBitmap(ref hShadowDC, ref hShadowBitmap, ref shadowData, ref shadowWidth, ref shadowHeight, ref shadowStep))
         {
             rdpInstance.LockShadowBitmap();
-            var bitmap = ShadowToBitmap(new HWND(hWnd), new HDC(hShadowDC), (int)shadowWidth, (int)shadowHeight, (int)shadowWidth, (int)shadowHeight);
+            var bitmap = ShadowToBitmap(new HWND(hWnd), new HDC(hShadowDC), (int)shadowWidth, (int)shadowHeight, Width, Height);
             rdpInstance.UnlockShadowBitmap();
 
             if (bitmap is not null)

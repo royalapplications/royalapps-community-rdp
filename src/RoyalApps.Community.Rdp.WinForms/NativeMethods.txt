@@ -1,4 +1,7 @@
+FindWindowEx
 PostMessage
+SetStretchBltMode
+StretchBlt
 SysAllocStringByteLen
 
 VIRTUAL_KEY

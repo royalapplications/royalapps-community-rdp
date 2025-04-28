@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using AxMSTSCLib;
 using Microsoft.Extensions.Logging;
+using MsRdpEx;
 using MSTSCLib;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
 using RoyalApps.Community.Rdp.WinForms.Interfaces;
@@ -29,13 +32,32 @@ public class RdpControl : UserControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();
 
+    /// <summary>
+    /// Return the last known screenshot of the session
+    /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public Bitmap? Screenshot { get; private set; }
+
+    /// <summary>
+    /// If enabled, a screenshot will be taken in a background thread once a second
+    /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public bool BackgroundScreenshotEnabled
+    {
+        get => _timerScreenshotTaker.Enabled;
+        set => _timerScreenshotTaker.Enabled = value;
+    }
+
     private bool _canScale;
     private bool _nlaReconnect;
+    private RdpInstance? _rdpInstance;
+    private Guid _sessionId;
 
     private int _currentZoomLevel = 100;
     private Size _previousClientSize = Size.Empty;
-    
+
     private readonly Timer _timerResizeInProgress;
+    private readonly Timer _timerScreenshotTaker;
     private readonly HashSet<string> _rdClientSearchPaths =
     [
         @"%ProgramFiles%\Remote Desktop",
@@ -55,12 +77,12 @@ public class RdpControl : UserControl
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public RdpClientConfiguration RdpConfiguration { get; set; }
-    
+
     /// <summary>
     /// Gets the current zoom level in percent of the remote desktop session.
     /// </summary>
     public int CurrentZoomLevel => _currentZoomLevel;
-    
+
     /// <summary>
     /// Returns true if a connection has been established successfully.
     /// </summary>
@@ -71,7 +93,7 @@ public class RdpControl : UserControl
     /// Raised when the RDP ActiveX has been connected.
     /// </summary>
     public event EventHandler<ConnectedEventArgs>? OnConnected;
-    
+
     /// <summary>
     /// Raised when the RDP ActiveX has been disconnected.
     /// </summary>
@@ -93,7 +115,7 @@ public class RdpControl : UserControl
     public event EventHandler<IMsTscAxEvents_OnConfirmCloseEvent>? OnConfirmClose;
 
     /// <summary>
-    /// This event is raised when a user clicks into a remote desktop session and DisableClickDetection is not set. 
+    /// This event is raised when a user clicks into a remote desktop session and DisableClickDetection is not set.
     /// </summary>
     public event EventHandler? OnClientAreaClicked;
 
@@ -102,7 +124,7 @@ public class RdpControl : UserControl
     /// This event can be used to cancel the resize event using the CancelEventArgs.
     /// </summary>
     public event EventHandler<CancelEventArgs>? BeforeRemoteDesktopSizeChanged;
-    
+
     /// <summary>
     /// Raised when the remote desktop size has changed.
     /// </summary>
@@ -120,11 +142,19 @@ public class RdpControl : UserControl
     public RdpControl()
     {
         RdpConfiguration = new();
-        
+
         _timerResizeInProgress = new Timer
         {
             Interval = 1000
         };
+
+        _timerScreenshotTaker = new Timer
+        {
+            Interval = 1000
+        };
+        _timerScreenshotTaker.Tick += TimerScreenshotTaker_Tick;
+        BackgroundScreenshotEnabled = true;
+
         SetStyle(ControlStyles.Selectable, true);
         SetStyle(ControlStyles.ContainerControl, false);
         TabStop = true;
@@ -137,6 +167,9 @@ public class RdpControl : UserControl
         if (disposing)
         {
             CleanupRdpClient();
+
+            _timerScreenshotTaker.Tick -= TimerScreenshotTaker_Tick;
+            _timerScreenshotTaker.Dispose();
 
             _timerResizeInProgress.Dispose();
         }
@@ -177,10 +210,10 @@ public class RdpControl : UserControl
     public void UnregisterEvents()
     {
         _timerResizeInProgress.Tick -= TimerResizeInProgress_Tick;
-        
+
         if (RdpClient == null)
             return;
-        
+
         RdpClient.OnConnected -= RdpClient_OnConnected;
         RdpClient.OnDisconnected -= RdpClient_OnDisconnected;
         RdpClient.OnRequestContainerMinimize -= RdpClient_OnRequestContainerMinimize;
@@ -211,7 +244,7 @@ public class RdpControl : UserControl
     /// </summary>
     public void Disconnect()
     {
-        if (RdpClient == null || RdpClient.GetOcx() == null! || RdpClient.ConnectionState == ConnectionState.Disconnected) 
+        if (RdpClient == null || RdpClient.GetOcx() == null! || RdpClient.ConnectionState == ConnectionState.Disconnected)
             return;
 
         try
@@ -241,7 +274,7 @@ public class RdpControl : UserControl
     {
         if (RdpClient == null)
             return;
-        
+
         var handle = new HWND(RdpClient.Handle);
         PInvoke.PostMessage(handle, PInvoke.WM_SETFOCUS, new WPARAM(UIntPtr.Zero), new LPARAM(IntPtr.Zero));
         PInvoke.PostMessage(handle, PInvoke.WM_KEYDOWN, new WPARAM((UIntPtr)VIRTUAL_KEY.VK_CONTROL), new LPARAM(IntPtr.Zero));
@@ -311,7 +344,7 @@ public class RdpControl : UserControl
             return;
         RdpClient.ShowConnectionInformation = true;
     }
-    
+
     /// <summary>
     /// Ensure the ActiveX control updates the client size according to the control size.
     /// </summary>
@@ -320,14 +353,14 @@ public class RdpControl : UserControl
     {
         if (_previousClientSize.Equals(Size))
             return true;
-            
+
         _previousClientSize = Size;
 
         if (RdpConfiguration.Display.UseLocalScaling)
         {
             if (RdpConfiguration.Display.HasDesktopSize)
                 return true;
-            
+
             var scaleFactor = _currentZoomLevel / 100.00;
             var width = (int)(Width / scaleFactor);
             var height = (int)(Height / scaleFactor);
@@ -336,7 +369,7 @@ public class RdpControl : UserControl
                 SetZoomLevelLocal(_currentZoomLevel);
             return success;
         }
-        
+
         return UpdateClientSizeWithoutReconnect() || UpdateClientSizeWithReconnect();
     }
 
@@ -393,7 +426,7 @@ public class RdpControl : UserControl
     {
         if (RdpClient == null)
             return;
-        
+
         _previousClientSize = Size;
         ConnectedEventArgs? ea = null;
         if (RdpConfiguration.Display.FullScreen)
@@ -402,14 +435,14 @@ public class RdpControl : UserControl
             if (RdpClient is {UseMultimon: true, RemoteMonitorCount: > 1})
             {
                 RdpClient.GetRemoteMonitorsBoundingBox(
-                    out var left, 
-                    out var top, 
+                    out var left,
+                    out var top,
                     out var right,
                     out var bottom);
-                        
+
                 var originalLeft = left;
                 var originalTop = top;
-                        
+
                 if (left < 0)
                     left *= -1;
                 if (right < 0)
@@ -433,8 +466,8 @@ public class RdpControl : UserControl
         }
 
         var setLocalZoom = RdpConfiguration.Display.UseLocalScaling &&
-                           (!RdpClient.UseMultimon || RdpClient is { RemoteMonitorCount: 1 }); 
-        
+                           (!RdpClient.UseMultimon || RdpClient is { RemoteMonitorCount: 1 });
+
         if (setLocalZoom)
             BeginInvoke(new MethodInvoker(() => { SetZoomLevelLocal(_currentZoomLevel); }));
 
@@ -448,7 +481,7 @@ public class RdpControl : UserControl
     {
         if (RdpClient == null)
             return;
-        
+
         switch (e.discReason)
         {
             // ignore this one. a reconnect is in progress (RDP 8)
@@ -493,9 +526,9 @@ public class RdpControl : UserControl
 
                 var ea = new DisconnectedEventArgs
                 {
-                    DisconnectCode = e.discReason, 
-                    Description = description, 
-                    ShowError = showError, 
+                    DisconnectCode = e.discReason,
+                    Description = description,
+                    ShowError = showError,
                     UserInitiated = userInitiated
                 };
                 OnDisconnected?.Invoke(sender, ea);
@@ -525,15 +558,15 @@ public class RdpControl : UserControl
 
     private void ApplyInitialScaling()
     {
-        _currentZoomLevel = RdpConfiguration.Display.AutoScaling 
-            ? LogicalToDeviceUnits(100) : 
+        _currentZoomLevel = RdpConfiguration.Display.AutoScaling
+            ? LogicalToDeviceUnits(100) :
             RdpConfiguration.Display.InitialZoomLevel;
 
         if (RdpConfiguration.Display.UseLocalScaling)
         {
             if (RdpConfiguration.Display.HasDesktopSize)
                 return;
-        
+
             var scaleFactor = _currentZoomLevel / 100.00;
             RdpClient!.DesktopWidth = (int)(Width / scaleFactor);
             RdpClient.DesktopHeight = (int)(Height / scaleFactor);
@@ -556,10 +589,10 @@ public class RdpControl : UserControl
     {
         if (RdpClient == null)
             return;
-        
+
         if (performDisconnect && RdpClient.ConnectionState != ConnectionState.Disconnected)
             RdpClient.Disconnect();
-        
+
         UnregisterEvents();
         RdpClient.Dispose();
     }
@@ -571,15 +604,15 @@ public class RdpControl : UserControl
         var rdcClientInstalled = !string.IsNullOrWhiteSpace(msRdcAxDllPath);
 
         RdpClient = RdpClientFactory.Create(
-            RdpConfiguration.ClientVersion, 
+            RdpConfiguration.ClientVersion,
             MsRdpExManager.Instance.AxHookEnabled ? MsRdpExManager.Instance.CoreApi.MsRdpExDllPath : null,
             RdpConfiguration.UseMsRdc && rdcClientInstalled);
-        
+
         ((ISupportInitialize)RdpClient).BeginInit();
         Environment.SetEnvironmentVariable("MSRDPEX_LOG_ENABLED", RdpConfiguration.LogEnabled ? "1" : "0");
         Environment.SetEnvironmentVariable("MSRDPEX_LOG_LEVEL", RdpConfiguration.LogLevel);
         Environment.SetEnvironmentVariable("MSRDPEX_LOG_FILE_PATH", RdpConfiguration.LogFilePath);
-        
+
         var control = (Control) RdpClient;
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
@@ -593,15 +626,15 @@ public class RdpControl : UserControl
         {
             if (string.IsNullOrWhiteSpace(msRdcAxDllPath))
                 Logger.LogDebug("Microsoft Remote Desktop Client will not be used, rdclientax.dll was not found");
-        
+
             Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxDllPath);
-                
+
             RdpConfiguration.UseMsRdc = false;
         }
 
         // workaround to ensure msrdcax.dll can be used even when hooking not enabled:
         // https://github.com/Devolutions/MsRdpEx/blob/01995487f22fd697262525ece2e0a6f02908715b/dotnet/MsRdpEx_App/MainDlg.cs#L307
-        try 
+        try
         {
             object requestUseNewOutputPresenter = true;
             RdpClient.GetExtendedSettings().set_Property("RequestUseNewOutputPresenter", ref requestUseNewOutputPresenter);
@@ -612,6 +645,16 @@ public class RdpControl : UserControl
         }
 
         this.ApplyRdpClientConfiguration(RdpConfiguration);
+
+        if (MsRdpExManager.Instance.AxHookEnabled)
+        {
+            _rdpInstance = new RdpInstance((IMsRdpExInstance)RdpClient.GetOcx()!)
+            {
+                OutputMirrorEnabled = false,
+                VideoRecordingEnabled = false
+            };
+            _sessionId = _rdpInstance.SessionId;
+        }
 
         RegisterEvents();
         ((ISupportInitialize)RdpClient).EndInit();
@@ -652,7 +695,7 @@ public class RdpControl : UserControl
     private void RegisterEvents()
     {
         _timerResizeInProgress.Tick += TimerResizeInProgress_Tick;
-        
+
         RdpClient!.OnConnected += RdpClient_OnConnected;
         RdpClient.OnDisconnected += RdpClient_OnDisconnected;
         RdpClient.OnRequestContainerMinimize += RdpClient_OnRequestContainerMinimize;
@@ -697,7 +740,7 @@ public class RdpControl : UserControl
     {
         object zl = (uint) desiredZoomLevel;
         Logger.LogDebug("Setting local zoom level to {ZoomLevel}", desiredZoomLevel);
-            
+
         if (RdpClient!.TrySetProperty("ZoomLevel", ref zl, out var ex))
             return true;
 
@@ -713,6 +756,19 @@ public class RdpControl : UserControl
             return;
         _timerResizeInProgress.Stop();
         RaiseRemoteDesktopSizeChanged();
+    }
+
+    private void TimerScreenshotTaker_Tick(object? sender, EventArgs e)
+    {
+        if (RdpClient is null || RdpClient.Handle == IntPtr.Zero)
+            return;
+
+        var screenshot = GetBitmap();
+        if (screenshot is null)
+            return;
+        var oldScreenshot = Screenshot;
+        Screenshot = screenshot;
+        oldScreenshot?.Dispose();
     }
 
     private bool RaiseBeforeRemoteDesktopSizeChangedAndCancel()
@@ -742,7 +798,7 @@ public class RdpControl : UserControl
     {
         return UpdateClientSizeWithoutReconnect(Width, Height, _currentZoomLevel);
     }
-    
+
     private bool UpdateClientSizeWithoutReconnect(int width, int height, int zoomLevel)
     {
         try
@@ -771,5 +827,126 @@ public class RdpControl : UserControl
         var success = RdpClient!.Reconnect((uint) Width, (uint) Height) == ControlReconnectStatus.controlReconnectStarted;
         Logger.LogDebug("UpdateClientSizeWithReconnect result: {Result}", success ? "Success" : "Failed");
         return success;
+    }
+
+    private Bitmap? GetBitmap()
+    {
+        IntPtr hWnd = GetOutputPresenterHwnd();
+        IMsRdpExCoreApi coreApi = Bindings.GetCoreApi();
+
+        object? instance = null;
+        var success = coreApi.OpenInstanceForWindowHandle(hWnd, out instance);
+        IMsRdpExInstance  rdpInstance = (IMsRdpExInstance) instance;
+        rdpInstance.SetOutputMirrorEnabled(true);
+
+        IntPtr hShadowDC = IntPtr.Zero;
+        IntPtr hShadowBitmap = IntPtr.Zero;
+        IntPtr shadowData = IntPtr.Zero;
+        UInt32 shadowWidth = 0;
+        UInt32 shadowHeight = 0;
+        UInt32 shadowStep = 0;
+
+        if (rdpInstance.GetShadowBitmap(ref hShadowDC, ref hShadowBitmap, ref shadowData, ref shadowWidth, ref shadowHeight, ref shadowStep))
+        {
+            rdpInstance.LockShadowBitmap();
+            var bitmap = ShadowToBitmap(new HWND(hWnd), new HDC(hShadowDC), (int)shadowWidth, (int)shadowHeight, (int)shadowWidth, (int)shadowHeight);
+            rdpInstance.UnlockShadowBitmap();
+
+            if (bitmap is not null)
+            {
+                return bitmap;
+            }
+        }
+
+        return null;
+    }
+
+    private Bitmap? ShadowToBitmap(HWND hWnd, HDC hShadowDC, int shadowWidth, int shadowHeight, int captureWidth, int captureHeight)
+    {
+        using var g = Graphics.FromHwnd(hWnd);
+
+        if (shadowWidth == 0 || shadowHeight == 0)
+            return null;
+
+        var width = captureWidth;
+        var height = captureHeight;
+
+        var srcX = 0;
+        var srcY = 0;
+        var dstX = 0;
+        var dstY = 0;
+        float percent;
+        var srcWidth = shadowWidth;
+        var srcHeight = shadowHeight;
+
+        var percentW = width / (float)srcWidth;
+        var percentH = height / (float)srcHeight;
+        if (percentH < percentW)
+        {
+            percent = percentH;
+            dstX = Convert.ToInt16((width - srcWidth * percent) / 2);
+        }
+        else
+        {
+            percent = percentW;
+            dstY = Convert.ToInt16((height - srcHeight * percent) / 2);
+        }
+
+        var dstWidth = (int)(srcWidth * percent);
+        var dstHeight = (int)(srcHeight * percent);
+
+        var bmp = new Bitmap(width, height, g);
+        using var memoryGraphics = Graphics.FromImage(bmp);
+        var dc = new HDC(memoryGraphics.GetHdc());
+
+        PInvoke.SetStretchBltMode(dc, STRETCH_BLT_MODE.HALFTONE);
+
+        if (!PInvoke.StretchBlt(
+                dc,
+                dstX,
+                dstY,
+                dstWidth,
+                dstHeight,
+                hShadowDC,
+                srcX,
+                srcY,
+                srcWidth,
+                srcHeight,
+                ROP_CODE.SRCCOPY))
+        {
+            bmp = null;
+        }
+
+        memoryGraphics.ReleaseHdc(dc);
+
+        return bmp;
+    }
+
+    private HWND GetOutputPresenterHwnd()
+    {
+        var clientHandle = new HWND(RdpClient!.Handle);
+
+        // UIMainClass ""
+        // UIContainerClass ""
+        // OPContainerClass "Output Painter Window"
+        // OPWindowClass "Output Painter Child Window"
+
+        var hUIMainClassWnd = PInvoke.FindWindowEx(clientHandle, HWND.Null, "UIMainClass", null);
+        var hUIContainerClassWnd = PInvoke.FindWindowEx(hUIMainClassWnd, HWND.Null, "UIContainerClass", null);
+        var hOPContainerClassWnd = PInvoke.FindWindowEx(hUIContainerClassWnd, HWND.Null, "OPContainerClass", null);
+        var hOPWindowClassWnd = PInvoke.FindWindowEx(hOPContainerClassWnd, HWND.Null, "OPWindowClass", null);
+
+        if (hOPWindowClassWnd == HWND.Null)
+            hOPWindowClassWnd = PInvoke.FindWindowEx(hOPContainerClassWnd, HWND.Null, "OPWindowClass_mstscax", null);
+
+        if (hOPWindowClassWnd == HWND.Null)
+            hOPWindowClassWnd = PInvoke.FindWindowEx(hOPContainerClassWnd, HWND.Null, "OPWindowClass_rdclientax", null);
+
+        //Debug.WriteLine("UIMainClass: {0}", hUIMainClassWnd);
+        //Debug.WriteLine("OPContainerClass: {0}", hOPContainerClassWnd);
+        //Debug.WriteLine("UIContainerClass: {0}", hUIContainerClassWnd);
+        //Debug.WriteLine("OPWindowClass: {0}", hOPWindowClassWnd);
+
+        return hOPWindowClassWnd;
     }
 }

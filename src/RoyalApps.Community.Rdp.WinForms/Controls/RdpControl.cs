@@ -35,28 +35,27 @@ public class RdpControl : UserControl
     /// Return the last known screenshot of the session
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Bitmap? Screenshot { get; private set; }
+    public Bitmap? SessionCapture { get; private set; }
 
     /// <summary>
     /// If enabled, a screenshot will be taken in a background thread once a second
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool BackgroundScreenshotEnabled
+    public bool EnableSessionCapture
     {
-        get => _timerScreenshotTaker.Enabled;
-        set => _timerScreenshotTaker.Enabled = value;
+        get => _sessionCaptureTimer.Enabled;
+        set => _sessionCaptureTimer.Enabled = value;
     }
 
     private bool _canScale;
     private bool _nlaReconnect;
     private RdpInstance? _rdpInstance;
-    private Guid _sessionId;
 
     private int _currentZoomLevel = 100;
     private Size _previousClientSize = Size.Empty;
 
     private readonly Timer _timerResizeInProgress;
-    private readonly Timer _timerScreenshotTaker;
+    private readonly Timer _sessionCaptureTimer;
     private readonly HashSet<string> _rdClientSearchPaths =
     [
         @"%ProgramFiles%\Remote Desktop",
@@ -147,12 +146,12 @@ public class RdpControl : UserControl
             Interval = 1000
         };
 
-        _timerScreenshotTaker = new Timer
+        _sessionCaptureTimer = new Timer
         {
             Interval = 1000
         };
-        _timerScreenshotTaker.Tick += TimerScreenshotTaker_Tick;
-        BackgroundScreenshotEnabled = true;
+        _sessionCaptureTimer.Tick += SessionCaptureTimer_Tick;
+        EnableSessionCapture = true;
 
         SetStyle(ControlStyles.Selectable, true);
         SetStyle(ControlStyles.ContainerControl, false);
@@ -167,8 +166,8 @@ public class RdpControl : UserControl
         {
             CleanupRdpClient();
 
-            _timerScreenshotTaker.Tick -= TimerScreenshotTaker_Tick;
-            _timerScreenshotTaker.Dispose();
+            _sessionCaptureTimer.Tick -= SessionCaptureTimer_Tick;
+            _sessionCaptureTimer.Dispose();
 
             _timerResizeInProgress.Dispose();
         }
@@ -652,7 +651,6 @@ public class RdpControl : UserControl
                 OutputMirrorEnabled = false,
                 VideoRecordingEnabled = false
             };
-            _sessionId = _rdpInstance.SessionId;
         }
 
         RegisterEvents();
@@ -757,7 +755,7 @@ public class RdpControl : UserControl
         RaiseRemoteDesktopSizeChanged();
     }
 
-    private void TimerScreenshotTaker_Tick(object? sender, EventArgs e)
+    private void SessionCaptureTimer_Tick(object? sender, EventArgs e)
     {
         if (RdpClient is null || RdpClient.Handle == IntPtr.Zero)
             return;
@@ -765,8 +763,8 @@ public class RdpControl : UserControl
         var screenshot = GetBitmap();
         if (screenshot is null)
             return;
-        var oldScreenshot = Screenshot;
-        Screenshot = screenshot;
+        var oldScreenshot = SessionCapture;
+        SessionCapture = screenshot;
         oldScreenshot?.Dispose();
     }
 
@@ -830,37 +828,48 @@ public class RdpControl : UserControl
 
     private Bitmap? GetBitmap()
     {
-        IntPtr hWnd = GetOutputPresenterHwnd();
-        IMsRdpExCoreApi coreApi = Bindings.GetCoreApi();
+        var hWnd = GetOutputPresenterHandle();
+        var coreApi = Bindings.GetCoreApi();
 
-        object? instance = null;
-        var success = coreApi.OpenInstanceForWindowHandle(hWnd, out instance);
-        IMsRdpExInstance  rdpInstance = (IMsRdpExInstance) instance;
+        var success = coreApi.OpenInstanceForWindowHandle(hWnd, out var instance);
+        if (!success)
+            return null;
+        
+        var  rdpInstance = (IMsRdpExInstance) instance;
         rdpInstance.SetOutputMirrorEnabled(true);
 
-        IntPtr hShadowDC = IntPtr.Zero;
-        IntPtr hShadowBitmap = IntPtr.Zero;
-        IntPtr shadowData = IntPtr.Zero;
-        UInt32 shadowWidth = 0;
-        UInt32 shadowHeight = 0;
-        UInt32 shadowStep = 0;
+        var hShadowDc = IntPtr.Zero;
+        var hShadowBitmap = IntPtr.Zero;
+        var shadowData = IntPtr.Zero;
+        uint shadowWidth = 0;
+        uint shadowHeight = 0;
+        uint shadowStep = 0;
 
-        if (rdpInstance.GetShadowBitmap(ref hShadowDC, ref hShadowBitmap, ref shadowData, ref shadowWidth, ref shadowHeight, ref shadowStep))
-        {
-            rdpInstance.LockShadowBitmap();
-            var bitmap = ShadowToBitmap(new HWND(hWnd), new HDC(hShadowDC), (int)shadowWidth, (int)shadowHeight, Width, Height);
-            rdpInstance.UnlockShadowBitmap();
+        var captureWidth = RdpConfiguration.Display.DesktopWidth > 0 
+            ? RdpConfiguration.Display.DesktopWidth 
+            : Width;
 
-            if (bitmap is not null)
-            {
-                return bitmap;
-            }
-        }
+        var captureHeight = RdpConfiguration.Display.DesktopHeight > 0 
+            ? RdpConfiguration.Display.DesktopHeight 
+            : Height;
 
-        return null;
+        if (!rdpInstance.GetShadowBitmap(
+                ref hShadowDc, 
+                ref hShadowBitmap, 
+                ref shadowData, 
+                ref shadowWidth,
+                ref shadowHeight, 
+                ref shadowStep)) 
+            return null;
+        
+        rdpInstance.LockShadowBitmap();
+        var bitmap = ShadowToBitmap(hWnd, new HDC(hShadowDc), (int)shadowWidth, (int)shadowHeight, captureWidth, captureHeight);
+        rdpInstance.UnlockShadowBitmap();
+
+        return bitmap;
     }
 
-    private Bitmap? ShadowToBitmap(HWND hWnd, HDC hShadowDC, int shadowWidth, int shadowHeight, int captureWidth, int captureHeight)
+    private Bitmap? ShadowToBitmap(HWND hWnd, HDC hShadowDc, int shadowWidth, int shadowHeight, int captureWidth, int captureHeight)
     {
         using var g = Graphics.FromHwnd(hWnd);
 
@@ -906,7 +915,7 @@ public class RdpControl : UserControl
                 dstY,
                 dstWidth,
                 dstHeight,
-                hShadowDC,
+                hShadowDc,
                 srcX,
                 srcY,
                 srcWidth,
@@ -921,14 +930,9 @@ public class RdpControl : UserControl
         return bmp;
     }
 
-    private HWND GetOutputPresenterHwnd()
+    private HWND GetOutputPresenterHandle()
     {
         var clientHandle = new HWND(RdpClient!.Handle);
-
-        // UIMainClass ""
-        // UIContainerClass ""
-        // OPContainerClass "Output Painter Window"
-        // OPWindowClass "Output Painter Child Window"
 
         var hUIMainClassWnd = PInvoke.FindWindowEx(clientHandle, HWND.Null, "UIMainClass", null);
         var hUIContainerClassWnd = PInvoke.FindWindowEx(hUIMainClassWnd, HWND.Null, "UIContainerClass", null);
@@ -940,11 +944,6 @@ public class RdpControl : UserControl
 
         if (hOPWindowClassWnd == HWND.Null)
             hOPWindowClassWnd = PInvoke.FindWindowEx(hOPContainerClassWnd, HWND.Null, "OPWindowClass_rdclientax", null);
-
-        //Debug.WriteLine("UIMainClass: {0}", hUIMainClassWnd);
-        //Debug.WriteLine("OPContainerClass: {0}", hOPContainerClassWnd);
-        //Debug.WriteLine("UIContainerClass: {0}", hUIContainerClassWnd);
-        //Debug.WriteLine("OPWindowClass: {0}", hOPWindowClassWnd);
 
         return hOPWindowClassWnd;
     }

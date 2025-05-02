@@ -17,12 +17,12 @@ public class HyperVConfiguration : ExpandableObjectConverter
     /// The Hyper-V console RDP port.
     /// </summary>
     public int HyperVPort { get; set; } = 2179;
-    
+
     /// <summary>
     /// If true, enhanced session mode is used when possible.
     /// </summary>
     public bool EnhancedSessionMode { get; set; }
-    
+
     /// <summary>
     /// ToString
     /// </summary>

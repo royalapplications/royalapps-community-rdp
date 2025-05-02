@@ -31,7 +31,7 @@ public class ProgramConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-maximizeshell</cref>
     /// </see>
     public bool MaximizeShell { get; set; } = true;
-    
+
     /// <summary>
     /// ToString
     /// </summary>

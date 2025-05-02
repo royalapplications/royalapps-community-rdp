@@ -31,7 +31,7 @@ public class RedirectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audiocaptureredirectionmode</cref>
     /// </see>
     public bool AudioCaptureRedirectionMode { get; set; }
-    
+
     /// <summary>
     /// Specifies if video decoding and rendering is redirected to the client.
     /// </summary>
@@ -79,7 +79,7 @@ public class RedirectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings5-redirectdevices</cref>
     /// </see>
     public bool RedirectDevices { get; set; }
-    
+
     /// <summary>
     /// Sets or retrieves the configuration for Point of Service device redirection.
     /// </summary>
@@ -101,7 +101,7 @@ public class RedirectionConfiguration : ExpandableObjectConverter
     /// If empty, all drives are redirected when RedirectDrives property is true.
     /// </summary>
     public string? RedirectDriveLetters { get; set; }
-    
+
     /// <summary>
     /// Specifies if redirection of cameras is allowed.
     /// </summary>

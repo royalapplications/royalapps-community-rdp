@@ -17,7 +17,7 @@ public class InputConfiguration : ExpandableObjectConverter
     public bool AllowBackgroundInput { get; set; }
 
     /// <summary>
-    /// If true, a mouse click in a remote session will not transfer the input focus to the session. 
+    /// If true, a mouse click in a remote session will not transfer the input focus to the session.
     /// </summary>
     public bool DisableClickDetection { get; set; }
 
@@ -37,7 +37,7 @@ public class InputConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings6-relativemousemode</cref>
     /// </seealso>
     public bool RelativeMouseMode { get; set; } = true;
-    
+
     /// <summary>
     /// Specifies if keyboard accelerators should be passed to the server.
     /// </summary>
@@ -66,7 +66,7 @@ public class InputConfiguration : ExpandableObjectConverter
     /// When enabled, ctrl+alt+space can be used to toggle between local and remote keyboard hook modes. Only works when the session is in full screen mode.
     /// </summary>
     public bool KeyboardHookToggleShortcutEnabled { get; set; }
-    
+
     /// <summary>
     /// Specifies the name of the active input locale identifier (formerly called the keyboard layout) to use for the connection.
     /// </summary>
@@ -74,7 +74,7 @@ public class InputConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imstscadvancedsettings-keyboardlayoutstr</cref>
     /// </see>
     public string? KeyBoardLayoutStr { get; set; }
-    
+
     /// <summary>
     /// ToString
     /// </summary>

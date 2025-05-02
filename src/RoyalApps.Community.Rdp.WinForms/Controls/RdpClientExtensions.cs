@@ -46,7 +46,7 @@ internal static class RdpClientExtensions
 
         if (rdpClient is null)
             throw new InvalidOperationException("Cannot apply configuration because there is no IRdpClient instance.");
-        
+
         try
         {
             logger.LogTrace("Set {Server} and {Port}", configuration.Server, configuration.Port);
@@ -72,7 +72,7 @@ internal static class RdpClientExtensions
         var password = configuration.Credentials.Password?.GetValue();
         if (!string.IsNullOrEmpty(password))
             rdpClient.Password = password;
-        
+
         rdpClient.NetworkLevelAuthentication = configuration.Credentials.NetworkLevelAuthentication;
 
         if (configuration.Credentials.PasswordContainsSmartCardPin)
@@ -166,7 +166,7 @@ internal static class RdpClientExtensions
 
         if (!string.IsNullOrWhiteSpace(configuration.Input.KeyBoardLayoutStr))
             rdpClient.KeyBoardLayoutStr = configuration.Input.KeyBoardLayoutStr;
-        
+
         TraceConfigurationData(logger, configuration.Redirection);
         rdpClient.AudioRedirectionMode = configuration.Redirection.AudioRedirectionMode;
         rdpClient.AudioQualityMode = configuration.Redirection.AudioQualityMode;
@@ -242,7 +242,7 @@ internal static class RdpClientExtensions
     {
         if (!logger.IsEnabled(LogLevel.Trace))
             return;
-        
+
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"Configuration class: {configuration.GetType().Name}");
         var properties = configuration.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -254,7 +254,7 @@ internal static class RdpClientExtensions
         // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
         logger.LogTrace(stringBuilder.ToString());
     }
-    
+
     /// <summary>
     /// Provides access to the non-scriptable properties (version 4) of a client's remote session on the Remote Desktop ActiveX control.
     /// </summary>
@@ -338,7 +338,7 @@ internal static class RdpClientExtensions
             exception = ex;
 #if DEBUG
             throw;
-#else                
+#else
             return false;
 #endif
         }
@@ -376,7 +376,7 @@ internal static class RdpClientExtensions
             exception = ex;
 #if DEBUG
             throw;
-#else                
+#else
             return false;
 #endif
         }
@@ -545,12 +545,12 @@ internal static class RdpClientExtensions
         exception = success ? null : new Exception(logMessage.ToString());
         return success;
     }
-    
+
     private static IMsRdpExtendedSettings GetCoreProperties(this IRdpClient rdpClient)
     {
         return (IMsRdpExtendedSettings)rdpClient.GetExtendedSettings().get_Property(CoreProperties);
     }
-    
+
     private static IMsRdpExtendedSettings GetBaseProperties(this IRdpClient rdpClient)
     {
         return (IMsRdpExtendedSettings)rdpClient.GetExtendedSettings().get_Property(BaseProperties);

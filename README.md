@@ -60,7 +60,7 @@ Shows a window with all the settings from the `RdpClientConfiguration` class. Ed
 ## Notable Features
 
 ### Use Microsoft Remote Desktop Client
-One of the most interesting possibilities of this package is to use the Microsoft's modern Remote Desktop Client (RDC) instead of the Terminal Services Client (MSTSC) which ships with Windows. Just set `RdpClientConfiguration.UseMsRdc` to true and ensure that the [Remote Desktop Client](https://www.microsoft.com/store/productId/9WZDNCRFJ3PS) is installed from the Microsoft Store. 
+One of the most interesting possibilities of this package is to use the Microsoft's modern Remote Desktop Client (RDC) instead of the Terminal Services Client (MSTSC) which ships with Windows. Just set `RdpClientConfiguration.UseMsRdc` to true and ensure that the [Remote Desktop Client](https://www.microsoft.com/store/productId/9WZDNCRFJ3PS) is installed from the Microsoft Store.
 
 ### Auto Expand Desktop Size
 If `DesktopWidth` and `DesktopHeight` properties are set to `0` (default), the remote desktop size is determined by the container size the control is placed on.

@@ -11,7 +11,7 @@ internal class DebugLogger : ILogger
     public static DebugLogger Instance => _instance.Value;
 
     private DebugLogger() { }
-    
+
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
         Debug.WriteLine($"[{eventId.Id, 2}: {logLevel, -12}]");

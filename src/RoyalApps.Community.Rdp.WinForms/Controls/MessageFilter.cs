@@ -15,9 +15,9 @@ internal static class MessageFilter
         if (control.DisableClickDetection ||
             (m.Msg != PInvoke.WM_MOUSEACTIVATE &&
              m.Msg != PInvoke.WM_LBUTTONDOWN &&
-             m.Msg != PInvoke.WM_MDIACTIVATE)) 
+             m.Msg != PInvoke.WM_MDIACTIVATE))
             return false;
-        
+
         // notify host application that the RDP client area has been clicked
         control.RaiseClientAreaClicked();
         if (!control.ContainsFocus)

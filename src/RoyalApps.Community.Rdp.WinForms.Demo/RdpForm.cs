@@ -17,7 +17,7 @@ public partial class RdpForm : Form
         _form = new Form
         {
             Size = new Size(800, 1000),
-            Text = @"Settings",
+            Text = "Settings",
             FormBorderStyle = FormBorderStyle.SizableToolWindow,
             StartPosition = FormStartPosition.CenterParent
         };
@@ -97,11 +97,11 @@ public partial class RdpForm : Form
         {
             DropDownItems =
             {
-                connect, 
-                disconnect, 
+                connect,
+                disconnect,
                 new ToolStripSeparator(),
                 connectionInfo,
-                new ToolStripSeparator(), 
+                new ToolStripSeparator(),
                 settings
             }
         };
@@ -112,7 +112,7 @@ public partial class RdpForm : Form
             DropDownItems =
             {
                 updateDisplay,
-                new ToolStripSeparator(), 
+                new ToolStripSeparator(),
                 new ToolStripLabel("Resize Behavior") { Enabled = false },
                 scrollbars,
                 smartSizing,

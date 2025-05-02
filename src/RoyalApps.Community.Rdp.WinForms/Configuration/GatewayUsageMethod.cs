@@ -18,3 +18,4 @@ public enum GatewayUsageMethod
     /// </summary>
     OnDemand = 2
 }
+

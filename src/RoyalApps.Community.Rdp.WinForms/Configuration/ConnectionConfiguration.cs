@@ -15,7 +15,7 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imstscadvancedsettings-compress</cref>
     /// </seealso>
     public bool Compression { get; set; }
- 
+
     /// <summary>
     /// Specifies whether to enable the client control to reconnect automatically to a session in the event of a network disconnection.
     /// </summary>
@@ -31,12 +31,12 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings2-maxreconnectattempts</cref>
     /// </seealso>
     public int MaxReconnectAttempts { get; set; }
-    
+
     /// <summary>
-    /// Disables RDP UDP transport and forces TCP transport. It is recommended to set this true when using connection through UDP based VPN connections. 
+    /// Disables RDP UDP transport and forces TCP transport. It is recommended to set this true when using connection through UDP based VPN connections.
     /// </summary>
     public bool DisableUdpTransport { get; set; }
-    
+
     /// <summary>
     /// Gets and sets whether to use the redirection server name.
     /// </summary>
@@ -52,7 +52,7 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-loadbalanceinfo</cref>
     /// </seealso>
     public string? LoadBalanceInfo { get; set; }
-    
+
     /// <summary>
     /// The interval in seconds between keep-alive packets.
     /// </summary>
@@ -75,12 +75,12 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     /// The method used to perform the keep-alive action
     /// </summary>
     public KeepAliveMethod KeepAliveMethod { get; set; } = KeepAliveMethod.MouseMove;
-    
+
     /// <summary>
     /// Determines whether the client will use Microsoft Entra ID to authenticate to the remote PC. In Azure Virtual Desktop, this provides a single sign-on experience.
     /// </summary>
     public bool EnableRdsAadAuth { get; set; }
-    
+
     /// <summary>
     /// ToString
     /// </summary>

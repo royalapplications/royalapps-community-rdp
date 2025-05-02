@@ -34,7 +34,7 @@ public class DisplayConfiguration : ExpandableObjectConverter
     /// Return true if a desktop width and height is set.
     /// </summary>
     public bool HasDesktopSize => DesktopWidth != 0 && DesktopHeight != 0;
-    
+
     /// <summary>
     /// The color depth (in bits per pixel) for the control's connection.
     /// Values include 8, 15, 16, 24, and 32 bits per pixel.
@@ -54,7 +54,7 @@ public class DisplayConfiguration : ExpandableObjectConverter
     /// If enabled, Smart Sizing is not available.
     /// </summary>
     public bool UseLocalScaling { get; set; }
-    
+
     /// <summary>
     /// The initial zoom level in percent (default is 100).
     /// </summary>
@@ -64,7 +64,7 @@ public class DisplayConfiguration : ExpandableObjectConverter
     /// The behavior when the control is resized.
     /// </summary>
     public ResizeBehavior ResizeBehavior { get; set; } = ResizeBehavior.SmartReconnect;
-    
+
     ///  <summary>
     /// Determines whether the client control is in full-screen mode.
     ///  True to enter full-screen mode, False to leave full-screen mode and return to window mode.
@@ -82,7 +82,7 @@ public class DisplayConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imstscadvancedsettings-containerhandledfullscreen</cref>
     /// </seealso>
     public bool ContainerHandledFullScreen { get; set; } = true;
-    
+
     /// <summary>
     /// Specifies the window title displayed when the control is in full-screen mode.
     /// </summary>
@@ -120,7 +120,7 @@ public class DisplayConfiguration : ExpandableObjectConverter
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable5-usemultimon</cref>
     /// </seealso>
     public bool UseMultimon { get; set; }
-    
+
     /// <summary>
     /// ToString
     /// </summary>

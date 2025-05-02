@@ -80,7 +80,7 @@ public class GatewayConfiguration : ExpandableObjectConverter
     /// </see>
     [TypeConverter(typeof(SensitiveStringConverter))]
     public SensitiveString? GatewayPassword { get; set; }
-    
+
     /// <summary>
     /// ToString
     /// </summary>

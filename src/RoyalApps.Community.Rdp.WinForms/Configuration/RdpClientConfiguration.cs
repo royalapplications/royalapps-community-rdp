@@ -63,7 +63,7 @@ public class RdpClientConfiguration
     /// The file path to the log file when LogEnabled is set to true.
     /// </summary>
     public string LogFilePath { get; set; } = Environment.ExpandEnvironmentVariables(@"%TEMP%\MsRdpEx.log");
-    
+
     /// <summary>
     /// The credential configuration used to log on to the remote desktop session.
     /// </summary>
@@ -73,7 +73,7 @@ public class RdpClientConfiguration
     /// Connection related configuration and settings.
     /// </summary>
     public ConnectionConfiguration Connection { get; set; } = new();
-    
+
     /// <summary>
     /// The display settings used for the remote desktop session.
     /// </summary>
@@ -88,12 +88,12 @@ public class RdpClientConfiguration
     /// Configuration and settings related to Hyper-V connections.
     /// </summary>
     public HyperVConfiguration HyperV { get; set; } = new();
-    
+
     /// <summary>
     /// Input related configuration and settings.
     /// </summary>
     public InputConfiguration Input { get; set; } = new();
-    
+
     /// <summary>
     /// Performance related configuration and settings.
     /// </summary>
@@ -103,7 +103,7 @@ public class RdpClientConfiguration
     /// Configuration related to a program to be started on the remote server upon connection.
     /// </summary>
     public ProgramConfiguration Program { get; set; } = new();
-    
+
     /// <summary>
     /// Configuration and settings for device redirection.
     /// </summary>

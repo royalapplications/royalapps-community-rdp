@@ -21,7 +21,7 @@ public class SensitiveString
     /// </summary>
     /// <param name="value">Sensitive string.</param>
     public void SetValue(string value) => _value = value;
-    
+
     /// <summary>
     /// Retrieves the sensitive string value.
     /// </summary>

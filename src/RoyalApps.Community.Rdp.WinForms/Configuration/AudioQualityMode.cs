@@ -17,4 +17,4 @@ public enum AudioQualityMode
     /// High audio quality. The server provides audio output in uncompressed PCM format with lower processing overhead for latency.
     /// </summary>
     High = 2,
-}
+}

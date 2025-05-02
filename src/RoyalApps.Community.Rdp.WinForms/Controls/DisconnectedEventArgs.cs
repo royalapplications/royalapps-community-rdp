@@ -3,7 +3,7 @@ using System;
 namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 /// <summary>
-/// Event args for the OnDisconnected event. 
+/// Event args for the OnDisconnected event.
 /// </summary>
 public class DisconnectedEventArgs : EventArgs
 {

@@ -13,7 +13,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Version>1.2.9</Version>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
         <RuntimeIdentifier Condition="$(Platform) == 'x64'">win-x64</RuntimeIdentifier>
@@ -49,5 +49,5 @@
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
         <EmbeddedResource Include="Resources\Files\*.*" />
     </ItemGroup>
-    
+
 </Project>

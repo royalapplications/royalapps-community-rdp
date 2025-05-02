@@ -834,7 +834,7 @@ public class RdpControl : UserControl
         var success = coreApi.OpenInstanceForWindowHandle(hWnd, out var instance);
         if (!success)
             return null;
-        
+
         var  rdpInstance = (IMsRdpExInstance) instance;
         rdpInstance.SetOutputMirrorEnabled(true);
 
@@ -845,23 +845,23 @@ public class RdpControl : UserControl
         uint shadowHeight = 0;
         uint shadowStep = 0;
 
-        var captureWidth = RdpConfiguration.Display.DesktopWidth > 0 
-            ? RdpConfiguration.Display.DesktopWidth 
+        var captureWidth = RdpConfiguration.Display.DesktopWidth > 0
+            ? RdpConfiguration.Display.DesktopWidth
             : Width;
 
-        var captureHeight = RdpConfiguration.Display.DesktopHeight > 0 
-            ? RdpConfiguration.Display.DesktopHeight 
+        var captureHeight = RdpConfiguration.Display.DesktopHeight > 0
+            ? RdpConfiguration.Display.DesktopHeight
             : Height;
 
         if (!rdpInstance.GetShadowBitmap(
-                ref hShadowDc, 
-                ref hShadowBitmap, 
-                ref shadowData, 
+                ref hShadowDc,
+                ref hShadowBitmap,
+                ref shadowData,
                 ref shadowWidth,
-                ref shadowHeight, 
-                ref shadowStep)) 
+                ref shadowHeight,
+                ref shadowStep))
             return null;
-        
+
         rdpInstance.LockShadowBitmap();
         var bitmap = ShadowToBitmap(hWnd, new HDC(hShadowDc), (int)shadowWidth, (int)shadowHeight, captureWidth, captureHeight);
         rdpInstance.UnlockShadowBitmap();

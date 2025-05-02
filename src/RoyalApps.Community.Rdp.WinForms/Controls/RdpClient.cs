@@ -19,12 +19,12 @@ namespace RoyalApps.Community.Rdp.WinForms.Controls;
 public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 {
     #region --- Events ---
-    
+
     /// <inheritdoc cref="OnClientAreaClicked"/>
     public event EventHandler? OnClientAreaClicked;
 
     #endregion
-    
+
     #region --- Rdp Settings ---
 
     #region ::: General :::
@@ -59,7 +59,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 
 
     /// <summary>
-    /// This client does not support this property. 
+    /// This client does not support this property.
     /// </summary>
     /// <inheritdoc cref="NetworkLevelAuthentication"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -166,7 +166,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
             if (!this.TryGetProperty<uint>(RdpClientExtensions.DeviceScaleFactor, out var value, out var ex))
                 Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", RdpClientExtensions.DeviceScaleFactor);
             return value;
-        } 
+        }
         set
         {
             object deviceScaleFactor = value;
@@ -229,7 +229,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="PublicMode"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -266,7 +266,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="EnableAutoReconnect"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -277,7 +277,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="MaxReconnectAttempts"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -341,7 +341,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RelativeMouseMode"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -357,7 +357,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="DisableCredentialsDelegation"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -368,7 +368,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RedirectedAuthentication"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -379,7 +379,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RestrictedLogon"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -391,7 +391,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RemoteCredentialGuard"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -399,10 +399,10 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     {
         get => false;
         set => LogFeatureNotSupported(nameof(RemoteCredentialGuard));
-    }        
+    }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RestrictedAdminMode"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -489,7 +489,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     #region ::: Performance :::
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="NetworkConnectionType"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -508,7 +508,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RedirectDirectX"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -519,7 +519,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="BandwidthDetection"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -548,7 +548,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="ClientProtocolSpec"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -563,7 +563,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     #region ::: Redirection :::
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="AudioRedirectionMode"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -574,7 +574,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioQualityMode AudioQualityMode
@@ -584,7 +584,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="AudioCaptureRedirectionMode"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -595,7 +595,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public VideoPlaybackMode VideoPlaybackMode
@@ -613,7 +613,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RedirectClipboard"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -639,7 +639,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RedirectDevices"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -650,7 +650,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="RedirectPOSDevices"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -686,7 +686,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 
     /// <inheritdoc cref="RedirectCameras"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool RedirectCameras 
+    public bool RedirectCameras
     {
         get => false;
         set => LogFeatureNotSupported(nameof(RedirectCameras));
@@ -986,7 +986,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     #region --- Public Methods ---
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="Reconnect"/>
     public ControlReconnectStatus Reconnect(uint width, uint height)
@@ -996,7 +996,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="GetRemoteMonitorsBoundingBox"/>
     public void GetRemoteMonitorsBoundingBox(out int left, out int top, out int right, out int bottom)
@@ -1015,7 +1015,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     public void LogFeatureNotSupported(string feature) => Logger.LogDebug("The feature '{Feature}' is not supported in Rdp Client V2", feature);
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="SendRemoteAction"/>
     public void SendRemoteAction(RemoteSessionActionType action)
@@ -1024,7 +1024,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="UpdateSessionDisplaySettings"/>
     public void UpdateSessionDisplaySettings(uint desktopWidth, uint desktopHeight, uint physicalWidth, uint physicalHeight, uint orientation, uint desktopScaleFactor, uint deviceScaleFactor)
@@ -1051,7 +1051,7 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
 public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
 {
     #region --- Events ---
-    
+
     /// <inheritdoc cref="OnClientAreaClicked"/>
     public event EventHandler? OnClientAreaClicked;
 
@@ -1306,7 +1306,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
             catch (Exception ex) { Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", "UseRedirectionServerName", value); }
         }
     }
-    
+
     /// <inheritdoc cref="KeepAliveInterval"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int KeepAliveInterval
@@ -1564,7 +1564,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public AudioQualityMode AudioQualityMode
@@ -1580,9 +1580,9 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
         get => false;
         set => LogFeatureNotSupported(nameof(AudioCaptureRedirectionMode));
     }
-    
+
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public VideoPlaybackMode VideoPlaybackMode
@@ -1664,7 +1664,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
 
     /// <inheritdoc cref="RedirectCameras"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool RedirectCameras 
+    public bool RedirectCameras
     {
         get => false;
         set => LogFeatureNotSupported(nameof(RedirectCameras));
@@ -1940,7 +1940,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     #region --- Public Methods ---
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="Reconnect"/>
     public ControlReconnectStatus Reconnect(uint width, uint height)
@@ -1973,7 +1973,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     public void LogFeatureNotSupported(string feature) => Logger.LogDebug("The feature '{Feature}' is not supported in Rdp Client V7", feature);
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="SendRemoteAction"/>
     public void SendRemoteAction(RemoteSessionActionType action)
@@ -1982,7 +1982,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="UpdateSessionDisplaySettings"/>
     public void UpdateSessionDisplaySettings(uint desktopWidth, uint desktopHeight, uint physicalWidth, uint physicalHeight, uint orientation, uint desktopScaleFactor, uint deviceScaleFactor)
@@ -2009,7 +2009,7 @@ public class RdpClient7 : AxMsRdpClient6NotSafeForScripting, IRdpClient
 public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 {
     #region --- Events ---
-    
+
     /// <inheritdoc cref="OnClientAreaClicked"/>
     public event EventHandler? OnClientAreaClicked;
 
@@ -2591,7 +2591,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 
     /// <inheritdoc cref="RedirectCameras"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool RedirectCameras 
+    public bool RedirectCameras
     {
         get => false;
         set => LogFeatureNotSupported(nameof(RedirectCameras));
@@ -2864,7 +2864,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     #region --- Public Methods ---
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="Reconnect"/>
     public ControlReconnectStatus Reconnect(uint width, uint height)
@@ -2900,7 +2900,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="SendRemoteAction"/>
     public void SendRemoteAction(RemoteSessionActionType action)
@@ -2909,7 +2909,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
     }
 
     /// <summary>
-    /// This client does not support this feature. 
+    /// This client does not support this feature.
     /// </summary>
     /// <inheritdoc cref="UpdateSessionDisplaySettings"/>
     public void UpdateSessionDisplaySettings(uint desktopWidth, uint desktopHeight, uint physicalWidth, uint physicalHeight, uint orientation, uint desktopScaleFactor, uint deviceScaleFactor)
@@ -2972,7 +2972,7 @@ public class RdpClient8 : AxMsRdpClient7NotSafeForScripting, IRdpClient
 public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 {
     #region --- Events ---
-    
+
     /// <inheritdoc cref="OnClientAreaClicked"/>
     public event EventHandler? OnClientAreaClicked;
 
@@ -3584,7 +3584,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 
     /// <inheritdoc cref="RedirectCameras"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool RedirectCameras 
+    public bool RedirectCameras
     {
         get => false;
         set => LogFeatureNotSupported(nameof(RedirectCameras));
@@ -3851,7 +3851,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
     }
 
     #endregion
-        
+
     #endregion
 
     #region --- Public Methods ---
@@ -3907,7 +3907,7 @@ public class RdpClient9 : AxMsRdpClient8NotSafeForScripting, IRdpClient
 public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
 {
     #region --- Events ---
-    
+
     /// <inheritdoc cref="OnClientAreaClicked"/>
     public event EventHandler? OnClientAreaClicked;
 
@@ -4503,7 +4503,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     private string _redirectDriveLetters = string.Empty;
-        
+
     /// <inheritdoc cref="RedirectDriveLetters"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RedirectDriveLetters
@@ -4521,7 +4521,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
 
     /// <inheritdoc cref="RedirectCameras"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool RedirectCameras 
+    public bool RedirectCameras
     {
         get => false;
         set => LogFeatureNotSupported(nameof(RedirectCameras));
@@ -4636,7 +4636,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
 
     /// <inheritdoc cref="GatewayUsageMethod"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public GatewayUsageMethod GatewayUsageMethod 
+    public GatewayUsageMethod GatewayUsageMethod
     {
         get => (GatewayUsageMethod)TransportSettings4.GatewayUsageMethod;
         set => TransportSettings4.GatewayUsageMethod = (uint) value;
@@ -4788,7 +4788,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
     }
 
     #endregion
-        
+
     #endregion
 
     #region --- Public Methods ---
@@ -4830,7 +4830,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
             return;
         base.WndProc(ref m);
     }
-    
+
     #endregion
 }
 
@@ -4838,7 +4838,7 @@ public class RdpClient10 : AxMsRdpClient9NotSafeForScripting, IRdpClient
 public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
 {
     #region --- Events ---
-    
+
     /// <inheritdoc cref="OnClientAreaClicked"/>
     public event EventHandler? OnClientAreaClicked;
 
@@ -5434,7 +5434,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     private string _redirectDriveLetters = string.Empty;
-        
+
     /// <inheritdoc cref="RedirectDriveLetters"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string RedirectDriveLetters
@@ -5453,7 +5453,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     private bool _redirectCameras;
     /// <inheritdoc cref="RedirectCameras"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool RedirectCameras 
+    public bool RedirectCameras
     {
         get => _redirectCameras;
         set
@@ -5575,7 +5575,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
 
     /// <inheritdoc cref="GatewayUsageMethod"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public GatewayUsageMethod GatewayUsageMethod 
+    public GatewayUsageMethod GatewayUsageMethod
     {
         get => (GatewayUsageMethod)TransportSettings4.GatewayUsageMethod;
         set => TransportSettings4.GatewayUsageMethod = (uint) value;
@@ -5727,7 +5727,7 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     }
 
     #endregion
-        
+
     #endregion
 
     #region --- Public Methods ---
@@ -5769,6 +5769,6 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
             return;
         base.WndProc(ref m);
     }
-    
+
     #endregion
 }

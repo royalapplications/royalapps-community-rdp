@@ -24,22 +24,22 @@ public class RdpClientFactory
     {
         if (rdpClientVersion is 0 or >= 12 && Create<RdpClient12>(dllPath, useMsRdc, out var rdpClient, out var exception))
             return rdpClient!;
-        
+
         if (rdpClientVersion is 0 or >= 10 && Create<RdpClient10>(dllPath, useMsRdc, out rdpClient, out exception))
             return rdpClient!;
 
         if (rdpClientVersion is 0 or >= 9 && Create<RdpClient9>(dllPath, useMsRdc, out rdpClient, out exception))
             return rdpClient!;
-        
+
         if (rdpClientVersion is 0 or >= 8 && Create<RdpClient8>(dllPath, useMsRdc, out rdpClient, out exception))
             return rdpClient!;
-        
+
         if (rdpClientVersion is 0 or >= 7 && Create<RdpClient7>(dllPath, useMsRdc, out rdpClient, out exception))
             return rdpClient!;
-        
+
         if (Create<RdpClient2>(dllPath, useMsRdc, out rdpClient, out exception))
             return rdpClient!;
-        
+
         throw new Exception("Failed to create RDP client instance.", exception);
     }
 
@@ -54,11 +54,11 @@ public class RdpClientFactory
             var client = Activator.CreateInstance<T>();
 
             var axName = "mstsc";
-            var hookingEnabled = !string.IsNullOrEmpty(dllPath); 
+            var hookingEnabled = !string.IsNullOrEmpty(dllPath);
             if (hookingEnabled)
             {
                 client.RdpExDll = dllPath!;
-                
+
                 if (useMsRdc)
                 {
                     axName = "msrdc";

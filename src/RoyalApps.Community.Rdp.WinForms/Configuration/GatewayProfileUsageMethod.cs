@@ -14,3 +14,4 @@ public enum GatewayProfileUsageMethod
     /// </summary>
     Explicit = 1
 }
+

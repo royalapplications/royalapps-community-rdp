@@ -42,7 +42,7 @@ public interface IRdpClient : IDisposable
     /// <inheritdoc cref="OnRequestLeaveFullScreen"/>
     event EventHandler OnRequestLeaveFullScreen;
     /// <summary>
-    /// This event is raised when a user clicks into a remote desktop session and DisableClickDetection is not set. 
+    /// This event is raised when a user clicks into a remote desktop session and DisableClickDetection is not set.
     /// </summary>
     event EventHandler OnClientAreaClicked;
 
@@ -304,10 +304,10 @@ public interface IRdpClient : IDisposable
     bool EnableAutoReconnect { get; set; }
 
     /// <summary>
-    /// Disables RDP UDP transport and forces TCP transport. It is recommended to set this true when using connection through UDP based VPN connections. 
+    /// Disables RDP UDP transport and forces TCP transport. It is recommended to set this true when using connection through UDP based VPN connections.
     /// </summary>
     bool DisableUdpTransport { get; set; }
-    
+
     /// <summary>
     /// Specifies the number of times to try to reconnect during automatic reconnection. Valid values are 0 to 200.
     /// </summary>
@@ -424,12 +424,12 @@ public interface IRdpClient : IDisposable
     /// 0 = mouse move, 1 = keyboard input (F15 key)
     /// </summary>
     KeepAliveMethod MouseJigglerMethod { get; set; }
-    
+
     /// <summary>
     /// Determines whether the client will use Microsoft Entra ID to authenticate to the remote PC. In Azure Virtual Desktop, this provides a single sign-on experience.
     /// </summary>
     bool EnableRdsAadAuth { get; set; }
-    
+
     #endregion
 
     #region ::: Performance :::
@@ -493,7 +493,7 @@ public interface IRdpClient : IDisposable
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientsecuredsettings-autoredirectionmode</cref>
     /// </see>
     AudioRedirectionMode AudioRedirectionMode { get; set; }
-    
+
     /// <summary>
     /// Specifies the audio quality mode.
     /// </summary>
@@ -509,7 +509,7 @@ public interface IRdpClient : IDisposable
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-audiocaptureredirectionmode</cref>
     /// </see>
     bool AudioCaptureRedirectionMode { get; set; }
-    
+
     /// <summary>
     /// Specifies if video decoding and rendering is redirected to the client.
     /// </summary>
@@ -629,7 +629,7 @@ public interface IRdpClient : IDisposable
     /// When enabled, ctrl+alt+space can be used to toggle between local and remote keyboard hook modes. Only works when the session is in full screen mode.
     /// </summary>
     bool KeyboardHookToggleShortcutEnabled { get; set; }
-    
+
     /// <summary>
     /// Specifies the name of the active input locale identifier (formerly called the keyboard layout) to use for the connection.
     /// </summary>
@@ -802,7 +802,7 @@ public interface IRdpClient : IDisposable
     /// Raises the OnClientAreaClicked event.
     /// </summary>
     void RaiseClientAreaClicked();
-   
+
     #endregion
 
     #region ::: MsRdpEx :::

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 
 namespace RoyalApps.Community.Rdp.WinForms.Configuration;
@@ -92,7 +93,8 @@ public class PerformanceConfiguration : ExpandableObjectConverter
     /// </summary>
     /// <see>
     ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings7-redirectdirectx</cref>
-    /// </see>
+    /// </see>\
+    [Obsolete("According to the documentation, this property is not used and has no effect. Will be removed in a future update.")]
     public bool RedirectDirectX { get; set; }
 
     /// <summary>

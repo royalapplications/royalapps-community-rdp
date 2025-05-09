@@ -138,13 +138,13 @@ internal static class RdpClientExtensions
             NetworkConnectionType.Satellite => 3,
             NetworkConnectionType.BroadbandHigh => 4,
             NetworkConnectionType.WAN => 5,
-            NetworkConnectionType.LAN => 6,
-            NetworkConnectionType.Automatic => 7,
-            _ => 7
+            _ => 6
         };
         rdpClient.PerformanceFlags = configuration.Performance.GetPerformanceFlags();
-        rdpClient.RedirectDirectX = configuration.Performance.RedirectDirectX;
-        rdpClient.BandwidthDetection = configuration.Performance.BandwidthDetection;
+
+        rdpClient.BandwidthDetection = configuration.Performance.BandwidthDetection ||
+                                       configuration.Performance.NetworkConnectionType == NetworkConnectionType.Automatic;
+
         rdpClient.EnableHardwareMode = configuration.Performance.EnableHardwareMode;
         rdpClient.ClientProtocolSpec = configuration.Performance.ClientProtocolSpec switch
         {

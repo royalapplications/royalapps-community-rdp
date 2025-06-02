@@ -760,7 +760,16 @@ public class RdpControl : UserControl
         if (RdpClient is null || RdpClient.Handle == IntPtr.Zero)
             return;
 
-        var screenshot = GetBitmap();
+        Bitmap? screenshot = null;
+        try
+        {
+            screenshot = GetBitmap();
+        }
+        catch (Exception exception)
+        {
+            Logger.LogDebug(exception, "Failed to capture session bitmap.");
+        }
+
         if (screenshot is null)
             return;
         var oldScreenshot = SessionCapture;

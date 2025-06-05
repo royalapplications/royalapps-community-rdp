@@ -25,6 +25,9 @@ public class RdpClientFactory
         if (rdpClientVersion is 0 or >= 12 && Create<RdpClient12>(dllPath, useMsRdc, out var rdpClient, out var exception))
             return rdpClient!;
 
+        if (rdpClientVersion is 0 or >= 11 && Create<RdpClient11>(dllPath, useMsRdc, out rdpClient, out exception))
+            return rdpClient!;
+
         if (rdpClientVersion is 0 or >= 10 && Create<RdpClient10>(dllPath, useMsRdc, out rdpClient, out exception))
             return rdpClient!;
 

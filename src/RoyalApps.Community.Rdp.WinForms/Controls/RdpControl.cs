@@ -25,6 +25,8 @@ namespace RoyalApps.Community.Rdp.WinForms.Controls;
 /// </summary>
 public class RdpControl : UserControl
 {
+    private HWND _outputPresenterHandle = HWND.Null;
+
     /// <summary>
     /// The ILogger instance used for logging. If not set, a default logger is used for debug logging.
     /// </summary>
@@ -49,7 +51,7 @@ public class RdpControl : UserControl
 
     private bool _canScale;
     private bool _nlaReconnect;
-    private RdpInstance? _rdpInstance;
+    private IMsRdpExInstance? _rdpInstance;
 
     private int _currentZoomLevel = 100;
     private Size _previousClientSize = Size.Empty;
@@ -634,8 +636,7 @@ public class RdpControl : UserControl
         // https://github.com/Devolutions/MsRdpEx/blob/01995487f22fd697262525ece2e0a6f02908715b/dotnet/MsRdpEx_App/MainDlg.cs#L307
         try
         {
-            object requestUseNewOutputPresenter = true;
-            RdpClient.GetExtendedSettings().set_Property("RequestUseNewOutputPresenter", ref requestUseNewOutputPresenter);
+            RdpClient.SetProperty(RdpProperties.RequestUseNewOutputPresenter, true);
         }
         catch
         {
@@ -646,11 +647,10 @@ public class RdpControl : UserControl
 
         if (MsRdpExManager.Instance.AxHookEnabled)
         {
-            _rdpInstance = new RdpInstance((IMsRdpExInstance)RdpClient.GetOcx()!)
-            {
-                OutputMirrorEnabled = false,
-                VideoRecordingEnabled = false
-            };
+            _outputPresenterHandle = GetOutputPresenterHandle(RdpClient.Handle);
+            MsRdpExManager.Instance.CoreApi.iface.OpenInstanceForWindowHandle(_outputPresenterHandle, out var instance);
+            _rdpInstance = (IMsRdpExInstance)instance;
+            _rdpInstance.SetOutputMirrorEnabled(true);
         }
 
         RegisterEvents();
@@ -735,16 +735,11 @@ public class RdpControl : UserControl
 
     private bool SetZoomLevelLocal(int desiredZoomLevel)
     {
-        object zl = (uint) desiredZoomLevel;
+        if (RdpClient is null)
+            return false;
+
         Logger.LogDebug("Setting local zoom level to {ZoomLevel}", desiredZoomLevel);
-
-        if (RdpClient!.TrySetProperty("ZoomLevel", ref zl, out var ex))
-            return true;
-
-        Logger.LogWarning(ex,
-            "Unable to set local zoom level to {ZoomLevel}. Not all RDP and OS versions support different DPIs in remote sessions. Check the log for more information",
-            desiredZoomLevel);
-        return false;
+        return RdpClient.SetProperty("ZoomLevel", desiredZoomLevel);
     }
 
     private void TimerResizeInProgress_Tick(object? sender, EventArgs e)
@@ -768,6 +763,7 @@ public class RdpControl : UserControl
         catch (Exception exception)
         {
             Logger.LogDebug(exception, "Failed to capture session bitmap.");
+            EnableSessionCapture = false;
         }
 
         if (screenshot is null)
@@ -837,15 +833,8 @@ public class RdpControl : UserControl
 
     private Bitmap? GetBitmap()
     {
-        var hWnd = GetOutputPresenterHandle();
-        var coreApi = Bindings.GetCoreApi();
-
-        var success = coreApi.OpenInstanceForWindowHandle(hWnd, out var instance);
-        if (!success)
+        if (_rdpInstance is null)
             return null;
-
-        var  rdpInstance = (IMsRdpExInstance) instance;
-        rdpInstance.SetOutputMirrorEnabled(true);
 
         var hShadowDc = IntPtr.Zero;
         var hShadowBitmap = IntPtr.Zero;
@@ -862,7 +851,7 @@ public class RdpControl : UserControl
             ? RdpConfiguration.Display.DesktopHeight
             : Height;
 
-        if (!rdpInstance.GetShadowBitmap(
+        if (!_rdpInstance.GetShadowBitmap(
                 ref hShadowDc,
                 ref hShadowBitmap,
                 ref shadowData,
@@ -871,9 +860,9 @@ public class RdpControl : UserControl
                 ref shadowStep))
             return null;
 
-        rdpInstance.LockShadowBitmap();
-        var bitmap = ShadowToBitmap(hWnd, new HDC(hShadowDc), (int)shadowWidth, (int)shadowHeight, captureWidth, captureHeight);
-        rdpInstance.UnlockShadowBitmap();
+        _rdpInstance.LockShadowBitmap();
+        var bitmap = ShadowToBitmap(_outputPresenterHandle, new HDC(hShadowDc), (int)shadowWidth, (int)shadowHeight, captureWidth, captureHeight);
+        _rdpInstance.UnlockShadowBitmap();
 
         return bitmap;
     }
@@ -939,9 +928,9 @@ public class RdpControl : UserControl
         return bmp;
     }
 
-    private HWND GetOutputPresenterHandle()
+    private HWND GetOutputPresenterHandle(IntPtr rdpClientHandle)
     {
-        var clientHandle = new HWND(RdpClient!.Handle);
+        var clientHandle = new HWND(rdpClientHandle);
 
         var hUIMainClassWnd = PInvoke.FindWindowEx(clientHandle, HWND.Null, "UIMainClass", null);
         var hUIContainerClassWnd = PInvoke.FindWindowEx(hUIMainClassWnd, HWND.Null, "UIContainerClass", null);

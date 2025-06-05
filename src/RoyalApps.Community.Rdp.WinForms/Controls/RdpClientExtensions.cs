@@ -13,30 +13,6 @@ namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
 internal static class RdpClientExtensions
 {
-    public const string BaseProperties = "BaseProperties";
-    public const string CoreProperties = "CoreProperties";
-    public const string DesktopScaleFactor = "DesktopScaleFactor";
-    public const string DeviceScaleFactor = "DeviceScaleFactor";
-    public const string DisableCredentialsDelegation = "DisableCredentialsDelegation";
-    public const string DisableUdpTransport = "DisableUDPTransport";
-    public const string EnableMouseJiggler = "EnableMouseJiggler";
-    public const string EnableRdsAadAuth = "EnableRdsAadAuth";
-    public const string EnableHardwareMode = "EnableHardwareMode";
-    public const string MouseJigglerInterval = "MouseJigglerInterval";
-    public const string MouseJigglerMethod = "MouseJigglerMethod";
-    public const string KeyboardHookToggleShortcutEnabled = "KeyboardHookToggleShortcutEnabled";
-    public const string KeyboardHookToggleShortcutKey = "KeyboardHookToggleShortcutKey";
-    public const string PasswordContainsSmartcardPin = "PasswordContainsSCardPin";
-    public const string RestrictedLogon = "RestrictedLogon";
-    public const string RedirectedAuthentication = "RedirectedAuthentication";
-    public const string ShowConnectionInformation = "ShowConnectionInformation";
-    public const string EnableLocationRedirection = "EnableLocationRedirection";
-
-    /// <summary>
-    /// Applies the RdpClientConfiguration to the RdpClient.
-    /// </summary>
-    /// <param name="rdpControl">The RdpControl instance.</param>
-    /// <param name="configuration">The RdpClientConfiguration instance.</param>
     public static void ApplyRdpClientConfiguration(this RdpControl rdpControl, RdpClientConfiguration configuration)
     {
         ArgumentException.ThrowIfNullOrEmpty(configuration.Server, nameof(configuration.Server));
@@ -90,7 +66,6 @@ internal static class RdpClientExtensions
             ColorDepth.ColorDepth15Bpp => 15,
             ColorDepth.ColorDepth16Bpp => 16,
             ColorDepth.ColorDepth24Bpp => 24,
-            ColorDepth.ColorDepth32Bpp => 32,
             _ => 32
         };
         rdpClient.SmartSizing = configuration.Display is {UseLocalScaling: false, ResizeBehavior: ResizeBehavior.SmartSizing};
@@ -237,86 +212,21 @@ internal static class RdpClientExtensions
                 rdpClient.PCB = $"{rdpClient.PCB};EnhancedMode=1";
         }
     }
-
-    private static void TraceConfigurationData(ILogger logger, object configuration)
+    public static T? GetProperty<T>(this IRdpClient rdpClient, string propertyName)
     {
-        if (!logger.IsEnabled(LogLevel.Trace))
-            return;
+        if (!rdpClient.TryGetProperty(propertyName, out T? value, out var ex))
+            rdpClient.Logger.LogWarning(ex, "Failed to get RDP client property: {PropertyName}", propertyName);
 
-        var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"Configuration class: {configuration.GetType().Name}");
-        var properties = configuration.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
-        foreach (var property in properties)
-        {
-            stringBuilder.AppendLine($"      {property.Name}: {property.GetValue(configuration)}");
-        }
-
-        // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
-        logger.LogTrace(stringBuilder.ToString());
+        return value;
     }
-
-    /// <summary>
-    /// Provides access to the non-scriptable properties (version 4) of a client's remote session on the Remote Desktop ActiveX control.
-    /// </summary>
-    /// <param name="rdpClient">The RDP client instance.</param>
-    /// <returns>IMsRdpClientNonScriptable4</returns>
-    /// <seealso>
-    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable5</cref>
-    /// </seealso>
-    public static IMsRdpClientNonScriptable4 GetNonScriptable4(this IRdpClient rdpClient)
+    public static bool SetProperty<T>(this IRdpClient rdpClient, string property, T value)
     {
-        return (IMsRdpClientNonScriptable4)rdpClient.GetOcx()!;
-    }
+        if (rdpClient.TrySetProperty(property, value, out var ex))
+            return true;
 
-    /// <summary>
-    /// Provides access to the non-scriptable properties (version 5) of a client's remote session on the Remote Desktop ActiveX control.
-    /// </summary>
-    /// <param name="rdpClient">The RDP client instance.</param>
-    /// <returns>IMsRdpClientNonScriptable5</returns>
-    /// <seealso>
-    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable5</cref>
-    /// </seealso>
-    public static IMsRdpClientNonScriptable5 GetNonScriptable5(this IRdpClient rdpClient)
-    {
-        return (IMsRdpClientNonScriptable5)rdpClient.GetOcx()!;
+        rdpClient.Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", property, value);
+        return false;
     }
-
-    /// <summary>
-    /// Provides access to the non-scriptable properties (version 7) of a client's remote session on the Remote Desktop ActiveX control.
-    /// </summary>
-    /// <param name="rdpClient">The RDP client instance.</param>
-    /// <returns>IMsRdpClientNonScriptable7</returns>
-    /// <seealso>
-    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientnonscriptable7</cref>
-    /// </seealso>
-    public static IMsRdpClientNonScriptable7 GetNonScriptable7(this IRdpClient rdpClient)
-    {
-        return (IMsRdpClientNonScriptable7)rdpClient.GetOcx()!;
-    }
-
-    /// <summary>
-    /// Provides access to the extended settings interface of a client's remote session on the Remote Desktop ActiveX control.
-    /// </summary>
-    /// <param name="rdpClient">The RDP client instance.</param>
-    /// <returns>IMsRdpExtendedSettings</returns>
-    /// <seealso>
-    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/termserv/imsrdpextendedsettings</cref>
-    /// </seealso>
-    public static IMsRdpExtendedSettings GetExtendedSettings(this IRdpClient rdpClient)
-    {
-        return (IMsRdpExtendedSettings)rdpClient.GetOcx()!;
-    }
-
-    /// <summary>
-    /// Provides access to the IMsRdpExtendedSettings interface of the Remote Desktop ActiveX control.
-    /// </summary>
-    /// <param name="rdpClient">The RDP client instance.</param>
-    /// <param name="propertyName">The name of the property to get.</param>
-    /// <param name="value">The value.</param>
-    /// <param name="exception">The exception in case the call fails.</param>
-    /// <seealso>
-    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpextendedsettings-property</cref>
-    /// </seealso>
     public static bool TryGetProperty<T>(this IRdpClient rdpClient, string propertyName, out T? value, out Exception? exception)
     {
         exception = null;
@@ -325,8 +235,11 @@ internal static class RdpClientExtensions
         {
             switch (propertyName)
             {
-                case DisableUdpTransport:
+                case RdpProperties.DisableUdpTransport:
                     value = (T)rdpClient.GetCoreProperties().get_Property(propertyName);
+                    break;
+                case RdpProperties.UseRedirectionServerName:
+                    value = (T)(object)rdpClient.GetPreferredRedirectionInfo().UseRedirectionServerName;
                     break;
                 default:
                     value = (T)rdpClient.GetExtendedSettings().get_Property(propertyName);
@@ -344,30 +257,23 @@ internal static class RdpClientExtensions
         }
         return true;
     }
-
-    /// <summary>
-    /// Provides access to the IMsRdpExtendedSettings interface of the Remote Desktop ActiveX control.
-    /// </summary>
-    /// <param name="rdpClient">The RDP client instance.</param>
-    /// <param name="propertyName">The name of the property to set.</param>
-    /// <param name="value">The value</param>
-    /// <param name="exception">The exception in case the call fails.</param>
-    /// <returns>IMsRdpExtendedSettings</returns>
-    /// <seealso>
-    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpextendedsettings-property</cref>
-    /// </seealso>
-    public static bool TrySetProperty(this IRdpClient rdpClient, string propertyName, ref object value, out Exception? exception)
+    public static bool TrySetProperty<T>(this IRdpClient rdpClient, string propertyName, T value, out Exception? exception)
     {
         exception = null;
+        object? objValue = value;
+
         try
         {
             switch (propertyName)
             {
-                case DisableUdpTransport:
-                    rdpClient.GetCoreProperties().set_Property(propertyName, ref value);
+                case RdpProperties.DisableUdpTransport:
+                    rdpClient.GetCoreProperties().set_Property(propertyName, ref objValue);
+                    break;
+                case RdpProperties.UseRedirectionServerName:
+                    rdpClient.GetPreferredRedirectionInfo().UseRedirectionServerName = (bool)objValue!;
                     break;
                 default:
-                    rdpClient.GetExtendedSettings().set_Property(propertyName, ref value);
+                    rdpClient.GetExtendedSettings().set_Property(propertyName, ref objValue);
                     break;
             }
         }
@@ -382,29 +288,14 @@ internal static class RdpClientExtensions
         }
         return true;
     }
+    public static void LogPropertyGetFailed(this IRdpClient rdpClient, Exception ex, string property) => rdpClient.Logger.LogWarning(ex, "Failed to get property value '{Property}'", property);
+    public static void LogPropertyNotSupported(this IRdpClient rdpClient, string property, object? value) => rdpClient.Logger.LogDebug("Cannot set property '{Property}' to '{Value}' because it is not supported", property, value ?? "n/a");
+    public static void LogPropertySetFailed(this IRdpClient rdpClient, Exception ex, string property, object? value) => rdpClient.Logger.LogWarning(ex, "Failed to set property '{Property}' to '{Value}'", property, value ?? "n/a");
+    public static void LogMethodFailed(this IRdpClient rdpClient, Exception ex, string method) => rdpClient.Logger.LogDebug("Failed to call method '{Method}'", method);
+    public static void LogMethodNotSupported(this IRdpClient rdpClient, string method) => rdpClient.Logger.LogDebug("The method '{Method}' is not supported", method);
 
-    /// <summary>
-    /// Provides a property to control using a redirection server.
-    /// </summary>
-    /// <param name="rdpClient"></param>
-    /// <returns>IMsRdpPreferredRedirectionInfo</returns>
-    /// <seealso>
-    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdppreferredredirectioninfo</cref>
-    /// </seealso>
-    public static IMsRdpPreferredRedirectionInfo GetPreferredRedirectionInfo(this IRdpClient rdpClient)
-    {
-        return (IMsRdpPreferredRedirectionInfo) rdpClient.GetOcx()!;
-    }
-
-    /// <summary>
-    /// Ensures the load balance info string is in the correct format
-    /// </summary>
-    /// <param name="loadBalanceInfo">The string provided by the user</param>
-    /// <param name="advancedSettings">Instance of the AdvancedSettings class of the rdp client</param>
-    /// <returns>The load balance info in the correct format.</returns>
-    /// <seealso>
-    ///     <cref>https://docs.microsoft.com/en-us/windows/win32/termserv/imsrdpclientadvancedsettings-loadbalanceinfo</cref>
-    /// </seealso>
+    private static IMsRdpExtendedSettings GetExtendedSettings(this IRdpClient rdpClient) => (IMsRdpExtendedSettings)rdpClient.GetOcx()!;
+    private static IMsRdpPreferredRedirectionInfo GetPreferredRedirectionInfo(this IRdpClient rdpClient) => (IMsRdpPreferredRedirectionInfo) rdpClient.GetOcx()!;
     public static void SetLoadBalanceInfo(string loadBalanceInfo, IMsRdpClientAdvancedSettings advancedSettings)
     {
         loadBalanceInfo += "\r\n";
@@ -420,15 +311,71 @@ internal static class RdpClientExtensions
 
         Marshal.ZeroFreeBSTR(lbiStringPtr);
     }
+    public static void SetDriveRedirection(this IRdpClient rdpClient, IMsRdpClientNonScriptable3 nonScriptable, string driveLetters)
+    {
+        if (!rdpClient.RedirectDrives)
+            return;
 
-    /// <summary>
-    /// Sets up drive redirection for the remote desktop client using the non scriptable client version 4.
-    /// </summary>
-    /// <param name="rdpClient">The remote desktop client.</param>
-    /// <param name="driveLetters">A string containing all drive letters to setup redirection for..</param>
-    /// <param name="exception">An exception as output parameter in case one or more drives cannot be redirected.</param>
-    /// <returns>True if all drives could be redirected. False, if one or more drives failed to redirect. Check exception output parameter for more details.</returns>
-    public static bool SetupDriveRedirection(this IRdpClient rdpClient, string driveLetters, out Exception? exception)
+        if (SetDriveRedirection(nonScriptable, driveLetters, out var ex))
+            return;
+
+        rdpClient.Logger.LogWarning(ex, "One or more errors occurred during drive redirection");
+    }
+    public static void SetCameraRedirection(this IRdpClient rdpClient, IMsRdpClientNonScriptable7 nonScriptable, bool redirect)
+    {
+        if (SetCameraRedirection(nonScriptable, redirect, out var ex))
+            return;
+
+        rdpClient.Logger.LogWarning(ex, "One or more errors occurred during camera redirection");
+    }
+
+    private static IMsRdpExtendedSettings GetCoreProperties(this IRdpClient rdpClient)
+    {
+        return (IMsRdpExtendedSettings)rdpClient.GetExtendedSettings().get_Property(RdpProperties.CoreProperties);
+    }
+    private static IMsRdpExtendedSettings GetBaseProperties(this IRdpClient rdpClient)
+    {
+        return (IMsRdpExtendedSettings)rdpClient.GetExtendedSettings().get_Property(RdpProperties.BaseProperties);
+    }
+    private static bool SetCameraRedirection(IMsRdpClientNonScriptable7 nonScriptable, bool redirect, out Exception? exception)
+    {
+        var logMessage = new StringBuilder();
+
+        logMessage.AppendLine("Setup camera redirection.");
+
+        try
+        {
+            nonScriptable.CameraRedirConfigCollection.Rescan();
+            logMessage.AppendLine("Successfully scanned local cameras.");
+        }
+        catch (Exception ex)
+        {
+            exception = ex;
+            return false;
+        }
+
+        var success = true;
+        for (uint i = 0; i < nonScriptable.CameraRedirConfigCollection.Count; i++)
+        {
+            try
+            {
+                logMessage.AppendLine($"Processing camera: {i}");
+                var cameraRedirectConfig = nonScriptable.CameraRedirConfigCollection.ByIndex[i];
+                if (cameraRedirectConfig is not null)
+                    cameraRedirectConfig.Redirected = redirect;
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                logMessage.AppendLine(ex.Message);
+                logMessage.AppendLine();
+            }
+        }
+
+        exception = success ? null : new Exception(logMessage.ToString());
+        return success;
+    }
+    private static bool SetDriveRedirection(IMsRdpClientNonScriptable3 nonScriptable, string driveLetters, out Exception? exception)
     {
         if (string.IsNullOrWhiteSpace(driveLetters))
         {
@@ -437,7 +384,6 @@ internal static class RdpClientExtensions
         }
 
         var logMessage = new StringBuilder();
-        var nonScriptable = rdpClient.GetNonScriptable4();
 
         logMessage.AppendLine($"Setup drive redirection for '{driveLetters}'.");
 
@@ -462,9 +408,9 @@ internal static class RdpClientExtensions
                 var driveLetter = string.Empty;
 
                 // http://stackoverflow.com/questions/2819934/detect-windows-7-in-net
-                if ((Environment.OSVersion.Version.Major > 5) &&
-                    (Environment.OSVersion.Version.Minor > 0) &&
-                    (volumeName.Substring(volumeName.Length - 3, 1) == ":"))
+                if (Environment.OSVersion.Version.Major > 5 &&
+                    Environment.OSVersion.Version.Minor > 0 &&
+                    volumeName.Substring(volumeName.Length - 3, 1) == ":")
                 {
                     logMessage.AppendLine("OS Version: Windows 7 / Windows 2008R2 or later.");
                     // win7/2008r2 returns a different name property like: "BOOTCAMP (C:)"
@@ -505,54 +451,20 @@ internal static class RdpClientExtensions
         exception = success ? null : new Exception(logMessage.ToString());
         return success;
     }
-
-    public static bool SetupCameraRedirection(this IRdpClient rdpClient, bool redirect, out Exception? exception)
+    private static void TraceConfigurationData(ILogger logger, object configuration)
     {
-        var logMessage = new StringBuilder();
-        var nonScriptable = rdpClient.GetNonScriptable7();
+        if (!logger.IsEnabled(LogLevel.Trace))
+            return;
 
-        logMessage.AppendLine("Setup camera redirection.");
-
-        try
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"Configuration class: {configuration.GetType().Name}");
+        var properties = configuration.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+        foreach (var property in properties)
         {
-            nonScriptable.CameraRedirConfigCollection.Rescan();
-            logMessage.AppendLine("Successfully scanned local cameras.");
-        }
-        catch (Exception ex)
-        {
-            exception = ex;
-            return false;
+            stringBuilder.AppendLine($"      {property.Name}: {property.GetValue(configuration)}");
         }
 
-        var success = true;
-        for (uint i = 0; i < nonScriptable.CameraRedirConfigCollection.Count; i++)
-        {
-            try
-            {
-                logMessage.AppendLine($"Processing camera: {i}");
-                var cameraRedirectConfig = nonScriptable.CameraRedirConfigCollection.ByIndex[i];
-                if (cameraRedirectConfig is not null)
-                    cameraRedirectConfig.Redirected = redirect;
-            }
-            catch (Exception ex)
-            {
-                success = false;
-                logMessage.AppendLine(ex.Message);
-                logMessage.AppendLine();
-            }
-        }
-
-        exception = success ? null : new Exception(logMessage.ToString());
-        return success;
-    }
-
-    private static IMsRdpExtendedSettings GetCoreProperties(this IRdpClient rdpClient)
-    {
-        return (IMsRdpExtendedSettings)rdpClient.GetExtendedSettings().get_Property(CoreProperties);
-    }
-
-    private static IMsRdpExtendedSettings GetBaseProperties(this IRdpClient rdpClient)
-    {
-        return (IMsRdpExtendedSettings)rdpClient.GetExtendedSettings().get_Property(BaseProperties);
+        // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
+        logger.LogTrace(stringBuilder.ToString());
     }
 }

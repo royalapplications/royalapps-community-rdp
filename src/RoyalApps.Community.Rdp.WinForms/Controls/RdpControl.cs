@@ -739,7 +739,7 @@ public class RdpControl : UserControl
             return false;
 
         Logger.LogDebug("Setting local zoom level to {ZoomLevel}", desiredZoomLevel);
-        return RdpClient.SetProperty("ZoomLevel", desiredZoomLevel);
+        return RdpClient.SetProperty("ZoomLevel", (uint)desiredZoomLevel);
     }
 
     private void TimerResizeInProgress_Tick(object? sender, EventArgs e)

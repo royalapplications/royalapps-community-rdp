@@ -153,7 +153,7 @@ public class RdpControl : UserControl
             Interval = 1000
         };
         _sessionCaptureTimer.Tick += SessionCaptureTimer_Tick;
-        EnableSessionCapture = true;
+        //EnableSessionCapture = true;
 
         SetStyle(ControlStyles.Selectable, true);
         SetStyle(ControlStyles.ContainerControl, false);

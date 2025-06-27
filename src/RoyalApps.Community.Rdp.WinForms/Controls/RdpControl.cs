@@ -153,7 +153,6 @@ public class RdpControl : UserControl
             Interval = 1000
         };
         _sessionCaptureTimer.Tick += SessionCaptureTimer_Tick;
-        //EnableSessionCapture = true;
 
         SetStyle(ControlStyles.Selectable, true);
         SetStyle(ControlStyles.ContainerControl, false);
@@ -900,6 +899,9 @@ public class RdpControl : UserControl
 
         var dstWidth = (int)(srcWidth * percent);
         var dstHeight = (int)(srcHeight * percent);
+
+        if (width < 1 || height < 1)
+            return null;
 
         var bmp = new Bitmap(width, height, g);
         using var memoryGraphics = Graphics.FromImage(bmp);

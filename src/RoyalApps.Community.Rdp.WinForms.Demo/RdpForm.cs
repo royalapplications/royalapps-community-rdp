@@ -21,7 +21,7 @@ public partial class RdpForm : Form
             FormBorderStyle = FormBorderStyle.SizableToolWindow,
             StartPosition = FormStartPosition.CenterParent
         };
-        _form.Closing += (_, args) =>
+        _form.FormClosing += (_, args) =>
         {
             _form.Hide();
             args.Cancel = true;

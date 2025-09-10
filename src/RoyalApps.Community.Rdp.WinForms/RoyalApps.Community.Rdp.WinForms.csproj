@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <TargetFrameworks>net9.0-windows;net8.0-windows</TargetFrameworks>
+        <TargetFrameworks>net10.0-windows;net9.0-windows;net8.0-windows</TargetFrameworks>
         <RuntimeIdentifier Condition="$(Platform) == 'x64'">win-x64</RuntimeIdentifier>
         <RuntimeIdentifier Condition="$(Platform) == 'ARM64'">win-arm64</RuntimeIdentifier>
         <UseWindowsForms>true</UseWindowsForms>
@@ -41,7 +41,11 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.9" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-rc.1.25451.107" />
     </ItemGroup>
 
     <ItemGroup>

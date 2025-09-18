@@ -132,9 +132,9 @@ public partial class RdpForm : Form
         };
 
         // Sample Connection
-        // _rdpControl.RdpConfiguration.Server = "10.0.0.200";
-        // _rdpControl.RdpConfiguration.Credentials.Username = "Administrator";
-        // _rdpControl.RdpConfiguration.Credentials.Password = new SensitiveString("Administrator");
+        _rdpControl.RdpConfiguration.Server = "10.0.0.172";
+        _rdpControl.RdpConfiguration.Credentials.Username = "Administrator";
+        _rdpControl.RdpConfiguration.Credentials.Password = new SensitiveString("admin");
 
 
         _rdpControl.OnConnected += (_, _) =>

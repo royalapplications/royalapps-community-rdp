@@ -11,7 +11,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>RoyalApps_1024.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.3.2</Version>
+        <Version>1.4.0</Version>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -30,7 +30,7 @@
 
     <ItemGroup>
       <PackageReference Include="Devolutions.MsRdpEx" Version="2025.7.25" />
-      <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.242">
+      <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.252">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>

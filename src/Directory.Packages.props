@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <NugetAudit>true</NugetAudit>
+    <NugetAuditMode>all</NugetAuditMode>
+    <NugetAuditLevel>low</NugetAuditLevel>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Devolutions.MsRdpEx" Version="2025.7.25" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.264" />
+  </ItemGroup>
+</Project>

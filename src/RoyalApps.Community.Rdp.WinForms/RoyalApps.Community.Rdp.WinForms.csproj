@@ -15,9 +15,9 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <TargetFrameworks>net10.0-windows;net9.0-windows;net8.0-windows</TargetFrameworks>
-        <RuntimeIdentifier Condition="$(Platform) == 'x64'">win-x64</RuntimeIdentifier>
-        <RuntimeIdentifier Condition="$(Platform) == 'ARM64'">win-arm64</RuntimeIdentifier>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <RuntimeIdentifier Condition="'$(Platform)' == 'x64'">win-x64</RuntimeIdentifier>
+        <RuntimeIdentifier Condition="'$(Platform)' == 'ARM64'">win-arm64</RuntimeIdentifier>
         <UseWindowsForms>true</UseWindowsForms>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
@@ -25,27 +25,15 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);CS8981;NU1701</NoWarn>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Devolutions.MsRdpEx" Version="2025.7.25" />
-      <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.259">
+      <PackageReference Include="Devolutions.MsRdpEx" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+      <PackageReference Include="Microsoft.Windows.CsWin32">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.11" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>

@@ -10,6 +10,6 @@
   <ItemGroup>
     <PackageVersion Include="Devolutions.MsRdpEx" Version="2026.1.12" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
-    <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.264" />
+    <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.257" />
   </ItemGroup>
 </Project>

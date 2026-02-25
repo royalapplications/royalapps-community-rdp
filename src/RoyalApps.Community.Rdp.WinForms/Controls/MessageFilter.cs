@@ -27,7 +27,7 @@ internal static class MessageFilter
 
         // Avoid synchronous callbacks/focus changes in hook/WndProc paths, because
         // they can trigger re-entrant COM calls on the UI STA and freeze the app.
-        if (control is Control winFormsControl && control.IsHandleCreated && !control.IsDisposed)
+        if (control is Control winFormsControl && control is { IsHandleCreated: true, IsDisposed: false })
         {
             _isProcessingClickMessage = true;
             try

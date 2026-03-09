@@ -1,4 +1,12 @@
 using System;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Applications;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Connection;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Display;
+using RoyalApps.Community.Rdp.WinForms.Configuration.External;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Input;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Performance;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Redirection;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Security;
 
 namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
@@ -7,6 +15,11 @@ namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 /// </summary>
 public class RdpClientConfiguration
 {
+    /// <summary>
+    /// Selects whether the connection should be hosted inside the control or by an external client process.
+    /// </summary>
+    public RdpSessionMode SessionMode { get; set; }
+
     /// <summary>
     /// Specifies the name of the server to which the current control is connected.
     /// The new server name. This parameter can be a DNS name or IP address.
@@ -40,27 +53,27 @@ public class RdpClientConfiguration
     public string? PluginDlls { get; set; }
 
     /// <summary>
-    /// If true, Microsoft's Remote Desktop Client is used (when installed) instead of the legacy MSTSC ActiveX control.
+    /// When <see langword="true"/>, the Microsoft Remote Desktop Client is used when available instead of the legacy MSTSC ActiveX control.
     /// </summary>
     public bool UseMsRdc { get; set; }
 
     /// <summary>
-    /// If set, the Microsoft Remote Desktop Client files (rdclientax.dll) will be searched here at first.
+    /// Gets or sets the directory that is probed first for Microsoft Remote Desktop Client files such as <c>rdclientax.dll</c>.
     /// </summary>
     public string? MsRdcPath { get; set; }
 
     /// <summary>
-    /// If true, a detailed log file will be written to the file system (see: LogFilePath)
+    /// When <see langword="true"/>, MsRdpEx logging is enabled and written to <see cref="LogFilePath"/>.
     /// </summary>
     public bool LogEnabled { get; set; }
 
     /// <summary>
-    /// The following log levels are available: TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+    /// Gets or sets the MsRdpEx log level, for example <c>TRACE</c>, <c>DEBUG</c>, <c>INFO</c>, <c>WARN</c>, <c>ERROR</c>, <c>FATAL</c>, or <c>OFF</c>.
     /// </summary>
     public string LogLevel { get; set; } = "TRACE";
 
     /// <summary>
-    /// The file path to the log file when LogEnabled is set to true.
+    /// Gets or sets the MsRdpEx log file path used when <see cref="LogEnabled"/> is enabled.
     /// </summary>
     public string LogFilePath { get; set; } = Environment.ExpandEnvironmentVariables(@"%TEMP%\MsRdpEx.log");
 
@@ -80,7 +93,7 @@ public class RdpClientConfiguration
     public DisplayConfiguration Display { get; set; } = new();
 
     /// <summary>
-    /// Remote Desktop Gateway configuration and settings
+    /// Remote Desktop Gateway configuration and settings.
     /// </summary>
     public GatewayConfiguration Gateway { get; set; } = new();
 
@@ -101,8 +114,17 @@ public class RdpClientConfiguration
 
     /// <summary>
     /// Configuration related to a program to be started on the remote server upon connection.
+    /// Support: embedded and external desktop sessions.
+    /// This alternate-shell model cannot be combined with <see cref="RemoteApp"/>.
     /// </summary>
     public ProgramConfiguration Program { get; set; } = new();
+
+    /// <summary>
+    /// Configuration for launching a RemoteApp instead of a full desktop session.
+    /// Support: external sessions only.
+    /// Embedded mode rejects RemoteApp because the published window cannot be hosted reliably inside the control.
+    /// </summary>
+    public RemoteAppConfiguration RemoteApp { get; set; } = new();
 
     /// <summary>
     /// Configuration and settings for device redirection.
@@ -113,4 +135,11 @@ public class RdpClientConfiguration
     /// Security related settings for the remote desktop connection.
     /// </summary>
     public SecurityConfiguration Security { get; set; } = new();
+
+    /// <summary>
+    /// External client launch settings used when <see cref="SessionMode"/> is <see cref="RdpSessionMode.External"/>.
+    /// Support: external sessions only.
+    /// Values in this block are rejected or ignored when the connection runs in embedded mode.
+    /// </summary>
+    public ExternalSessionConfiguration External { get; set; } = new();
 }

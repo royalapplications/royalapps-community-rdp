@@ -18,7 +18,7 @@ partial class RdpForm
         this.components = new System.ComponentModel.Container();
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
         this.ClientSize = new System.Drawing.Size(1600, 1200);
-        this.Text = "MsRdpEx Test";
+        this.Text = "RoyalApps RDP Demo";
     }
 
     #endregion

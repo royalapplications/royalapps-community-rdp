@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <Product>RoyalApps.Community.Rdp.WinForms</Product>
-        <Description>An embeddable WinForms control which uses MsRdpEx.</Description>
+        <Description>A WinForms Remote Desktop control supporting embedded ActiveX and external mstsc.exe sessions.</Description>
         <Company>Royal Apps GmbH</Company>
         <Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy)), Royal Apps GmbH, Austria</Copyright>
         <PackageProjectUrl>https://github.com/royalapplications/royalapps-community-rdp</PackageProjectUrl>
@@ -11,7 +11,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>RoyalApps_1024.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.4.1</Version>
+        <Version>2.0.0-beta.1</Version>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -21,6 +21,7 @@
         <UseWindowsForms>true</UseWindowsForms>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);CS8981;NU1701</NoWarn>
@@ -40,6 +41,10 @@
         <None Include="Resources\Images\RoyalApps_1024.png" Pack="true" PackagePath="\" />
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
         <EmbeddedResource Include="Resources\Files\*.*" />
+        <EmbeddedResource Include="Resources\Tools\win-arm64\MsRdpEx.dll" LogicalName="RoyalApps.Community.Rdp.WinForms.Resources.Tools.win-arm64.MsRdpEx.dll" />
+        <EmbeddedResource Include="Resources\Tools\win-arm64\mstscex.exe" LogicalName="RoyalApps.Community.Rdp.WinForms.Resources.Tools.win-arm64.mstscex.exe" />
+        <EmbeddedResource Include="Resources\Tools\win-x64\MsRdpEx.dll" LogicalName="RoyalApps.Community.Rdp.WinForms.Resources.Tools.win-x64.MsRdpEx.dll" />
+        <EmbeddedResource Include="Resources\Tools\win-x64\mstscex.exe" LogicalName="RoyalApps.Community.Rdp.WinForms.Resources.Tools.win-x64.mstscex.exe" />
     </ItemGroup>
 
 </Project>

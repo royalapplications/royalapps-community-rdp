@@ -397,3 +397,8 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 src/.idea
+
+# VitePress generated files
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/api/

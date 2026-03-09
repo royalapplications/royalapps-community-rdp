@@ -2,88 +2,184 @@
 
 [![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Rdp.WinForms.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.Rdp.WinForms)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Rdp.WinForms.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.Rdp.WinForms)
-[![.NET](https://img.shields.io/badge/.NET-%3E%3D%20%208.0-blueviolet)](https://dotnet.microsoft.com/download)
+[![.NET](https://img.shields.io/badge/.NET-net10.0--windows-blueviolet)](https://dotnet.microsoft.com/download)
 
-RoyalApps.Community.RDP contains projects/packages to easily embed/use Microsoft RDP ActiveX wrapped in [MsRdpEx](https://github.com/Devolutions/MsRdpEx) in a Windows (WinForms) application.
+`RoyalApps.Community.Rdp.WinForms` provides a WinForms `RdpControl` for Microsoft Remote Desktop sessions.
+
+Version `2.0.0-beta.1` supports both:
+
+- embedded ActiveX-hosted RDP sessions
+- external `mstsc.exe` sessions driven by a generated `.rdp` file
+
+When available, external mode can also launch through `mstscex.exe` for MsRdpEx-based hooks.
+
 ![Screenshot](https://raw.githubusercontent.com/royalapplications/royalapps-community-rdp/main/docs/assets/Screenshot.png)
 
-## Getting Started
-### Installation
-You should install the RoyalApps.Community.RDP.WinForms with NuGet:
-```
-Install-Package RoyalApps.Community.RDP.WinForms
-```
-or via the command line interface:
-```
-dotnet add package RoyalApps.Community.RDP.WinForms
+## Installation
+
+```powershell
+Install-Package RoyalApps.Community.Rdp.WinForms
 ```
 
-### Using the RdpControl
-#### Add Control
-Place the `RdpControl` on a form or in a container control (user control, tab control, etc.) and set the `Dock` property to `DockStyle.Fill`
+```cmd
+dotnet add package RoyalApps.Community.Rdp.WinForms
+```
 
-#### Set Properties
-To configure all RDP relevant settings, use the properties of the `RdpClientConfiguration` class which is accessible through the `RdpControl.RdpConfiguration` property.
+## Quick Start
 
-#### Connect and Disconnect
-Once the configuration is set, call:
 ```csharp
-RdpControl.Connect();
-```
-to start a connection.
+using System.Windows.Forms;
+using RoyalApps.Community.Rdp.WinForms;
+using RoyalApps.Community.Rdp.WinForms.Configuration;
 
-To disconnect, simply call:
+var control = new RdpControl
+{
+    Dock = DockStyle.Fill
+};
+
+control.RdpConfiguration.Server = "rdp.example.test";
+control.RdpConfiguration.Credentials.Username = "alice";
+control.RdpConfiguration.Credentials.Password = new SensitiveString("secret");
+control.RdpConfiguration.SessionMode = RdpSessionMode.Embedded;
+
+control.Connect();
+```
+
+Switch to external mode:
+
 ```csharp
-RdpControl.Disconnect();
+control.RdpConfiguration.SessionMode = RdpSessionMode.External;
+control.RdpConfiguration.External.UseCredentialManager = true;
+control.RdpConfiguration.External.KillProcessOnHostExit = true;
+
+control.Connect();
 ```
-#### Subscribe to Events
-When the connection has been established, the `Connected` event is raised.
 
-The `Disconnected` event is raised when:
-* the connection couldn't be established (server not reachable, incorrect credentials)
-* the connection has been interrupted (network failure)
-* the connection was closed by the user (logoff or disconnect)
+## API Model
 
-The `DisconnectedEventArgs` may have an error code or error message for more information.
+`RdpControl` remains the main entry point, but `RdpClientConfiguration` now distinguishes between the hosting models:
 
-## Exploring the Demo Application
-The demo application is quite simple. The `Remote Desktop` menu has the following items:
-### Connect
-Starts the remote desktop connection.
+- `SessionMode`: `Embedded` or `External`
+- `External`: launcher path, temporary file, credential-manager, cleanup, and optional MsRdpEx hook settings
+- `Display`, `Connection`, `Credentials`, `Gateway`, `Input`, `Performance`, `Program`, `RemoteApp`, and `Security`: shared connection settings used for both modes
 
-### Disconnect
-Stops the remote desktop connection.
+In external mode:
 
-### Settings
-Shows a window with all the settings from the `RdpClientConfiguration` class. Edit/change the settings before you click on `Connect`.
+- a temporary `.rdp` file is written with standard mapped settings plus any custom `RdpFileSetting` values
+- `External.SelectedMonitors` can target a specific monitor set for `mstsc.exe` or `mstscex.exe`
+- gateway settings and `Connection.UseRedirectionServerName` are written into the generated `.rdp` file
+- a temporary Windows credential can be staged and later restored or removed
+- the launched process can be assigned to a Windows job so it is terminated if the host process exits unexpectedly
+- `ExternalSessionWindowChanged` and `ExternalSessionWindowHandle` allow the host to track the external top-level window
+- `ConnectedEventArgs.SessionMode` and `DisconnectedEventArgs.SessionMode` report that the session ran externally
+
+`IRdpClient` is only available in embedded mode.
+
+See [`docs/articles/support-matrix.md`](docs/articles/support-matrix.md) for the supported feature split between embedded and external sessions.
 
 ## Notable Features
 
-### Use Microsoft Remote Desktop Client
-One of the most interesting possibilities of this package is to use the Microsoft's modern Remote Desktop Client (RDC) instead of the Terminal Services Client (MSTSC) which ships with Windows. Just set `RdpClientConfiguration.UseMsRdc` to true and ensure that the [Remote Desktop Client](https://www.microsoft.com/store/productId/9WZDNCRFJ3PS) is installed from the Microsoft Store.
+### External mstsc.exe Support
 
-### Auto Expand Desktop Size
-If `DesktopWidth` and `DesktopHeight` properties are set to `0` (default), the remote desktop size is determined by the container size the control is placed on.
+Set `RdpClientConfiguration.SessionMode` to `RdpSessionMode.External` to launch an external Remote Desktop client instead of embedding the ActiveX control. The library writes a temporary `.rdp` file, launches `mstsc.exe`, and tracks the process lifetime.
 
-### Resize Behavior
-You can set the `RdpClientConfiguration.Display.ResizeBehavior` property to one of the following:
-- Scrollbars: displays scrollbars when the container (form) size decreases.
-- SmartSizing: scales down the remote desktop while preserving the original desktop size.
-- SmartReconnect: adapts the remote desktop size to accordingly when the container (form) size changes.
+That generated `.rdp` file now includes the typed gateway configuration and `use redirection server name`, which makes AVD and brokered RDS scenarios closer to the embedded ActiveX path.
 
-Call the `RdpControl.SetResizeBehavior(ResizeBehavior resizeBehavior)` method to change the behavior while connected.
+### Optional MsRdpEx Launcher
 
-#### Scaling and Zoom
-##### Auto Scaling
-Setting the `RdpClientConfiguration.Display.AutoScaling` to true will automatically adapt the scaling factor to system's the DPI scaling during connect.
+Set `RdpClientConfiguration.External.UseMsRdpExHooks` to `true` to launch through `mstscex.exe` when it is installed, explicitly configured via `External.MsRdpExLauncherPath`, found through `External.MsRdpExSearchPaths` for app-local deployments, or extracted together with the matching bundled `MsRdpEx.dll` for `x64` / `arm64` as a fallback.
 
-Alternatively you can provide the `RdpClientConfiguration.Display.InitialZoomLevel` to set a custom zoom level.
+The bundled fallback is only provided for `x64` and `arm64`. When it is used, the launcher files are extracted into `%LocalAppData%\RoyalApps.Community.Rdp.WinForms\MsRdpEx\<version>\<rid>`.
 
-##### Changing Zoom Level
-While connected you can use the methods `RdpControl.ZoomIn()` and `RdpControl.ZoomOut()` to change the zoom level.
+`External.MsRdpEx` now provides typed hook-specific settings for the common cases that previously required raw `AdditionalMsRdpExSettings`, including `KdcProxyUrl`, `UserSpecifiedServerName`, `EnableMouseJiggler`, `MouseJigglerInterval`, and `MouseJigglerMethod`.
+The existing shared settings `Connection.DisableUdpTransport`, `Input.AllowBackgroundInput`, `Input.RelativeMouseMode`, `Performance.EnableHardwareMode`, and the security low-level flags are also emitted in MsRdpEx form when hooks are enabled.
 
-##### Local Scaling
-Setting `RdpClientConfiguration.Display.UseLocalScaling` to true will scale on the client side instead of settings the remote zoom level (DPI settings). With this enabled, `SmartSizing` as `ResizeBehavior` will not be possible.
+### Temporary Credential Staging
+
+When `External.UseCredentialManager` is enabled and a username/password is configured, the library stages the credential in the Windows credential manager before launch and restores or removes it after the external process exits.
+
+If gateway-specific credentials are configured through `Gateway.GatewayHostname`, `Gateway.GatewayUsername`, and `Gateway.GatewayPassword`, the library stages a second temporary credential for the RD Gateway endpoint independently from the target server credential.
+
+### RemoteApp
+
+RemoteApp is now modeled through `RdpClientConfiguration.RemoteApp` instead of overloading `Program`.
+
+- External mode writes standard RemoteApp `.rdp` properties such as `remoteapplicationmode` and `remoteapplicationprogram`.
+- Embedded mode is intentionally unsupported for RemoteApp because the window is not truly hosted inside the control and behaves as a fragile pseudo-embedded top-level window.
+- `Program` and `RemoteApp` cannot be combined in one connection attempt; conflicting intent is rejected during validation.
+
+### Security Flag Precedence
+
+`Security.RemoteCredentialGuard` and `Security.RestrictedAdminMode` are the high-level modes.
+
+- `RemoteCredentialGuard` implies `DisableCredentialsDelegation=true` and `RedirectedAuthentication=true`.
+- `RestrictedAdminMode` implies `DisableCredentialsDelegation=true` and `RestrictedLogon=true`.
+- If both high-level modes are enabled, all three low-level flags become effective.
+- `AuthenticationServiceClass` is an embedded-mode ActiveX setting used to override the SPN service class for authentication. It is mainly relevant for special targets such as Hyper-V console sessions.
+- In external mode, the low-level flags are only written when `External.UseMsRdpExHooks` is enabled, because stock `mstsc.exe` does not consume them through the standard `.rdp` mapping used here.
+
+### Validation
+
+The connection pipeline now normalizes and validates configuration before either mode starts.
+
+- Embedded mode rejects external-only features such as `External.SelectedMonitors`.
+- Embedded mode rejects `RemoteApp.Enabled`.
+- Conflicting intent such as `Program.StartProgram` together with `RemoteApp.Enabled` is rejected instead of silently ignored.
+
+The full supported feature split is documented in [`docs/articles/support-matrix.md`](docs/articles/support-matrix.md).
+
+### Resizing and Zoom
+
+Embedded mode keeps the existing resizing and zoom features:
+
+- `ResizeBehavior.Scrollbars`
+- `ResizeBehavior.SmartSizing`
+- `ResizeBehavior.SmartReconnect`
+- `RdpControl.ZoomIn()`
+- `RdpControl.ZoomOut()`
+
+These operations are no-ops in external mode because the session is hosted by a separate process.
+
+## Breaking Changes from v1
+
+- `RdpClientConfiguration.SessionMode` selects embedded vs external hosting.
+- `RdpClientConfiguration.External` contains the new external-launch configuration.
+- `ConnectedEventArgs` and `DisconnectedEventArgs` now expose `SessionMode`.
+- External mode does not expose an `IRdpClient` instance.
+
+## Testing
+
+Run the tests with:
+
+```cmd
+dotnet test src/RoyalApps.Community.Rdp.slnx
+```
+
+The current suite covers configuration validation, `.rdp` file serialization, credential-target resolution, credential-manager staging, external-session orchestration, launcher resolution, and bundled MsRdpEx fallback extraction.
+
+## Documentation
+
+The documentation site is built with VitePress and the API reference is generated from XML documentation comments.
+
+Useful commands:
+
+```cmd
+npm install
+npm run docs:api
+npm run docs:build
+```
+
+Guide pages:
+
+- `docs/articles/getting-started.md`
+- `docs/articles/support-matrix.md`
+- `docs/articles/external-mode.md`
+- `docs/articles/migrating-from-v1.md`
+
+Diagnostic helpers:
+
+- `powershell -ExecutionPolicy Bypass -File .\scripts\Inspect-RdGatewayCredentialTargets.ps1 -LaunchMstsc`
 
 ## Acknowledgements
-Special thanks to [Marc-André Moreau](https://github.com/awakecoding) / Devolutions for providing the [MsRdpEx](https://github.com/Devolutions/MsRdpEx) package.
+
+Special thanks to [Marc-André Moreau](https://github.com/awakecoding) / Devolutions for providing [MsRdpEx](https://github.com/Devolutions/MsRdpEx).

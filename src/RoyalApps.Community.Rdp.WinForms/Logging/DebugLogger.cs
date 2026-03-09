@@ -7,7 +7,7 @@ namespace RoyalApps.Community.Rdp.WinForms.Logging;
 
 internal class DebugLogger : ILogger
 {
-    private static readonly Lazy<DebugLogger> _instance = new Lazy<DebugLogger>(() => new DebugLogger(), LazyThreadSafetyMode.ExecutionAndPublication);
+    private static readonly Lazy<DebugLogger> _instance = new(() => new DebugLogger(), LazyThreadSafetyMode.ExecutionAndPublication);
     public static DebugLogger Instance => _instance.Value;
 
     private DebugLogger() { }

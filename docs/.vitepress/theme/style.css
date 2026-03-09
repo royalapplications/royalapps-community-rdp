@@ -1,0 +1,21 @@
+:root {
+  --vp-sidebar-width: 320px;
+}
+
+.vp-doc h3 .api-member-external-link {
+  color: var(--vp-c-text-2);
+  opacity: 0.72;
+  text-decoration: none;
+  margin-left: 0.18rem;
+  font-weight: 400;
+}
+
+.vp-doc h3 .api-member-external-link:hover {
+  color: var(--vp-c-text-1);
+  opacity: 1;
+  text-decoration: none;
+}
+
+.vp-doc h3 .api-member-external-link:visited {
+  color: var(--vp-c-text-2);
+}

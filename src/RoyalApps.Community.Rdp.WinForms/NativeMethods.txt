@@ -3,8 +3,28 @@ PostMessage
 SetStretchBltMode
 StretchBlt
 SysAllocStringByteLen
+CloseHandle
+CreateJobObject
+AssignProcessToJobObject
+SetInformationJobObject
+CredRead
+CredWrite
+CredDelete
+CredFree
+EnumWindows
+GetWindowThreadProcessId
+IsWindowVisible
+IsIconic
+SetForegroundWindow
+ShowWindow
 
 VIRTUAL_KEY
+CREDENTIALW
+CRED_TYPE
+CRED_PERSIST
+JOBOBJECT_EXTENDED_LIMIT_INFORMATION
+JOBOBJECTINFOCLASS
+JOB_OBJECT_LIMIT
 
 WM_DESTROY
 WM_KEYDOWN
@@ -13,3 +33,4 @@ WM_LBUTTONDOWN
 WM_MDIACTIVATE
 WM_MOUSEACTIVATE
 WM_SETFOCUS
+SHOW_WINDOW_CMD

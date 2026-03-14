@@ -13,6 +13,16 @@ Version `2.0.0-beta.1` supports both:
 
 When available, external mode can also launch through `mstscex.exe` for MsRdpEx-based hooks.
 
+## Documentation
+
+Read the documentation first:
+
+- [Documentation site](https://royalapplications.github.io/royalapps-community-rdp/)
+- [Getting Started](https://royalapplications.github.io/royalapps-community-rdp/articles/getting-started)
+- [Support Matrix](https://royalapplications.github.io/royalapps-community-rdp/articles/support-matrix)
+- [External Mode](https://royalapplications.github.io/royalapps-community-rdp/articles/external-mode)
+- [API Reference](https://royalapplications.github.io/royalapps-community-rdp/api/)
+
 ![Screenshot](https://raw.githubusercontent.com/royalapplications/royalapps-community-rdp/main/docs/assets/Screenshot.png)
 
 ## Installation

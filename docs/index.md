@@ -10,13 +10,13 @@ hero:
     alt: RoyalApps RDP
   actions:
     - theme: brand
-      text: Getting Started
+      text: 🚀 Getting Started
       link: /articles/getting-started
     - theme: alt
-      text: API Reference
+      text: 💡 API Reference
       link: /api/
     - theme: alt
-      text: GitHub
+      text: 🔗 GitHub
       link: https://github.com/royalapplications/royalapps-community-rdp
 
 features:

@@ -28,7 +28,7 @@ const publicApi = collectPublicApiSurface(path.join(repoRoot, "src", "RoyalApps.
 
 execFileSync(
   "dotnet",
-  ["build", projectFile, "-c", "Release", "-nologo", "-p:UseSharedCompilation=false"],
+  ["build", projectFile, "-c", "Release", "-nologo", "-p:UseSharedCompilation=false", "/p:EnableWindowsTargeting=true"],
   { cwd: repoRoot, stdio: "inherit" });
 
 mkdirSync(generatedRoot, { recursive: true });

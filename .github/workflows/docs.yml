@@ -1,0 +1,85 @@
+name: RDP Docs
+
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: 22
+        cache: npm
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Install npm dependencies
+      run: npm ci
+
+    - name: Generate docs
+      run: npm run docs:build
+
+    - name: Publish to gh-pages
+      if: github.ref == 'refs/heads/main'
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        $sitePath = Join-Path $env:RUNNER_TEMP "site"
+        if (Test-Path $sitePath) {
+          Remove-Item -Path $sitePath -Recurse -Force
+        }
+        New-Item -ItemType Directory -Path $sitePath | Out-Null
+        Copy-Item -Path "docs/.vitepress/dist/*" -Destination $sitePath -Recurse -Force
+
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+        git ls-remote --exit-code --heads origin gh-pages | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+          git fetch origin gh-pages:gh-pages
+          git switch gh-pages
+        }
+        else {
+          git switch --orphan gh-pages
+        }
+
+        Get-ChildItem -Force | Where-Object { $_.Name -ne ".git" } | Remove-Item -Recurse -Force
+        Copy-Item -Path "$sitePath/*" -Destination . -Recurse -Force
+
+        if (-not (Test-Path .nojekyll)) {
+          New-Item -ItemType File -Path .nojekyll | Out-Null
+        }
+
+        git add --all
+
+        git diff --cached --quiet
+        if ($LASTEXITCODE -eq 0) {
+          Write-Host "No documentation changes to publish."
+          exit 0
+        }
+
+        git commit -m "Deploy docs from $env:GITHUB_SHA"
+        git push --force origin gh-pages

@@ -89,9 +89,12 @@ internal static class RdpClientExtensions
         rdpClient.PublicMode = configuration.Security.PublicMode;
         if (effectiveSecuritySettings.AuthenticationServiceClass is not null)
             rdpClient.AuthenticationServiceClass = effectiveSecuritySettings.AuthenticationServiceClass;
-        rdpClient.DisableCredentialsDelegation = effectiveSecuritySettings.DisableCredentialsDelegation;
-        rdpClient.RedirectedAuthentication = effectiveSecuritySettings.RedirectedAuthentication;
-        rdpClient.RestrictedLogon = effectiveSecuritySettings.RestrictedLogon;
+        if (effectiveSecuritySettings.DisableCredentialsDelegation)
+            rdpClient.DisableCredentialsDelegation = true;
+        if (effectiveSecuritySettings.RedirectedAuthentication)
+            rdpClient.RedirectedAuthentication = true;
+        if (effectiveSecuritySettings.RestrictedLogon)
+            rdpClient.RestrictedLogon = true;
         if (configuration.Security.RemoteCredentialGuard)
             rdpClient.RemoteCredentialGuard = configuration.Security.RemoteCredentialGuard;
         if (configuration.Security.RestrictedAdminMode)
@@ -103,8 +106,10 @@ internal static class RdpClientExtensions
         if (!string.IsNullOrWhiteSpace(configuration.Connection.LoadBalanceInfo))
             rdpClient.LoadBalanceInfo = configuration.Connection.LoadBalanceInfo;
         rdpClient.MaxReconnectAttempts = configuration.Connection.MaxReconnectAttempts;
-        rdpClient.UseRedirectionServerName = configuration.Connection.UseRedirectionServerName;
-        rdpClient.DisableUdpTransport = configuration.Connection.DisableUdpTransport;
+        if (configuration.Connection.UseRedirectionServerName)
+            rdpClient.UseRedirectionServerName = true;
+        if (configuration.Connection.DisableUdpTransport)
+            rdpClient.DisableUdpTransport = true;
         rdpClient.KeepAliveInterval = configuration.Connection.ConnectionKeepAliveInterval.GetValueOrDefault() * 1000; //Convert seconds to milliseconds, use 0 for disabled
         if (configuration.Connection.KeepAlive)
         {
@@ -132,7 +137,8 @@ internal static class RdpClientExtensions
         rdpClient.BandwidthDetection = configuration.Performance.BandwidthDetection ||
                                        configuration.Performance.NetworkConnectionType == NetworkConnectionType.Automatic;
 
-        rdpClient.EnableHardwareMode = configuration.Performance.EnableHardwareMode;
+        if (configuration.Performance.EnableHardwareMode)
+            rdpClient.EnableHardwareMode = true;
         rdpClient.ClientProtocolSpec = configuration.Performance.ClientProtocolSpec switch
         {
             ClientProtocolSpec.FullMode => ClientSpec.FullMode,
@@ -150,7 +156,8 @@ internal static class RdpClientExtensions
         rdpClient.AcceleratorPassthrough = configuration.Input.AcceleratorPassthrough;
         rdpClient.EnableWindowsKey = configuration.Input.EnableWindowsKey;
         rdpClient.KeyboardHookMode = configuration.Input.KeyboardHookMode ? 1 : 0;
-        rdpClient.KeyboardHookToggleShortcutEnabled = configuration.Input.KeyboardHookToggleShortcutEnabled;
+        if (configuration.Input.KeyboardHookToggleShortcutEnabled)
+            rdpClient.KeyboardHookToggleShortcutEnabled = true;
 
         if (!string.IsNullOrWhiteSpace(configuration.Input.KeyBoardLayoutStr))
             rdpClient.KeyBoardLayoutStr = configuration.Input.KeyBoardLayoutStr;
@@ -172,7 +179,8 @@ internal static class RdpClientExtensions
         if (!string.IsNullOrWhiteSpace(configuration.Redirection.RedirectDriveLetters))
             rdpClient.RedirectDriveLetters = configuration.Redirection.RedirectDriveLetters;
         rdpClient.RedirectCameras = configuration.Redirection.RedirectCameras;
-        rdpClient.RedirectLocation = configuration.Redirection.RedirectLocation;
+        if (configuration.Redirection.RedirectLocation)
+            rdpClient.RedirectLocation = true;
 
         TraceConfigurationData(logger, configuration.Program);
         if (!string.IsNullOrWhiteSpace(configuration.Program.StartProgram))
@@ -262,11 +270,7 @@ internal static class RdpClientExtensions
         catch (Exception ex)
         {
             exception = ex;
-#if DEBUG
-            throw;
-#else
             return false;
-#endif
         }
         return true;
     }
@@ -293,11 +297,7 @@ internal static class RdpClientExtensions
         catch (Exception ex)
         {
             exception = ex;
-#if DEBUG
-            throw;
-#else
             return false;
-#endif
         }
         return true;
     }

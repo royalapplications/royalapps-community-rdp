@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Windows.Win32;
@@ -712,6 +713,8 @@ public class RdpControl : UserControl
 
     private void CleanupRdpClient(bool performDisconnect = false)
     {
+        ReleaseOutputMirror();
+
         if (RdpClient == null)
             return;
 
@@ -739,51 +742,53 @@ public class RdpControl : UserControl
     {
         var msTscAxDllPath = GetMsTscAxDllPath();
         var msRdcAxDllPath = GetRdClientAxDllPath();
-        var rdcClientInstalled = !string.IsNullOrWhiteSpace(msRdcAxDllPath);
+        var useMsRdc = RdpConfiguration.UseMsRdc && !string.IsNullOrWhiteSpace(msRdcAxDllPath);
+        var enableMsRdpExHook = useMsRdc || EnableSessionCapture || RdpConfiguration.LogEnabled;
 
         RdpClient = RdpClientFactory.Create(
             RdpConfiguration.ClientVersion,
-            MsRdpExManager.Instance.AxHookEnabled ? MsRdpExManager.Instance.CoreApi.MsRdpExDllPath : null,
-            RdpConfiguration.UseMsRdc && rdcClientInstalled);
+            enableMsRdpExHook && MsRdpExManager.Instance.AxHookEnabled ? MsRdpExManager.Instance.CoreApi.MsRdpExDllPath : null,
+            useMsRdc);
 
         ((ISupportInitialize)RdpClient).BeginInit();
-        Environment.SetEnvironmentVariable("MSRDPEX_LOG_ENABLED", RdpConfiguration.LogEnabled ? "1" : "0");
-        Environment.SetEnvironmentVariable("MSRDPEX_LOG_LEVEL", RdpConfiguration.LogLevel);
-        Environment.SetEnvironmentVariable("MSRDPEX_LOG_FILE_PATH", RdpConfiguration.LogFilePath);
+        ConfigureMsRdpExEnvironment(enableMsRdpExHook);
 
         var control = (Control) RdpClient;
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
 
-        if (RdpConfiguration.UseMsRdc && !string.IsNullOrWhiteSpace(msRdcAxDllPath))
+        if (useMsRdc)
         {
             Logger.LogDebug("Microsoft Remote Desktop Client (rdclientax.dll) will be used");
             Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxDllPath);
         }
         else
         {
-            if (string.IsNullOrWhiteSpace(msRdcAxDllPath))
+            if (RdpConfiguration.UseMsRdc && string.IsNullOrWhiteSpace(msRdcAxDllPath))
                 Logger.LogDebug("Microsoft Remote Desktop Client will not be used, rdclientax.dll was not found");
 
-            Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxDllPath);
+            if (enableMsRdpExHook)
+                Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxDllPath);
 
             RdpConfiguration.UseMsRdc = false;
         }
 
-        // workaround to ensure msrdcax.dll can be used even when hooking not enabled:
-        // https://github.com/Devolutions/MsRdpEx/blob/01995487f22fd697262525ece2e0a6f02908715b/dotnet/MsRdpEx_App/MainDlg.cs#L307
-        try
+        if (useMsRdc || EnableSessionCapture)
         {
-            RdpClient.SetProperty(RdpProperties.RequestUseNewOutputPresenter, true);
-        }
-        catch
-        {
-            // ignored
+            // The new output presenter is only needed for the modern rdclient ActiveX or explicit session capture.
+            try
+            {
+                RdpClient.SetProperty(RdpProperties.RequestUseNewOutputPresenter, true);
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         EmbeddedRdpClientConfigurationMapper.Apply(this, connectionContext);
 
-        if (MsRdpExManager.Instance.AxHookEnabled)
+        if (enableMsRdpExHook && EnableSessionCapture && MsRdpExManager.Instance.AxHookEnabled)
         {
             _outputPresenterHandle = GetOutputPresenterHandle(RdpClient.Handle);
             MsRdpExManager.Instance.CoreApi.iface.OpenInstanceForWindowHandle(_outputPresenterHandle, out var instance);
@@ -793,6 +798,52 @@ public class RdpControl : UserControl
 
         RegisterEvents();
         ((ISupportInitialize)RdpClient).EndInit();
+    }
+
+    private void ConfigureMsRdpExEnvironment(bool enabled)
+    {
+        if (!enabled)
+        {
+            Environment.SetEnvironmentVariable("MSRDPEX_LOG_ENABLED", null);
+            Environment.SetEnvironmentVariable("MSRDPEX_LOG_LEVEL", null);
+            Environment.SetEnvironmentVariable("MSRDPEX_LOG_FILE_PATH", null);
+            Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", null);
+            Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", null);
+            return;
+        }
+
+        Environment.SetEnvironmentVariable("MSRDPEX_LOG_ENABLED", RdpConfiguration.LogEnabled ? "1" : "0");
+        Environment.SetEnvironmentVariable("MSRDPEX_LOG_LEVEL", RdpConfiguration.LogLevel);
+        Environment.SetEnvironmentVariable("MSRDPEX_LOG_FILE_PATH", RdpConfiguration.LogFilePath);
+    }
+
+    private void ReleaseOutputMirror()
+    {
+        if (_rdpInstance is not null)
+        {
+            try
+            {
+                _rdpInstance.SetOutputMirrorEnabled(false);
+            }
+            catch
+            {
+                // ignored
+            }
+
+            try
+            {
+                if (Marshal.IsComObject(_rdpInstance))
+                    Marshal.FinalReleaseComObject(_rdpInstance);
+            }
+            catch
+            {
+                // ignored
+            }
+
+            _rdpInstance = null;
+        }
+
+        _outputPresenterHandle = HWND.Null;
     }
 
     private void CreateExternalSession()

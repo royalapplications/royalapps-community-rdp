@@ -480,7 +480,12 @@ public class RdpControl : UserControl
             return success;
         }
 
-        return UpdateClientSizeWithoutReconnect() || UpdateClientSizeWithReconnect();
+        return RdpConfiguration.Display.ResizeBehavior switch
+        {
+            ResizeBehavior.SmartReconnect => UpdateClientSizeWithReconnect(),
+            ResizeBehavior.SmartSizing => true,
+            _ => true
+        };
     }
 
     /// <summary>

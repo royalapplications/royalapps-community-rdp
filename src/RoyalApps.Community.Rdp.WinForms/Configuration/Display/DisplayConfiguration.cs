@@ -51,7 +51,7 @@ public class DisplayConfiguration : ExpandableObjectConverter
 
     /// <summary>
     /// Use local scaling instead of setting the DPI in the remote session.
-    /// If enabled, Smart Sizing is not available.
+    /// This applies the zoom level locally without changing the remote session DPI.
     /// </summary>
     public bool UseLocalScaling { get; set; }
 

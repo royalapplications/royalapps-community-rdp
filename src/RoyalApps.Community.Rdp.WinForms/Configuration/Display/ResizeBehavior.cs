@@ -14,6 +14,10 @@ public enum ResizeBehavior
     /// </summary>
     SmartSizing,
     /// <summary>
+    /// Update the active session display size without reconnecting.
+    /// </summary>
+    UpdateDesktopSize,
+    /// <summary>
     /// Reconnect and adapt the remote desktop size to the control.
     /// </summary>
     SmartReconnect

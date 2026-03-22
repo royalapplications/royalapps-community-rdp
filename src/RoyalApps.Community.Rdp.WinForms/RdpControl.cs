@@ -221,13 +221,13 @@ public class RdpControl : UserControl
     }
 
     /// <summary>
-    /// Starts deferred resize handling when <see cref="ResizeBehavior.SmartReconnect"/> is enabled.
+    /// Starts deferred resize handling when a resize mode updates the active session after the control size changes.
     /// </summary>
     /// <inheritdoc cref="OnSizeChanged"/>
     protected override void OnSizeChanged(EventArgs e)
     {
         base.OnSizeChanged(e);
-        if (RdpConfiguration.Display.ResizeBehavior != ResizeBehavior.SmartReconnect)
+        if (RdpConfiguration.Display.ResizeBehavior is not (ResizeBehavior.SmartReconnect or ResizeBehavior.UpdateDesktopSize))
             return;
         _timerResizeInProgress.Start();
     }
@@ -405,7 +405,11 @@ public class RdpControl : UserControl
 
         if (RdpClient is not {ConnectionState: ConnectionState.Connected})
             return;
+
         RdpClient.SmartSizing = resizeBehavior == ResizeBehavior.SmartSizing;
+
+        if (resizeBehavior == ResizeBehavior.UpdateDesktopSize)
+            UpdateClientSize();
     }
 
     /// <summary>
@@ -482,8 +486,8 @@ public class RdpControl : UserControl
 
         return RdpConfiguration.Display.ResizeBehavior switch
         {
+            ResizeBehavior.UpdateDesktopSize => UpdateClientSizeWithoutReconnect(),
             ResizeBehavior.SmartReconnect => UpdateClientSizeWithReconnect(),
-            ResizeBehavior.SmartSizing => true,
             _ => true
         };
     }

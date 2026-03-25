@@ -22,4 +22,5 @@ internal static class RdpProperties
     public const string RestrictedLogon = "RestrictedLogon";
     public const string ShowConnectionInformation = "ShowConnectionInformation";
     public const string UseRedirectionServerName = "UseRedirectionServerName";
+    public const string ZoomLevel = "ZoomLevel";
 }

@@ -245,6 +245,12 @@ internal static class RdpClientExtensions
         if (rdpClient.TrySetProperty(property, value, out var ex))
             return true;
 
+        if (IsUnsupportedWithoutMsRdpExHook(rdpClient.RdpExDll, property, ex))
+        {
+            rdpClient.LogPropertyNotSupported(property, value);
+            return false;
+        }
+
         rdpClient.Logger.LogWarning(ex, "Failed to set RDP client property: {PropertyName} to {PropertyValue}", property, value);
         return false;
     }
@@ -279,6 +285,12 @@ internal static class RdpClientExtensions
         exception = null;
         object? objValue = value;
 
+        if (RequiresMsRdpExHook(propertyName) && string.IsNullOrWhiteSpace(rdpClient.RdpExDll))
+        {
+            exception = new NotSupportedException($"The property '{propertyName}' requires the MsRdpEx hook.");
+            return false;
+        }
+
         try
         {
             switch (propertyName)
@@ -301,6 +313,7 @@ internal static class RdpClientExtensions
         }
         return true;
     }
+
     public static void LogPropertyGetFailed(this IRdpClient rdpClient, Exception ex, string property) => rdpClient.Logger.LogWarning(ex, "Failed to get property value '{Property}'", property);
     public static void LogPropertyNotSupported(this IRdpClient rdpClient, string property, object? value) => rdpClient.Logger.LogDebug("Cannot set property '{Property}' to '{Value}' because it is not supported", property, value ?? "n/a");
     public static void LogPropertySetFailed(this IRdpClient rdpClient, Exception ex, string property, object? value) => rdpClient.Logger.LogWarning(ex, "Failed to set property '{Property}' to '{Value}'", property, value ?? "n/a");
@@ -309,6 +322,21 @@ internal static class RdpClientExtensions
 
     private static IMsRdpExtendedSettings GetExtendedSettings(this IRdpClient rdpClient) => (IMsRdpExtendedSettings)rdpClient.GetOcx()!;
     private static IMsRdpPreferredRedirectionInfo GetPreferredRedirectionInfo(this IRdpClient rdpClient) => (IMsRdpPreferredRedirectionInfo) rdpClient.GetOcx()!;
+    internal static bool RequiresMsRdpExHook(string propertyName) =>
+        propertyName is
+            RdpProperties.EnableMouseJiggler or
+            RdpProperties.KeyboardHookToggleShortcutEnabled or
+            RdpProperties.KeyboardHookToggleShortcutKey or
+            RdpProperties.MouseJigglerInterval or
+            RdpProperties.MouseJigglerMethod or
+            RdpProperties.ZoomLevel;
+
+    internal static bool IsUnsupportedWithoutMsRdpExHook(string? rdpExDll, string propertyName, Exception? exception) =>
+        string.IsNullOrWhiteSpace(rdpExDll) &&
+        (RequiresMsRdpExHook(propertyName) ||
+         exception is NotSupportedException ||
+         exception is COMException { HResult: unchecked((int)0x8000FFFF) });
+
     public static void SetLoadBalanceInfo(string loadBalanceInfo, IMsRdpClientAdvancedSettings advancedSettings)
     {
         loadBalanceInfo += "\r\n";

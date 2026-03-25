@@ -465,10 +465,14 @@ public class RdpControl : UserControl
         if (IsExternalMode)
             return true;
 
-        if (_previousClientSize.Equals(Size))
+        var currentClientSize = GetCurrentClientSize();
+        if (currentClientSize.Width <= 0 || currentClientSize.Height <= 0)
             return true;
 
-        _previousClientSize = Size;
+        if (_previousClientSize.Equals(currentClientSize))
+            return true;
+
+        _previousClientSize = currentClientSize;
 
         if (RdpConfiguration.Display.UseLocalScaling)
         {
@@ -476,8 +480,8 @@ public class RdpControl : UserControl
                 return true;
 
             var scaleFactor = _currentZoomLevel / 100.00;
-            var width = (int)(Width / scaleFactor);
-            var height = (int)(Height / scaleFactor);
+            var width = (int)(currentClientSize.Width / scaleFactor);
+            var height = (int)(currentClientSize.Height / scaleFactor);
             var success = UpdateClientSizeWithoutReconnect(width, height, 100);
             if (success)
                 SetZoomLevelLocal(_currentZoomLevel);
@@ -556,7 +560,7 @@ public class RdpControl : UserControl
         if (RdpClient == null)
             return;
 
-        _previousClientSize = Size;
+        _previousClientSize = GetCurrentClientSize();
         ConnectedEventArgs? ea = null;
         if (RdpConfiguration.Display.FullScreen)
         {
@@ -697,15 +701,27 @@ public class RdpControl : UserControl
             ? LogicalToDeviceUnits(100) :
             RdpConfiguration.Display.InitialZoomLevel;
 
+        var currentClientSize = GetCurrentClientSize();
+
         if (RdpConfiguration.Display.UseLocalScaling)
         {
             if (RdpConfiguration.Display.HasDesktopSize)
                 return;
 
+            if (currentClientSize.Width <= 0 || currentClientSize.Height <= 0)
+                return;
+
             var scaleFactor = _currentZoomLevel / 100.00;
-            RdpClient!.DesktopWidth = (int)(Width / scaleFactor);
-            RdpClient.DesktopHeight = (int)(Height / scaleFactor);
+            RdpClient!.DesktopWidth = (int)(currentClientSize.Width / scaleFactor);
+            RdpClient.DesktopHeight = (int)(currentClientSize.Height / scaleFactor);
             return;
+        }
+
+        if (!RdpConfiguration.Display.HasDesktopSize &&
+            currentClientSize is { Width: > 0, Height: > 0 })
+        {
+            RdpClient!.DesktopWidth = currentClientSize.Width;
+            RdpClient.DesktopHeight = currentClientSize.Height;
         }
 
         try
@@ -938,11 +954,15 @@ public class RdpControl : UserControl
 
     private bool SetZoomLevelRemote(int desiredZoomLevel)
     {
+        var currentClientSize = GetCurrentClientSize();
+        if (currentClientSize.Width <= 0 || currentClientSize.Height <= 0)
+            return false;
+
         try
         {
             RdpClient!.UpdateSessionDisplaySettings(
-                (uint) ClientSize.Width,
-                (uint) ClientSize.Height,
+                (uint) currentClientSize.Width,
+                (uint) currentClientSize.Height,
                 0,
                 0,
                 0,
@@ -967,7 +987,7 @@ public class RdpControl : UserControl
             return false;
 
         Logger.LogDebug("Setting local zoom level to {ZoomLevel}", desiredZoomLevel);
-        return RdpClient.SetProperty("ZoomLevel", (uint)desiredZoomLevel);
+        return RdpClient.SetProperty(RdpProperties.ZoomLevel, (uint)desiredZoomLevel);
     }
 
     private void TimerResizeInProgress_Tick(object? sender, EventArgs e)
@@ -1010,11 +1030,13 @@ public class RdpControl : UserControl
 
     private void RaiseRemoteDesktopSizeChanged()
     {
+        var currentClientSize = GetCurrentClientSize();
+
         // make sure that Size 0,0 (when minimized) is also ignored
-        if (Size.Width == 0 ||
-            Size.Height == 0 ||
+        if (currentClientSize.Width == 0 ||
+            currentClientSize.Height == 0 ||
             _previousClientSize.IsEmpty ||
-            _previousClientSize.Equals(Size))
+            _previousClientSize.Equals(currentClientSize))
             return;
 
         if (RaiseBeforeRemoteDesktopSizeChangedAndCancel())
@@ -1026,7 +1048,8 @@ public class RdpControl : UserControl
 
     private bool UpdateClientSizeWithoutReconnect()
     {
-        return UpdateClientSizeWithoutReconnect(Width, Height, _currentZoomLevel);
+        var currentClientSize = GetCurrentClientSize();
+        return UpdateClientSizeWithoutReconnect(currentClientSize.Width, currentClientSize.Height, _currentZoomLevel);
     }
 
     private bool UpdateClientSizeWithoutReconnect(int width, int height, int zoomLevel)
@@ -1054,9 +1077,30 @@ public class RdpControl : UserControl
 
     private bool UpdateClientSizeWithReconnect()
     {
-        var success = RdpClient!.Reconnect((uint) Width, (uint) Height) == ControlReconnectStatus.controlReconnectStarted;
+        var currentClientSize = GetCurrentClientSize();
+        if (currentClientSize.Width <= 0 || currentClientSize.Height <= 0)
+            return false;
+
+        var success = RdpClient!.Reconnect((uint) currentClientSize.Width, (uint) currentClientSize.Height) == ControlReconnectStatus.controlReconnectStarted;
         Logger.LogDebug("UpdateClientSizeWithReconnect result: {Result}", success ? "Success" : "Failed");
         return success;
+    }
+
+    private Size GetCurrentClientSize()
+    {
+        if (RdpClient is Control activeXControl && !activeXControl.IsDisposed)
+        {
+            if (activeXControl.ClientSize is { Width: > 0, Height: > 0 })
+                return activeXControl.ClientSize;
+
+            if (activeXControl.Size is { Width: > 0, Height: > 0 })
+                return activeXControl.Size;
+        }
+
+        if (ClientSize is { Width: > 0, Height: > 0 })
+            return ClientSize;
+
+        return Size;
     }
 
     private Bitmap? GetBitmap()

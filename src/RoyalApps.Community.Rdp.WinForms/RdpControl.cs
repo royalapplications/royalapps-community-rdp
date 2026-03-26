@@ -703,6 +703,12 @@ public class RdpControl : UserControl
 
         var currentClientSize = GetCurrentClientSize();
 
+        LogDebugSizing(
+            "ApplyInitialScaling input",
+            currentClientSize,
+            RdpConfiguration.Display.DesktopWidth,
+            RdpConfiguration.Display.DesktopHeight);
+
         if (RdpConfiguration.Display.UseLocalScaling)
         {
             if (RdpConfiguration.Display.HasDesktopSize)
@@ -714,6 +720,11 @@ public class RdpControl : UserControl
             var scaleFactor = _currentZoomLevel / 100.00;
             RdpClient!.DesktopWidth = (int)(currentClientSize.Width / scaleFactor);
             RdpClient.DesktopHeight = (int)(currentClientSize.Height / scaleFactor);
+            LogDebugSizing(
+                "ApplyInitialScaling local-scaling assigned",
+                currentClientSize,
+                RdpClient.DesktopWidth,
+                RdpClient.DesktopHeight);
             return;
         }
 
@@ -722,6 +733,11 @@ public class RdpControl : UserControl
         {
             RdpClient!.DesktopWidth = currentClientSize.Width;
             RdpClient.DesktopHeight = currentClientSize.Height;
+            LogDebugSizing(
+                "ApplyInitialScaling assigned",
+                currentClientSize,
+                RdpClient.DesktopWidth,
+                RdpClient.DesktopHeight);
         }
 
         try
@@ -781,6 +797,11 @@ public class RdpControl : UserControl
         var control = (Control) RdpClient;
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
+        LogDebugSizing(
+            "CreateRdpClient attached",
+            GetCurrentClientSize(),
+            RdpConfiguration.Display.DesktopWidth,
+            RdpConfiguration.Display.DesktopHeight);
 
         if (useMsRdc)
         {
@@ -1101,6 +1122,33 @@ public class RdpControl : UserControl
             return ClientSize;
 
         return Size;
+    }
+
+    private void LogDebugSizing(string stage, Size currentClientSize, int desktopWidth, int desktopHeight)
+    {
+        if (!Logger.IsEnabled(LogLevel.Debug))
+            return;
+
+        var activeXControl = RdpClient as Control;
+        Logger.LogDebug(
+            "RDP control sizing ({Stage}): currentClient={CurrentClientWidth}x{CurrentClientHeight}, outerClient={OuterClientWidth}x{OuterClientHeight}, outerSize={OuterWidth}x{OuterHeight}, activeXClient={ActiveXClientWidth}x{ActiveXClientHeight}, activeXSize={ActiveXWidth}x{ActiveXHeight}, configuredDesktop={DesktopWidth}x{DesktopHeight}, hasDesktopSize={HasDesktopSize}, localScaling={LocalScaling}, autoScaling={AutoScaling}, zoom={Zoom}",
+            stage,
+            currentClientSize.Width,
+            currentClientSize.Height,
+            ClientSize.Width,
+            ClientSize.Height,
+            Width,
+            Height,
+            activeXControl?.ClientSize.Width ?? 0,
+            activeXControl?.ClientSize.Height ?? 0,
+            activeXControl?.Width ?? 0,
+            activeXControl?.Height ?? 0,
+            desktopWidth,
+            desktopHeight,
+            RdpConfiguration.Display.HasDesktopSize,
+            RdpConfiguration.Display.UseLocalScaling,
+            RdpConfiguration.Display.AutoScaling,
+            _currentZoomLevel);
     }
 
     private Bitmap? GetBitmap()

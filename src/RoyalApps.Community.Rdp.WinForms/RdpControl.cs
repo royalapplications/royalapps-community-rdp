@@ -32,7 +32,6 @@ namespace RoyalApps.Community.Rdp.WinForms;
 public class RdpControl : UserControl
 {
     private HWND _outputPresenterHandle = HWND.Null;
-    private RdpConnectionContext? _preparedConnectionContext;
 
     /// <summary>
     /// Gets or sets the logger used by the control.
@@ -88,7 +87,7 @@ public class RdpControl : UserControl
     public RdpClientConfiguration RdpConfiguration { get; set; }
 
     /// <summary>
-    /// Gets the current zoom level in percent of the remote desktop session.
+    /// Gets the current zoom level in percentage of the remote desktop session.
     /// </summary>
     public int CurrentZoomLevel => _currentZoomLevel;
 
@@ -261,58 +260,7 @@ public class RdpControl : UserControl
     /// <summary>
     /// Starts the remote desktop connection. Depending on <see cref="RdpClientConfiguration.SessionMode"/>, this either creates the embedded client control or launches an external client process.
     /// </summary>
-    public void Connect()
-    {
-        PrepareConnection();
-        StartPreparedConnection();
-    }
-
-    /// <summary>
-    /// Prepares the current session so the embedded ActiveX control is created, configured, and laid out before the network connection starts.
-    /// Use <see cref="StartPreparedConnection"/> to begin the actual connection afterwards.
-    /// </summary>
-    public void PrepareConnection()
-    {
-        PrepareConnection(RdpConnectionContextFactory.Create(RdpConfiguration));
-    }
-
-    /// <summary>
-    /// Starts a previously prepared connection. If no prepared connection exists, this falls back to <see cref="Connect"/>.
-    /// </summary>
-    public void StartPreparedConnection()
-    {
-        if (_preparedConnectionContext is null)
-        {
-            Connect();
-            return;
-        }
-
-        if (_preparedConnectionContext.IsExternalMode)
-        {
-            if (_externalSession is null)
-                CreateExternalSession();
-
-            _externalSession!.Connect(_preparedConnectionContext);
-            return;
-        }
-
-        if (RdpClient is null)
-        {
-            PrepareConnection(_preparedConnectionContext);
-            if (RdpClient is null)
-                return;
-        }
-
-        if (RdpClient.ConnectionState != ConnectionState.Disconnected)
-            return;
-
-        LogDebugSizing(
-            "StartPreparedConnection pre-connect",
-            GetCurrentClientSize(),
-            RdpClient.DesktopWidth,
-            RdpClient.DesktopHeight);
-        RdpClient.Connect();
-    }
+    public void Connect() => Connect(RdpConnectionContextFactory.Create(RdpConfiguration));
 
     /// <summary>
     /// Disconnects the remote desktop session or requests the external client process to close.
@@ -449,9 +397,7 @@ public class RdpControl : UserControl
             return;
         }
 
-        if (RdpClient is null)
-            return;
-        RdpClient.ShowConnectionInformation = true;
+        RdpClient?.ShowConnectionInformation = true;
     }
 
     /// <summary>
@@ -473,13 +419,11 @@ public class RdpControl : UserControl
     /// <returns><see langword="true"/> when a visible external window was found; otherwise <see langword="false"/>.</returns>
     public bool TryGetExternalSessionWindowHandle(out nint windowHandle)
     {
-        if (!IsExternalMode || _externalSession == null)
-        {
-            windowHandle = IntPtr.Zero;
-            return false;
-        }
+        if (IsExternalMode && _externalSession != null)
+            return _externalSession.TryGetWindowHandle(out windowHandle);
+        windowHandle = IntPtr.Zero;
+        return false;
 
-        return _externalSession.TryGetWindowHandle(out windowHandle);
     }
 
     /// <summary>
@@ -648,7 +592,7 @@ public class RdpControl : UserControl
 
         switch (e.discReason)
         {
-            // ignore this one. a reconnect is in progress (RDP 8)
+            // ignore this one. a reconnection is in progress (RDP 8)
             case 4360:
                 return;
             case 2825 when !RdpClient.NetworkLevelAuthentication && !_nlaReconnect:
@@ -669,7 +613,7 @@ public class RdpControl : UserControl
                 // shows an error message instead of the disconnect hint and closes the tab
                 var showError = true;
 
-                // find out if we need to show a messagebox
+                // find out if we need to show messagebox
                 // documentation about error codes: http://msdn.microsoft.com/en-us/library/windows/desktop/aa382170%28v=vs.85%29.aspx
                 switch (e.discReason)
                 {
@@ -701,25 +645,13 @@ public class RdpControl : UserControl
         }
     }
 
-    private void RdpClient_OnRequestContainerMinimize(object? sender, EventArgs e)
-    {
-        OnRequestContainerMinimize?.Invoke(sender, e);
-    }
+    private void RdpClient_OnRequestContainerMinimize(object? sender, EventArgs e) => OnRequestContainerMinimize?.Invoke(sender, e);
 
-    private void RdpClient_OnRequestLeaveFullScreen(object? sender, EventArgs e)
-    {
-        OnRequestLeaveFullScreen?.Invoke(sender, e);
-    }
+    private void RdpClient_OnRequestLeaveFullScreen(object? sender, EventArgs e) => OnRequestLeaveFullScreen?.Invoke(sender, e);
 
-    private void RdpClient_OnConfirmClose(object sender, IMsTscAxEvents_OnConfirmCloseEvent e)
-    {
-        OnConfirmClose?.Invoke(sender, e);
-    }
+    private void RdpClient_OnConfirmClose(object sender, IMsTscAxEvents_OnConfirmCloseEvent e) => OnConfirmClose?.Invoke(sender, e);
 
-    private void RdpClient_OnClientAreaClicked(object? sender, EventArgs e)
-    {
-        OnClientAreaClicked?.Invoke(sender, e);
-    }
+    private void RdpClient_OnClientAreaClicked(object? sender, EventArgs e) => OnClientAreaClicked?.Invoke(sender, e);
 
     private void ApplyInitialScaling()
     {
@@ -780,7 +712,6 @@ public class RdpControl : UserControl
     private void CleanupRdpClient(bool performDisconnect = false)
     {
         ReleaseOutputMirror();
-        _preparedConnectionContext = null;
 
         if (RdpClient == null)
             return;
@@ -795,8 +726,6 @@ public class RdpControl : UserControl
 
     private void CleanupExternalSession()
     {
-        _preparedConnectionContext = null;
-
         if (_externalSession == null)
             return;
 
@@ -880,7 +809,7 @@ public class RdpControl : UserControl
             RdpClient.DesktopHeight);
     }
 
-    private void PrepareConnection(RdpConnectionContext connectionContext)
+    private void Connect(RdpConnectionContext connectionContext)
     {
         WasSuccessfullyConnected = false;
         _nlaReconnect = false;
@@ -888,11 +817,10 @@ public class RdpControl : UserControl
         CleanupExternalSession();
         CleanupRdpClient(true);
 
-        _preparedConnectionContext = connectionContext;
-
         if (connectionContext.IsExternalMode)
         {
             CreateExternalSession();
+            _externalSession!.Connect(connectionContext);
             return;
         }
 
@@ -905,10 +833,15 @@ public class RdpControl : UserControl
         RdpClientConfigured?.Invoke(this, EventArgs.Empty);
         EnsureEmbeddedClientLayout(RdpClient as Control);
         LogDebugSizing(
-            "PrepareConnection ready",
+            "Connect pre-connect",
             GetCurrentClientSize(),
             RdpClient?.DesktopWidth ?? 0,
             RdpClient?.DesktopHeight ?? 0);
+
+        if (RdpClient is null || RdpClient.ConnectionState != ConnectionState.Disconnected)
+            return;
+
+        RdpClient.Connect();
     }
 
     private void ConfigureMsRdpExEnvironment(bool enabled)
@@ -1174,7 +1107,7 @@ public class RdpControl : UserControl
 
     private Size GetCurrentClientSize()
     {
-        if (RdpClient is Control activeXControl && !activeXControl.IsDisposed)
+        if (RdpClient is Control { IsDisposed: false } activeXControl)
         {
             if (activeXControl.ClientSize is { Width: > 0, Height: > 0 })
                 return activeXControl.ClientSize;
@@ -1224,12 +1157,8 @@ public class RdpControl : UserControl
             return;
 
         var activeXControl = RdpClient as Control;
-        var outerTopLevel = TopLevelControl?.GetType().Name ?? "<null>";
-        var outerForm = FindForm()?.GetType().Name ?? "<null>";
-        var activeXTopLevel = activeXControl?.TopLevelControl?.GetType().Name ?? "<null>";
-        var activeXForm = activeXControl?.FindForm()?.GetType().Name ?? "<null>";
         Logger.LogDebug(
-            "RDP control sizing ({Stage}): currentClient={CurrentClientWidth}x{CurrentClientHeight}, outerClient={OuterClientWidth}x{OuterClientHeight}, outerSize={OuterWidth}x{OuterHeight}, activeXClient={ActiveXClientWidth}x{ActiveXClientHeight}, activeXSize={ActiveXWidth}x{ActiveXHeight}, configuredDesktop={DesktopWidth}x{DesktopHeight}, hasDesktopSize={HasDesktopSize}, localScaling={LocalScaling}, autoScaling={AutoScaling}, zoom={Zoom}, outerDeviceDpi={OuterDeviceDpi}, activeXDeviceDpi={ActiveXDeviceDpi}, outerTopLevel={OuterTopLevel}, outerForm={OuterForm}, activeXTopLevel={ActiveXTopLevel}, activeXForm={ActiveXForm}",
+            "RDP control sizing ({Stage}): currentClient={CurrentClientWidth}x{CurrentClientHeight}, outerClient={OuterClientWidth}x{OuterClientHeight}, outerSize={OuterWidth}x{OuterHeight}, activeXClient={ActiveXClientWidth}x{ActiveXClientHeight}, activeXSize={ActiveXWidth}x{ActiveXHeight}, configuredDesktop={DesktopWidth}x{DesktopHeight}, hasDesktopSize={HasDesktopSize}, localScaling={LocalScaling}, autoScaling={AutoScaling}, zoom={Zoom}, outerDeviceDpi={OuterDeviceDpi}, activeXDeviceDpi={ActiveXDeviceDpi}",
             stage,
             currentClientSize.Width,
             currentClientSize.Height,
@@ -1248,11 +1177,7 @@ public class RdpControl : UserControl
             RdpConfiguration.Display.AutoScaling,
             _currentZoomLevel,
             DeviceDpi,
-            activeXControl?.DeviceDpi ?? 0,
-            outerTopLevel,
-            outerForm,
-            activeXTopLevel,
-            activeXForm);
+            activeXControl?.DeviceDpi ?? 0);
     }
 
     private Bitmap? GetBitmap()

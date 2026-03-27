@@ -61,10 +61,15 @@ internal static class RdpClientExtensions
             rdpClient.PasswordContainsSmartCardPin = configuration.Credentials.PasswordContainsSmartCardPin;
 
         TraceConfigurationData(logger, configuration.Display);
-        if (configuration.Display is {DesktopWidth: > 0, DesktopHeight: > 0})
+        if (configuration.Display is { DesktopWidth: > 0, DesktopHeight: > 0 })
         {
             rdpClient.DesktopWidth = configuration.Display.DesktopWidth;
             rdpClient.DesktopHeight = configuration.Display.DesktopHeight;
+        }
+        else
+        {
+            rdpClient.DesktopWidth = 0;
+            rdpClient.DesktopHeight = 0;
         }
         rdpClient.ColorDepth = configuration.Display.ColorDepth switch
         {

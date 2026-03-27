@@ -32,6 +32,7 @@ namespace RoyalApps.Community.Rdp.WinForms;
 public class RdpControl : UserControl
 {
     private HWND _outputPresenterHandle = HWND.Null;
+    private RdpConnectionContext? _preparedConnectionContext;
 
     /// <summary>
     /// Gets or sets the logger used by the control.
@@ -262,30 +263,55 @@ public class RdpControl : UserControl
     /// </summary>
     public void Connect()
     {
-        var connectionContext = RdpConnectionContextFactory.Create(RdpConfiguration);
+        PrepareConnection();
+        StartPreparedConnection();
+    }
 
-        WasSuccessfullyConnected = false;
-        _nlaReconnect = false;
+    /// <summary>
+    /// Prepares the current session so the embedded ActiveX control is created, configured, and laid out before the network connection starts.
+    /// Use <see cref="StartPreparedConnection"/> to begin the actual connection afterwards.
+    /// </summary>
+    public void PrepareConnection()
+    {
+        PrepareConnection(RdpConnectionContextFactory.Create(RdpConfiguration));
+    }
 
-        CleanupExternalSession();
-        CleanupRdpClient(true);
-
-        if (connectionContext.IsExternalMode)
+    /// <summary>
+    /// Starts a previously prepared connection. If no prepared connection exists, this falls back to <see cref="Connect"/>.
+    /// </summary>
+    public void StartPreparedConnection()
+    {
+        if (_preparedConnectionContext is null)
         {
-            CreateExternalSession();
-            _externalSession!.Connect(connectionContext);
+            Connect();
             return;
         }
 
-        CreateRdpClient(connectionContext);
+        if (_preparedConnectionContext.IsExternalMode)
+        {
+            if (_externalSession is null)
+                CreateExternalSession();
 
-        _canScale = false;
+            _externalSession!.Connect(_preparedConnectionContext);
+            return;
+        }
 
-        ApplyInitialScaling();
+        if (RdpClient is null)
+        {
+            PrepareConnection(_preparedConnectionContext);
+            if (RdpClient is null)
+                return;
+        }
 
-        RdpClientConfigured?.Invoke(this, EventArgs.Empty);
+        if (RdpClient.ConnectionState != ConnectionState.Disconnected)
+            return;
 
-        RdpClient!.Connect();
+        LogDebugSizing(
+            "StartPreparedConnection pre-connect",
+            GetCurrentClientSize(),
+            RdpClient.DesktopWidth,
+            RdpClient.DesktopHeight);
+        RdpClient.Connect();
     }
 
     /// <summary>
@@ -728,13 +754,12 @@ public class RdpControl : UserControl
             return;
         }
 
-        if (!RdpConfiguration.Display.HasDesktopSize &&
-            currentClientSize is { Width: > 0, Height: > 0 })
+        if (!RdpConfiguration.Display.HasDesktopSize)
         {
-            RdpClient!.DesktopWidth = currentClientSize.Width;
-            RdpClient.DesktopHeight = currentClientSize.Height;
+            RdpClient!.DesktopWidth = 0;
+            RdpClient.DesktopHeight = 0;
             LogDebugSizing(
-                "ApplyInitialScaling assigned",
+                "ApplyInitialScaling automatic-sizing preserved",
                 currentClientSize,
                 RdpClient.DesktopWidth,
                 RdpClient.DesktopHeight);
@@ -755,6 +780,7 @@ public class RdpControl : UserControl
     private void CleanupRdpClient(bool performDisconnect = false)
     {
         ReleaseOutputMirror();
+        _preparedConnectionContext = null;
 
         if (RdpClient == null)
             return;
@@ -769,6 +795,8 @@ public class RdpControl : UserControl
 
     private void CleanupExternalSession()
     {
+        _preparedConnectionContext = null;
+
         if (_externalSession == null)
             return;
 
@@ -844,6 +872,43 @@ public class RdpControl : UserControl
 
         RegisterEvents();
         ((ISupportInitialize)RdpClient).EndInit();
+        EnsureEmbeddedClientLayout(control);
+        LogDebugSizing(
+            "CreateRdpClient prepared",
+            GetCurrentClientSize(),
+            RdpClient.DesktopWidth,
+            RdpClient.DesktopHeight);
+    }
+
+    private void PrepareConnection(RdpConnectionContext connectionContext)
+    {
+        WasSuccessfullyConnected = false;
+        _nlaReconnect = false;
+
+        CleanupExternalSession();
+        CleanupRdpClient(true);
+
+        _preparedConnectionContext = connectionContext;
+
+        if (connectionContext.IsExternalMode)
+        {
+            CreateExternalSession();
+            return;
+        }
+
+        CreateRdpClient(connectionContext);
+
+        _canScale = false;
+
+        ApplyInitialScaling();
+
+        RdpClientConfigured?.Invoke(this, EventArgs.Empty);
+        EnsureEmbeddedClientLayout(RdpClient as Control);
+        LogDebugSizing(
+            "PrepareConnection ready",
+            GetCurrentClientSize(),
+            RdpClient?.DesktopWidth ?? 0,
+            RdpClient?.DesktopHeight ?? 0);
     }
 
     private void ConfigureMsRdpExEnvironment(bool enabled)
@@ -1124,14 +1189,47 @@ public class RdpControl : UserControl
         return Size;
     }
 
+    private void EnsureEmbeddedClientLayout(Control? activeXControl)
+    {
+        SuspendLayout();
+
+        try
+        {
+            CreateControl();
+            PerformLayout();
+
+            if (activeXControl is null || activeXControl.IsDisposed)
+            {
+                Update();
+                return;
+            }
+
+            activeXControl.CreateControl();
+            if (activeXControl.Dock != DockStyle.Fill)
+                activeXControl.Dock = DockStyle.Fill;
+
+            activeXControl.PerformLayout();
+            activeXControl.Update();
+            Update();
+        }
+        finally
+        {
+            ResumeLayout(true);
+        }
+    }
+
     private void LogDebugSizing(string stage, Size currentClientSize, int desktopWidth, int desktopHeight)
     {
         if (!Logger.IsEnabled(LogLevel.Debug))
             return;
 
         var activeXControl = RdpClient as Control;
+        var outerTopLevel = TopLevelControl?.GetType().Name ?? "<null>";
+        var outerForm = FindForm()?.GetType().Name ?? "<null>";
+        var activeXTopLevel = activeXControl?.TopLevelControl?.GetType().Name ?? "<null>";
+        var activeXForm = activeXControl?.FindForm()?.GetType().Name ?? "<null>";
         Logger.LogDebug(
-            "RDP control sizing ({Stage}): currentClient={CurrentClientWidth}x{CurrentClientHeight}, outerClient={OuterClientWidth}x{OuterClientHeight}, outerSize={OuterWidth}x{OuterHeight}, activeXClient={ActiveXClientWidth}x{ActiveXClientHeight}, activeXSize={ActiveXWidth}x{ActiveXHeight}, configuredDesktop={DesktopWidth}x{DesktopHeight}, hasDesktopSize={HasDesktopSize}, localScaling={LocalScaling}, autoScaling={AutoScaling}, zoom={Zoom}",
+            "RDP control sizing ({Stage}): currentClient={CurrentClientWidth}x{CurrentClientHeight}, outerClient={OuterClientWidth}x{OuterClientHeight}, outerSize={OuterWidth}x{OuterHeight}, activeXClient={ActiveXClientWidth}x{ActiveXClientHeight}, activeXSize={ActiveXWidth}x{ActiveXHeight}, configuredDesktop={DesktopWidth}x{DesktopHeight}, hasDesktopSize={HasDesktopSize}, localScaling={LocalScaling}, autoScaling={AutoScaling}, zoom={Zoom}, outerDeviceDpi={OuterDeviceDpi}, activeXDeviceDpi={ActiveXDeviceDpi}, outerTopLevel={OuterTopLevel}, outerForm={OuterForm}, activeXTopLevel={ActiveXTopLevel}, activeXForm={ActiveXForm}",
             stage,
             currentClientSize.Width,
             currentClientSize.Height,
@@ -1148,7 +1246,13 @@ public class RdpControl : UserControl
             RdpConfiguration.Display.HasDesktopSize,
             RdpConfiguration.Display.UseLocalScaling,
             RdpConfiguration.Display.AutoScaling,
-            _currentZoomLevel);
+            _currentZoomLevel,
+            DeviceDpi,
+            activeXControl?.DeviceDpi ?? 0,
+            outerTopLevel,
+            outerForm,
+            activeXTopLevel,
+            activeXForm);
     }
 
     private Bitmap? GetBitmap()

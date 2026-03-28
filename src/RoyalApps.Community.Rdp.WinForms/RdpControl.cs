@@ -1107,6 +1107,12 @@ public class RdpControl : UserControl
 
     private Size GetCurrentClientSize()
     {
+        if (ClientSize is { Width: > 0, Height: > 0 })
+            return ClientSize;
+
+        if (Size is { Width: > 0, Height: > 0 })
+            return Size;
+
         if (RdpClient is Control { IsDisposed: false } activeXControl)
         {
             if (activeXControl.ClientSize is { Width: > 0, Height: > 0 })
@@ -1116,10 +1122,7 @@ public class RdpControl : UserControl
                 return activeXControl.Size;
         }
 
-        if (ClientSize is { Width: > 0, Height: > 0 })
-            return ClientSize;
-
-        return Size;
+        return Size.Empty;
     }
 
     private void EnsureEmbeddedClientLayout(Control? activeXControl)

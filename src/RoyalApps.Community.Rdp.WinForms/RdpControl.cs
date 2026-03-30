@@ -31,6 +31,7 @@ namespace RoyalApps.Community.Rdp.WinForms;
 /// </summary>
 public class RdpControl : UserControl
 {
+    private const string ConnectingOverlayText = "Connecting...";
     private HWND _outputPresenterHandle = HWND.Null;
 
     /// <summary>
@@ -57,6 +58,7 @@ public class RdpControl : UserControl
 
     private bool _canScale;
     private bool _nlaReconnect;
+    private bool _shouldShowInitialConnectOverlay;
     private IMsRdpExInstance? _rdpInstance;
     private ExternalRdpSession? _externalSession;
 
@@ -65,6 +67,8 @@ public class RdpControl : UserControl
 
     private readonly Timer _timerResizeInProgress;
     private readonly Timer _sessionCaptureTimer;
+    private readonly Panel _connectingOverlayPanel;
+    private readonly Label _connectingOverlayLabel;
     private readonly HashSet<string> _rdClientSearchPaths =
     [
         @"%ProgramFiles%\Remote Desktop",
@@ -90,6 +94,44 @@ public class RdpControl : UserControl
     /// Gets the current zoom level in percentage of the remote desktop session.
     /// </summary>
     public int CurrentZoomLevel => _currentZoomLevel;
+
+    /// <summary>
+    /// Gets or sets the background color used by the initial connect overlay.
+    /// When unset, the control derives a fallback color from its WinForms host surface.
+    /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public Color? InitialConnectOverlayBackColor
+    {
+        get;
+        set
+        {
+            if (Nullable.Equals(field, value))
+                return;
+
+            field = value;
+            if (_connectingOverlayPanel.Visible)
+                UpdateInitialConnectOverlayTheme();
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the foreground color used by the initial connect overlay text.
+    /// When unset, the control derives a contrasting fallback from the overlay background.
+    /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public Color? InitialConnectOverlayForeColor
+    {
+        get;
+        set
+        {
+            if (Nullable.Equals(field, value))
+                return;
+
+            field = value;
+            if (_connectingOverlayPanel.Visible)
+                UpdateInitialConnectOverlayTheme();
+        }
+    }
 
     /// <summary>
     /// Gets a value indicating whether the session has connected successfully at least once.
@@ -181,6 +223,24 @@ public class RdpControl : UserControl
             Interval = 1000
         };
         _sessionCaptureTimer.Tick += SessionCaptureTimer_Tick;
+
+        _connectingOverlayLabel = new Label
+        {
+            Dock = DockStyle.Fill,
+            AutoEllipsis = true,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Text = ConnectingOverlayText
+        };
+
+        _connectingOverlayPanel = new Panel
+        {
+            Dock = DockStyle.Fill,
+            Margin = default,
+            Padding = default,
+            Visible = false
+        };
+        _connectingOverlayPanel.Controls.Add(_connectingOverlayLabel);
+        Controls.Add(_connectingOverlayPanel);
 
         SetStyle(ControlStyles.Selectable, true);
         SetStyle(ControlStyles.ContainerControl, false);
@@ -530,6 +590,7 @@ public class RdpControl : UserControl
         if (RdpClient == null)
             return;
 
+        HideInitialConnectOverlay();
         _previousClientSize = GetCurrentClientSize();
         ConnectedEventArgs? ea = null;
         if (RdpConfiguration.Display.FullScreen)
@@ -590,6 +651,8 @@ public class RdpControl : UserControl
         if (RdpClient == null)
             return;
 
+        if (!WasSuccessfullyConnected)
+            HideInitialConnectOverlay();
         switch (e.discReason)
         {
             // ignore this one. a reconnection is in progress (RDP 8)
@@ -711,6 +774,7 @@ public class RdpControl : UserControl
 
     private void CleanupRdpClient(bool performDisconnect = false)
     {
+        HideInitialConnectOverlay();
         ReleaseOutputMirror();
 
         if (RdpClient == null)
@@ -726,6 +790,7 @@ public class RdpControl : UserControl
 
     private void CleanupExternalSession()
     {
+        HideInitialConnectOverlay();
         if (_externalSession == null)
             return;
 
@@ -754,6 +819,9 @@ public class RdpControl : UserControl
         var control = (Control) RdpClient;
         control.Dock = DockStyle.Fill;
         Controls.Add(control);
+        if (_connectingOverlayPanel.Visible)
+            _connectingOverlayPanel.BringToFront();
+
         LogDebugSizing(
             "CreateRdpClient attached",
             GetCurrentClientSize(),
@@ -811,11 +879,14 @@ public class RdpControl : UserControl
 
     private void Connect(RdpConnectionContext connectionContext)
     {
+        var shouldShowInitialConnectOverlay = !connectionContext.IsExternalMode && !WasSuccessfullyConnected;
         WasSuccessfullyConnected = false;
         _nlaReconnect = false;
 
         CleanupExternalSession();
         CleanupRdpClient(true);
+
+        _shouldShowInitialConnectOverlay = shouldShowInitialConnectOverlay;
 
         if (connectionContext.IsExternalMode)
         {
@@ -823,6 +894,9 @@ public class RdpControl : UserControl
             _externalSession!.Connect(connectionContext);
             return;
         }
+
+        if (_shouldShowInitialConnectOverlay)
+            ShowInitialConnectOverlay();
 
         CreateRdpClient(connectionContext);
 
@@ -841,7 +915,15 @@ public class RdpControl : UserControl
         if (RdpClient is null || RdpClient.ConnectionState != ConnectionState.Disconnected)
             return;
 
-        RdpClient.Connect();
+        try
+        {
+            RdpClient.Connect();
+        }
+        catch
+        {
+            HideInitialConnectOverlay();
+            throw;
+        }
     }
 
     private void ConfigureMsRdpExEnvironment(bool enabled)
@@ -1136,6 +1218,7 @@ public class RdpControl : UserControl
 
             if (activeXControl is null || activeXControl.IsDisposed)
             {
+                _connectingOverlayPanel.BringToFront();
                 Update();
                 return;
             }
@@ -1145,6 +1228,7 @@ public class RdpControl : UserControl
                 activeXControl.Dock = DockStyle.Fill;
 
             activeXControl.PerformLayout();
+            _connectingOverlayPanel.BringToFront();
             activeXControl.Update();
             Update();
         }
@@ -1152,6 +1236,62 @@ public class RdpControl : UserControl
         {
             ResumeLayout(true);
         }
+    }
+
+    private void ShowInitialConnectOverlay()
+    {
+        if (IsExternalMode || !_shouldShowInitialConnectOverlay)
+            return;
+
+        UpdateInitialConnectOverlayTheme();
+
+        if (!_connectingOverlayPanel.Visible)
+            _connectingOverlayPanel.Visible = true;
+
+        _connectingOverlayPanel.BringToFront();
+        _connectingOverlayLabel.BringToFront();
+        _connectingOverlayPanel.Update();
+    }
+
+    private void HideInitialConnectOverlay()
+    {
+        _shouldShowInitialConnectOverlay = false;
+
+        if (!_connectingOverlayPanel.Visible)
+            return;
+
+        _connectingOverlayPanel.Visible = false;
+    }
+
+    private void UpdateInitialConnectOverlayTheme()
+    {
+        var background = InitialConnectOverlayBackColor ?? ResolveInitialConnectOverlayBackground();
+        var foreground = InitialConnectOverlayForeColor ?? (IsDarkColor(background)
+            ? Color.White
+            : Color.Black);
+
+        _connectingOverlayPanel.BackColor = background;
+        _connectingOverlayLabel.BackColor = background;
+        _connectingOverlayLabel.ForeColor = foreground;
+    }
+
+    private Color ResolveInitialConnectOverlayBackground()
+    {
+        var candidate = FindForm()?.BackColor
+                        ?? TopLevelControl?.BackColor
+                        ?? Parent?.BackColor
+                        ?? BackColor;
+
+        if (candidate.A == 0)
+            candidate = SystemColors.Control;
+
+        return candidate;
+    }
+
+    private static bool IsDarkColor(Color color)
+    {
+        var luminance = ((0.2126D * color.R) + (0.7152D * color.G) + (0.0722D * color.B)) / 255D;
+        return luminance < 0.5D;
     }
 
     private void LogDebugSizing(string stage, Size currentClientSize, int desktopWidth, int desktopHeight)

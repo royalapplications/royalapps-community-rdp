@@ -4,7 +4,7 @@ using RoyalApps.Community.Rdp.WinForms.Configuration.Input;
 namespace RoyalApps.Community.Rdp.WinForms.Configuration.Connection;
 
 /// <summary>
-/// Connection related configuration and settings.
+/// Connection-related configuration and settings.
 /// </summary>
 [TypeConverter(typeof(ExpandableObjectConverter))]
 public class ConnectionConfiguration : ExpandableObjectConverter
@@ -55,6 +55,42 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     public string? LoadBalanceInfo { get; set; }
 
     /// <summary>
+    /// Gets or sets the KDC proxy URL used for Kerberos over HTTPS scenarios.
+    /// Support: external sessions through MsRdpEx and embedded ActiveX sessions hosted through the MsRdpEx hook.
+    /// Written or applied as <c>KDCProxyURL</c>.
+    /// </summary>
+    public string? KdcProxyUrl { get; set; }
+
+    /// <summary>
+    /// Gets or sets the server name that should be presented to the remote endpoint instead of the transport address.
+    /// Support: external sessions through MsRdpEx only.
+    /// Written as <c>UserSpecifiedServerName</c> when external MsRdpEx hooks are enabled.
+    /// </summary>
+    public string? UserSpecifiedServerName { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether MsRdpEx should enable its mouse jiggler keep-alive behavior.
+    /// Support: external sessions through MsRdpEx only.
+    /// Written as <c>EnableMouseJiggler</c> when external MsRdpEx hooks are enabled.
+    /// </summary>
+    public bool EnableMouseJiggler { get; set; }
+
+    /// <summary>
+    /// Gets or sets the mouse jiggler interval in seconds.
+    /// Support: external sessions through MsRdpEx only.
+    /// Written as <c>MouseJigglerInterval</c> when external MsRdpEx hooks are enabled and <see cref="EnableMouseJiggler"/> is true.
+    /// MsRdpEx uses its own default interval when this value is zero or negative.
+    /// </summary>
+    public int MouseJigglerInterval { get; set; }
+
+    /// <summary>
+    /// Gets or sets the mouse jiggler method used by MsRdpEx.
+    /// Support: external sessions through MsRdpEx only.
+    /// Written as <c>MouseJigglerMethod</c> when external MsRdpEx hooks are enabled and <see cref="EnableMouseJiggler"/> is true.
+    /// </summary>
+    public KeepAliveMethod MouseJigglerMethod { get; set; } = KeepAliveMethod.MouseMove;
+
+    /// <summary>
     /// The interval in seconds between keep-alive packets.
     /// </summary>
     /// <seealso>
@@ -85,7 +121,7 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     public bool EnableRdsAadAuth { get; set; }
 
     /// <summary>
-    /// Returns an empty string so this configuration group appears as a blank expandable node in PropertyGrid-style editors.
+    /// Returns an empty string, so this configuration group appears as a blank expandable node in PropertyGrid-style editors.
     /// </summary>
     /// <returns>An empty string.</returns>
     public override string ToString()

@@ -88,12 +88,6 @@ public sealed class ExternalSessionConfiguration
     public Collection<RdpFileSetting> AdditionalRdpSettings { get; } = [];
 
     /// <summary>
-    /// Gets typed MsRdpEx-specific settings used when <see cref="UseMsRdpExHooks"/> is enabled.
-    /// Support: external sessions through MsRdpEx only.
-    /// </summary>
-    public MsRdpExConfiguration MsRdpEx { get; set; } = new();
-
-    /// <summary>
     /// Gets additional MsRdpEx-specific RDP settings that are appended after the built-in mapping when <see cref="UseMsRdpExHooks"/> is enabled.
     /// </summary>
     public Collection<RdpFileSetting> AdditionalMsRdpExSettings { get; } = [];

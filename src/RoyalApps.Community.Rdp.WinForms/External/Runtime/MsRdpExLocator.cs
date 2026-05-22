@@ -10,6 +10,7 @@ internal static class MsRdpExLocator
 {
     private static readonly string[] DefaultSearchPaths =
     [
+        Path.Combine(AppContext.BaseDirectory, "mstscex.exe"),
         @"%ProgramFiles%\Devolutions\MsRdpEx\mstscex.exe",
         @"%ProgramFiles(x86)%\Devolutions\MsRdpEx\mstscex.exe",
         @"%LocalAppData%\Programs\MsRdpEx\mstscex.exe"
@@ -40,10 +41,6 @@ internal static class MsRdpExLocator
             logger.LogDebug("Resolved MsRdpEx launcher path: {Path}", candidate);
             return candidate;
         }
-
-        var bundledLauncherPath = BundledMsRdpExLauncher.TryResolve(logger);
-        if (!string.IsNullOrWhiteSpace(bundledLauncherPath))
-            return bundledLauncherPath;
 
         logger.LogWarning("MsRdpEx hooks were requested, but mstscex.exe was not found. Falling back to mstsc.exe.");
         return null;

@@ -14,6 +14,7 @@ internal static class RdpProperties
     public const string EnableRdsAadAuth = "EnableRdsAadAuth";
     public const string KeyboardHookToggleShortcutEnabled = "KeyboardHookToggleShortcutEnabled";
     public const string KeyboardHookToggleShortcutKey = "KeyboardHookToggleShortcutKey";
+    public const string KdcProxyUrl = "KDCProxyURL";
     public const string MouseJigglerInterval = "MouseJigglerInterval";
     public const string MouseJigglerMethod = "MouseJigglerMethod";
     public const string PasswordContainsSmartcardPin = "PasswordContainsSCardPin";

@@ -110,6 +110,8 @@ internal static class RdpClientExtensions
         rdpClient.EnableAutoReconnect = configuration.Connection.EnableAutoReconnect;
         if (!string.IsNullOrWhiteSpace(configuration.Connection.LoadBalanceInfo))
             rdpClient.LoadBalanceInfo = configuration.Connection.LoadBalanceInfo;
+        if (!string.IsNullOrWhiteSpace(configuration.Connection.KdcProxyUrl))
+            rdpClient.KdcProxyUrl = configuration.Connection.KdcProxyUrl;
         rdpClient.MaxReconnectAttempts = configuration.Connection.MaxReconnectAttempts;
         if (configuration.Connection.UseRedirectionServerName)
             rdpClient.UseRedirectionServerName = true;
@@ -332,6 +334,7 @@ internal static class RdpClientExtensions
             RdpProperties.EnableMouseJiggler or
             RdpProperties.KeyboardHookToggleShortcutEnabled or
             RdpProperties.KeyboardHookToggleShortcutKey or
+            RdpProperties.KdcProxyUrl or
             RdpProperties.MouseJigglerInterval or
             RdpProperties.MouseJigglerMethod or
             RdpProperties.ZoomLevel;

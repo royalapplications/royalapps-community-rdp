@@ -10,6 +10,7 @@ public class RdpClientExtensionsTests
     [InlineData(RdpProperties.EnableMouseJiggler)]
     [InlineData(RdpProperties.KeyboardHookToggleShortcutEnabled)]
     [InlineData(RdpProperties.KeyboardHookToggleShortcutKey)]
+    [InlineData(RdpProperties.KdcProxyUrl)]
     [InlineData(RdpProperties.MouseJigglerInterval)]
     [InlineData(RdpProperties.MouseJigglerMethod)]
     [InlineData(RdpProperties.ZoomLevel)]

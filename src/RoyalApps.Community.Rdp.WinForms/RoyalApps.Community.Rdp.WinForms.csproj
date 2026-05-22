@@ -41,10 +41,6 @@
         <None Include="Resources\Images\RoyalApps_1024.png" Pack="true" PackagePath="\" />
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
         <EmbeddedResource Include="Resources\Files\*.*" />
-        <EmbeddedResource Include="Resources\Tools\win-arm64\MsRdpEx.dll" LogicalName="RoyalApps.Community.Rdp.WinForms.Resources.Tools.win-arm64.MsRdpEx.dll" />
-        <EmbeddedResource Include="Resources\Tools\win-arm64\mstscex.exe" LogicalName="RoyalApps.Community.Rdp.WinForms.Resources.Tools.win-arm64.mstscex.exe" />
-        <EmbeddedResource Include="Resources\Tools\win-x64\MsRdpEx.dll" LogicalName="RoyalApps.Community.Rdp.WinForms.Resources.Tools.win-x64.MsRdpEx.dll" />
-        <EmbeddedResource Include="Resources\Tools\win-x64\mstscex.exe" LogicalName="RoyalApps.Community.Rdp.WinForms.Resources.Tools.win-x64.mstscex.exe" />
     </ItemGroup>
 
 </Project>

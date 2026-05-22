@@ -379,6 +379,11 @@ public interface IRdpClient : IDisposable
     string LoadBalanceInfo { get; set; }
 
     /// <summary>
+    /// Gets or sets the KDC proxy URL used by MsRdpEx for Kerberos over HTTPS scenarios.
+    /// </summary>
+    string? KdcProxyUrl { get; set; }
+
+    /// <summary>
     /// Gets or sets the logger used by the RDP client wrapper.
     /// </summary>
     ILogger Logger { get; set; }

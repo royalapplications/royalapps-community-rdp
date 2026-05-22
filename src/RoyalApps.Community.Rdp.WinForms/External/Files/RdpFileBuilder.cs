@@ -271,21 +271,21 @@ internal static class RdpFileBuilder
         SetInteger(settings, "AllowBackgroundInput", configuration.Input.AllowBackgroundInput.ToInt());
         SetInteger(settings, "RelativeMouseMode", configuration.Input.RelativeMouseMode.ToInt());
         SetInteger(settings, "EnableHardwareMode", configuration.Performance.EnableHardwareMode.ToInt());
-        SetInteger(settings, "EnableMouseJiggler", configuration.External.MsRdpEx.EnableMouseJiggler.ToInt());
+        SetInteger(settings, "EnableMouseJiggler", configuration.Connection.EnableMouseJiggler.ToInt());
 
-        if (configuration.External.MsRdpEx.EnableMouseJiggler)
+        if (configuration.Connection.EnableMouseJiggler)
         {
-            SetInteger(settings, "MouseJigglerMethod", (int)configuration.External.MsRdpEx.MouseJigglerMethod);
+            SetInteger(settings, "MouseJigglerMethod", (int)configuration.Connection.MouseJigglerMethod);
 
-            if (configuration.External.MsRdpEx.MouseJigglerInterval > 0)
-                SetInteger(settings, "MouseJigglerInterval", configuration.External.MsRdpEx.MouseJigglerInterval);
+            if (configuration.Connection.MouseJigglerInterval > 0)
+                SetInteger(settings, "MouseJigglerInterval", configuration.Connection.MouseJigglerInterval);
         }
 
-        if (!string.IsNullOrWhiteSpace(configuration.External.MsRdpEx.KdcProxyUrl))
-            SetString(settings, "KDCProxyURL", configuration.External.MsRdpEx.KdcProxyUrl);
+        if (!string.IsNullOrWhiteSpace(configuration.Connection.KdcProxyUrl))
+            SetString(settings, "KDCProxyURL", configuration.Connection.KdcProxyUrl);
 
-        if (!string.IsNullOrWhiteSpace(configuration.External.MsRdpEx.UserSpecifiedServerName))
-            SetString(settings, "UserSpecifiedServerName", configuration.External.MsRdpEx.UserSpecifiedServerName);
+        if (!string.IsNullOrWhiteSpace(configuration.Connection.UserSpecifiedServerName))
+            SetString(settings, "UserSpecifiedServerName", configuration.Connection.UserSpecifiedServerName);
     }
 
     private static void SetInteger(ICollection<RdpFileSetting> settings, string name, int value)

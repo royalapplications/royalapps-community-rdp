@@ -111,7 +111,12 @@ public class RdpFileBuilderTests
             Server = "rdp.example.test",
             Connection =
             {
-                DisableUdpTransport = true
+                DisableUdpTransport = true,
+                EnableMouseJiggler = true,
+                MouseJigglerInterval = 45,
+                MouseJigglerMethod = KeepAliveMethod.KeyboardInput,
+                KdcProxyUrl = "https://kdc.example.test/kdcproxy",
+                UserSpecifiedServerName = "server-alias.example.test"
             },
             Input =
             {
@@ -126,17 +131,6 @@ public class RdpFileBuilderTests
             {
                 RemoteCredentialGuard = true,
                 RestrictedAdminMode = true
-            },
-            External =
-            {
-                MsRdpEx =
-                {
-                    EnableMouseJiggler = true,
-                    MouseJigglerInterval = 45,
-                    MouseJigglerMethod = KeepAliveMethod.KeyboardInput,
-                    KdcProxyUrl = "https://kdc.example.test/kdcproxy",
-                    UserSpecifiedServerName = "server-alias.example.test"
-                }
             }
         };
 
@@ -182,11 +176,11 @@ public class RdpFileBuilderTests
             }
         };
         configuration.External.UseMsRdpExHooks = true;
-        configuration.External.MsRdpEx.EnableMouseJiggler = true;
-        configuration.External.MsRdpEx.MouseJigglerInterval = 45;
-        configuration.External.MsRdpEx.MouseJigglerMethod = KeepAliveMethod.KeyboardInput;
-        configuration.External.MsRdpEx.KdcProxyUrl = "https://kdc.example.test/kdcproxy";
-        configuration.External.MsRdpEx.UserSpecifiedServerName = "server-alias.example.test";
+        configuration.Connection.EnableMouseJiggler = true;
+        configuration.Connection.MouseJigglerInterval = 45;
+        configuration.Connection.MouseJigglerMethod = KeepAliveMethod.KeyboardInput;
+        configuration.Connection.KdcProxyUrl = "https://kdc.example.test/kdcproxy";
+        configuration.Connection.UserSpecifiedServerName = "server-alias.example.test";
 
         var content = Build(configuration);
 

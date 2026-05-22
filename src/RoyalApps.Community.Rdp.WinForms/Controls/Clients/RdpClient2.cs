@@ -202,6 +202,10 @@ public class RdpClient2 : AxMsRdpClientNotSafeForScripting, IRdpClient
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string LoadBalanceInfo { get => RdpAdvancedSettings.LoadBalanceInfo; set => RdpClientExtensions.SetLoadBalanceInfo(value, RdpAdvancedSettings); }
 
+    /// <inheritdoc cref="KdcProxyUrl"/>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public string? KdcProxyUrl { get => this.GetProperty<string>(RdpProperties.KdcProxyUrl); set => this.SetProperty(RdpProperties.KdcProxyUrl, value); }
+
     /// <inheritdoc cref="Logger"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ILogger Logger { get; set; } = DebugLoggerFactory.Create();

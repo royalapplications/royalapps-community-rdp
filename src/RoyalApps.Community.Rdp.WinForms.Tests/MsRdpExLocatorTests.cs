@@ -94,6 +94,30 @@ public sealed class MsRdpExLocatorTests
         }
     }
 
+    [Fact]
+    public void ResolveLauncherPath_UsesAppBaseDirectoryDefault_WhenLauncherExists()
+    {
+        var appLocalLauncher = Path.Combine(AppContext.BaseDirectory, "mstscex.exe");
+        if (File.Exists(appLocalLauncher))
+            File.Delete(appLocalLauncher);
+
+        try
+        {
+            File.WriteAllText(appLocalLauncher, "stub");
+
+            var configuration = CreateExternalConfiguration();
+
+            var launcherPath = MsRdpExLocator.ResolveLauncherPath(configuration, NullLogger.Instance);
+
+            Assert.Equal(appLocalLauncher, launcherPath, StringComparer.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            if (File.Exists(appLocalLauncher))
+                File.Delete(appLocalLauncher);
+        }
+    }
+
     private static RdpClientConfiguration CreateExternalConfiguration()
     {
         return new RdpClientConfiguration

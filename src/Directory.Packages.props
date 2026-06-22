@@ -8,7 +8,7 @@
     <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Devolutions.MsRdpEx" Version="2026.1.12" />
+    <PackageVersion Include="Devolutions.MsRdpEx" Version="2026.6.18" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
     <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.296" />

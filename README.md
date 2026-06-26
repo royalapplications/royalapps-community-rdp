@@ -6,7 +6,7 @@
 
 `RoyalApps.Community.Rdp.WinForms` provides a WinForms `RdpControl` for Microsoft Remote Desktop sessions.
 
-Version `2.0.0-beta.1` supports both:
+Version 2 and later supports:
 
 - embedded ActiveX-hosted RDP sessions
 - external `mstsc.exe` sessions driven by a generated `.rdp` file

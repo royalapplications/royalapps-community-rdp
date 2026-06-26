@@ -40,9 +40,13 @@ name: RDP Package
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, v1 ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, v1 ]
+
+permissions:
+  # only allowed to read source code (ref. https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)
+  contents: read
 
 jobs:
 
@@ -66,9 +70,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
+        persist-credentials: false
 
     # Install the .NET Core workload
     - name: Install .NET Core
@@ -90,14 +95,14 @@ jobs:
 
     # Upload packages
     - name: Upload managed components
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: Rdp-nupkg
         path: ./*.nupkg
 
     # Push nuget package to nuget.org
     - name: nuget push
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v1'
       run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
       env:
         Configuration: ${{ matrix.configuration }}

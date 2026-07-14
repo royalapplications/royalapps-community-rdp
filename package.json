@@ -9,11 +9,6 @@
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
-    "vitepress": "2.0.0-alpha.17"
-  },
-  "overrides": {
-    "esbuild": "0.28.1",
-    "postcss": "8.5.10",
-    "vite": "7.3.5"
+    "vitepress": "2.0.0-alpha.18"
   }
 }

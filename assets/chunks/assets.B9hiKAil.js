@@ -1,0 +1,1 @@
+var e=`/royalapps-community-rdp/assets/Screenshot.BPoCJ0I6.png`;export{e as t};

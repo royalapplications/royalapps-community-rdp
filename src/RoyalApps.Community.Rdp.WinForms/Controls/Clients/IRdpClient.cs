@@ -225,6 +225,19 @@ public interface IRdpClient : IDisposable
     /// <summary>
     /// Specifies whether Microsoft Entra ID is used to authenticate to the remote PC.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The host executable must embed a Windows compatibility manifest that declares Windows 10 and Windows 11 support with the
+    /// <c>supportedOS</c> GUID <c>{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}</c>.
+    /// </para>
+    /// <para>
+    /// Without this declaration, the ActiveX control can accept <c>EnableRdsAadAuth</c> while presenting the classic Windows Security credential prompt
+    /// instead of the Microsoft Entra Web Account Manager flow.
+    /// </para>
+    /// </remarks>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/sbscs/application-manifests#supportedos</cref>
+    /// </see>
     bool EnableRdsAadAuth { get; set; }
 
     /// <summary>

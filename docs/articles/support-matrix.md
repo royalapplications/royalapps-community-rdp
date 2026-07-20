@@ -13,7 +13,7 @@ Use this page as the contract for which features are valid in `Embedded` and `Ex
 | `RemoteApp` | No | Yes | Embedded mode rejects it during validation. |
 | `Display.UseMultimon` | Yes | Yes | Embedded uses the ActiveX client property; external writes `use multimon`. |
 | `External.SelectedMonitors` | No | Yes | External-only monitor targeting via `selectedmonitors`. |
-| `Connection.EnableRdsAadAuth` | Yes | Yes | External writes `enablerdsaadauth`. |
+| `Connection.EnableRdsAadAuth` | Yes | Yes | Embedded requires the host executable's Windows 10/11 `supportedOS` manifest; external writes `enablerdsaadauth` and uses the `mstsc.exe` manifest. |
 | `Security.AuthenticationServiceClass` | Yes | No | Embedded-only ActiveX setting. It is not written to generated external `.rdp` files. |
 | `Security.DisableCredentialsDelegation` | Yes | Limited | External support requires `External.UseMsRdpExHooks`. |
 | `Security.RedirectedAuthentication` | Yes | Limited | External support requires `External.UseMsRdpExHooks`. |

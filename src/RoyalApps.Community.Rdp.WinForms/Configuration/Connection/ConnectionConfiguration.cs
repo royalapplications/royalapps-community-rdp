@@ -118,6 +118,22 @@ public class ConnectionConfiguration : ExpandableObjectConverter
     /// Support: embedded and external sessions.
     /// External mode writes the standard <c>enablerdsaadauth</c> RDP property.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// For embedded sessions, the host executable must embed a Windows compatibility manifest that declares Windows 10 and Windows 11 support with the
+    /// <c>supportedOS</c> GUID <c>{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}</c>.
+    /// </para>
+    /// <para>
+    /// Without this declaration, the ActiveX control can accept <c>EnableRdsAadAuth</c> while presenting the classic Windows Security credential prompt
+    /// instead of the Microsoft Entra Web Account Manager flow.
+    /// </para>
+    /// <para>
+    /// External sessions are not subject to the host application's manifest because <c>mstsc.exe</c> supplies its own compatibility manifest.
+    /// </para>
+    /// </remarks>
+    /// <see>
+    ///     <cref>https://learn.microsoft.com/en-us/windows/win32/sbscs/application-manifests#supportedos</cref>
+    /// </see>
     public bool EnableRdsAadAuth { get; set; }
 
     /// <summary>

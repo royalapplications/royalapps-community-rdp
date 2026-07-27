@@ -19,6 +19,17 @@ Or with the .NET CLI:
 dotnet add package RoyalApps.Community.Rdp.WinForms
 ```
 
+The package requires Devolutions.MsRdpEx's legacy COM interop because its public API and controls use the legacy MSTSC ActiveX types. Projects that configure MsRdpEx interop explicitly must use:
+
+```xml
+<PropertyGroup>
+  <MsRdpExComInterop>Legacy</MsRdpExComInterop>
+  <MsRdpExGeneratedWinForms>false</MsRdpExGeneratedWinForms>
+</PropertyGroup>
+```
+
+The build fails with an actionable error if generated or disabled MsRdpEx interop is selected.
+
 ## Basic Setup
 
 Create the control and configure a basic embedded session:

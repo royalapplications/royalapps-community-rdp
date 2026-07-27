@@ -35,6 +35,17 @@ Install-Package RoyalApps.Community.Rdp.WinForms
 dotnet add package RoyalApps.Community.Rdp.WinForms
 ```
 
+The package requires Devolutions.MsRdpEx's legacy COM interop because its public API and controls use the legacy MSTSC ActiveX types. If your project sets MsRdpEx interop properties explicitly, use:
+
+```xml
+<PropertyGroup>
+  <MsRdpExComInterop>Legacy</MsRdpExComInterop>
+  <MsRdpExGeneratedWinForms>false</MsRdpExGeneratedWinForms>
+</PropertyGroup>
+```
+
+Generated and disabled MsRdpEx interop modes are not supported by this package.
+
 ## Quick Start
 
 ```csharp

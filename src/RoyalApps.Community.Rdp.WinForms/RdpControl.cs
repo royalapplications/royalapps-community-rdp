@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Windows.Win32;
@@ -31,7 +30,7 @@ namespace RoyalApps.Community.Rdp.WinForms;
 /// </summary>
 public class RdpControl : UserControl
 {
-    private const string ConnectingOverlayText = "Connecting...";
+    private const string CONNECTING_OVERLAY_TEXT = "Connecting...";
     private HWND _outputPresenterHandle = HWND.Null;
 
     /// <summary>
@@ -58,6 +57,7 @@ public class RdpControl : UserControl
 
     private bool _canScale;
     private bool _nlaReconnect;
+    private bool _smartReconnectInProgress;
     private bool _shouldShowInitialConnectOverlay;
     private IMsRdpExInstance? _rdpInstance;
     private ExternalRdpSession? _externalSession;
@@ -229,7 +229,7 @@ public class RdpControl : UserControl
             Dock = DockStyle.Fill,
             AutoEllipsis = true,
             TextAlign = ContentAlignment.MiddleCenter,
-            Text = ConnectingOverlayText
+            Text = CONNECTING_OVERLAY_TEXT
         };
 
         _connectingOverlayPanel = new Panel
@@ -327,6 +327,8 @@ public class RdpControl : UserControl
     /// </summary>
     public void Disconnect()
     {
+        _smartReconnectInProgress = false;
+
         if (IsExternalMode)
         {
             _externalSession?.Disconnect();
@@ -590,6 +592,7 @@ public class RdpControl : UserControl
         if (RdpClient == null)
             return;
 
+        _smartReconnectInProgress = false;
         HideInitialConnectOverlay();
         _previousClientSize = GetCurrentClientSize();
         ConnectedEventArgs? ea = null;
@@ -655,8 +658,33 @@ public class RdpControl : UserControl
             HideInitialConnectOverlay();
         switch (e.discReason)
         {
-            // ignore this one. a reconnection is in progress (RDP 8)
-            case 4360:
+            // Reconnect failed with 0x1108. Recreate the ActiveX control after
+            // the current COM event callback returns and establish a new session.
+            case 4360 when _smartReconnectInProgress:
+                Logger.LogWarning("Smart reconnect failed with disconnect reason {DisconnectReason}; scheduling a full reconnect", e.discReason);
+
+                if (IsDisposed || Disposing || !IsHandleCreated)
+                {
+                    _smartReconnectInProgress = false;
+                    return;
+                }
+
+                try
+                {
+                    BeginInvoke(new MethodInvoker(() =>
+                    {
+                        if (!_smartReconnectInProgress || IsDisposed || Disposing)
+                            return;
+
+                        _smartReconnectInProgress = false;
+                        Connect();
+                    }));
+                }
+                catch (InvalidOperationException)
+                {
+                    _smartReconnectInProgress = false;
+                }
+
                 return;
             case 2825 when !RdpClient.NetworkLevelAuthentication && !_nlaReconnect:
                 // NLA seems to be required and was not reconnected using the setting
@@ -774,6 +802,7 @@ public class RdpControl : UserControl
 
     private void CleanupRdpClient(bool performDisconnect = false)
     {
+        _smartReconnectInProgress = false;
         HideInitialConnectOverlay();
         ReleaseOutputMirror();
 
@@ -879,6 +908,7 @@ public class RdpControl : UserControl
 
     private void Connect(RdpConnectionContext connectionContext)
     {
+        _smartReconnectInProgress = false;
         var shouldShowInitialConnectOverlay = !connectionContext.IsExternalMode && !WasSuccessfullyConnected;
         WasSuccessfullyConnected = false;
         _nlaReconnect = false;
@@ -950,16 +980,6 @@ public class RdpControl : UserControl
             try
             {
                 _rdpInstance.SetOutputMirrorEnabled(false);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            try
-            {
-                if (Marshal.IsComObject(_rdpInstance))
-                    Marshal.FinalReleaseComObject(_rdpInstance);
             }
             catch
             {
@@ -1178,13 +1198,19 @@ public class RdpControl : UserControl
 
     private bool UpdateClientSizeWithReconnect()
     {
+        _smartReconnectInProgress = false;
+
         var currentClientSize = GetCurrentClientSize();
         if (currentClientSize.Width <= 0 || currentClientSize.Height <= 0)
             return false;
 
-        var success = RdpClient!.Reconnect((uint) currentClientSize.Width, (uint) currentClientSize.Height) == ControlReconnectStatus.controlReconnectStarted;
-        Logger.LogDebug("UpdateClientSizeWithReconnect result: {Result}", success ? "Success" : "Failed");
-        return success;
+        if (RdpClient is not { ConnectionState: ConnectionState.Connected })
+            return false;
+
+        var reconnectStatus = RdpClient.Reconnect((uint) currentClientSize.Width, (uint) currentClientSize.Height);
+        _smartReconnectInProgress = reconnectStatus == ControlReconnectStatus.controlReconnectStarted;
+        Logger.LogDebug("UpdateClientSizeWithReconnect result: {Result}", reconnectStatus);
+        return _smartReconnectInProgress;
     }
 
     private Size GetCurrentClientSize()

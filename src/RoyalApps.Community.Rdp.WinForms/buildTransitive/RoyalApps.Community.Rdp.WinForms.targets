@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="RoyalAppsCommunityRdpValidateMsRdpExInterop"
+          BeforeTargets="_MsRdpExValidateComInteropSelection;ResolveReferences">
+    <Error Condition="'$(MsRdpExComInterop)' != 'Legacy' Or '$(MsRdpExGeneratedWinForms)' == 'true'"
+           Text="RoyalApps.Community.Rdp.WinForms requires Devolutions.MsRdpEx legacy COM interop. Set MsRdpExComInterop to Legacy and disable MsRdpExGeneratedWinForms." />
+  </Target>
+</Project>

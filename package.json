@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "vitepress": "2.0.0-alpha.18"
+  },
+  "overrides": {
+    "postcss": "8.5.18"
   }
 }

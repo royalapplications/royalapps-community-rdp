@@ -14,6 +14,7 @@ Use this page as the contract for which features are valid in `Embedded` and `Ex
 | `Display.UseMultimon` | Yes | Yes | Embedded uses the ActiveX client property; external writes `use multimon`. |
 | `External.SelectedMonitors` | No | Yes | External-only monitor targeting via `selectedmonitors`. |
 | `Connection.EnableRdsAadAuth` | Yes | Yes | Embedded requires the host executable's Windows 10/11 `supportedOS` manifest; external writes `enablerdsaadauth` and uses the `mstsc.exe` manifest. |
+| `Gateway.GatewayAccessToken` | Yes | Yes | Uses RD Gateway PAA. Embedded requires ActiveX client version 9 or later and a DPAPI-protected cookie; external writes `gatewayaccesstoken` to the temporary `.rdp` file. |
 | `Security.AuthenticationServiceClass` | Yes | No | Embedded-only ActiveX setting. It is not written to generated external `.rdp` files. |
 | `Security.DisableCredentialsDelegation` | Yes | Limited | External support requires `External.UseMsRdpExHooks`. |
 | `Security.RedirectedAuthentication` | Yes | Limited | External support requires `External.UseMsRdpExHooks`. |
@@ -30,3 +31,4 @@ The library validates unsupported combinations before connect instead of silentl
 - `RemoteApp` is external-only.
 - `Program` and `RemoteApp` cannot be combined in one connection.
 - `External.SelectedMonitors` is external-only.
+- A non-empty gateway access token requires an enabled gateway and a gateway hostname.

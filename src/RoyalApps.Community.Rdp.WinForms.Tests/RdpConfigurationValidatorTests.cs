@@ -1,5 +1,6 @@
 using System;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Connection;
 using RoyalApps.Community.Rdp.WinForms.Configuration.Internal;
 using Xunit;
 
@@ -118,5 +119,54 @@ public class RdpConfigurationValidatorTests
         Assert.True(context.IsEmbeddedMode);
         Assert.Equal("pwsh.exe", context.Configuration.Program.StartProgram);
         Assert.Equal("C:\\", context.Configuration.Program.WorkDir);
+    }
+
+    [Fact]
+    public void Create_Throws_WhenAccessTokenIsConfiguredWithoutGatewayUsage()
+    {
+        var configuration = new RdpClientConfiguration
+        {
+            Server = "rdp.example.test",
+            Gateway =
+            {
+                GatewayHostname = "gateway.example.test",
+                GatewayAccessToken = new SensitiveString("secureaccess")
+            }
+        };
+
+        Assert.Throws<InvalidOperationException>(() => RdpConnectionContextFactory.Create(configuration));
+    }
+
+    [Fact]
+    public void Create_Throws_WhenAccessTokenIsConfiguredWithoutGatewayHostname()
+    {
+        var configuration = new RdpClientConfiguration
+        {
+            Server = "rdp.example.test",
+            Gateway =
+            {
+                GatewayUsageMethod = GatewayUsageMethod.Always,
+                GatewayAccessToken = new SensitiveString("secureaccess")
+            }
+        };
+
+        Assert.ThrowsAny<ArgumentException>(() => RdpConnectionContextFactory.Create(configuration));
+    }
+
+    [Fact]
+    public void Create_AllowsEmptyAccessTokenWithoutGatewayConfiguration()
+    {
+        var configuration = new RdpClientConfiguration
+        {
+            Server = "rdp.example.test",
+            Gateway =
+            {
+                GatewayAccessToken = new SensitiveString(string.Empty)
+            }
+        };
+
+        var context = RdpConnectionContextFactory.Create(configuration);
+
+        Assert.True(context.IsEmbeddedMode);
     }
 }

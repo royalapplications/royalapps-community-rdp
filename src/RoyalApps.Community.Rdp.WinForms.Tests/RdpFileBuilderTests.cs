@@ -289,6 +289,54 @@ public class RdpFileBuilderTests
     }
 
     [Fact]
+    public void Build_WritesAccessTokenAndEffectivePaaSettings_WhenConfigured()
+    {
+        var configuration = new RdpClientConfiguration
+        {
+            Server = "rdp.example.test",
+            SessionMode = RdpSessionMode.External,
+            Gateway =
+            {
+                GatewayUsageMethod = GatewayUsageMethod.Always,
+                GatewayHostname = "gateway.example.test",
+                GatewayUsername = "secureaccess",
+                GatewayPassword = new SensitiveString("unused-password"),
+                GatewayAccessToken = new SensitiveString("secureaccess")
+            }
+        };
+
+        var content = Build(configuration);
+
+        Assert.Contains("gatewayprofileusagemethod:i:1", content);
+        Assert.Contains("gatewaycredentialssource:i:5", content);
+        Assert.Contains("gatewayaccesstoken:s:secureaccess", content);
+        Assert.Equal(GatewayProfileUsageMethod.Default, configuration.Gateway.GatewayProfileUsageMethod);
+        Assert.Equal(GatewayCredentialSource.UsernameAndPassword, configuration.Gateway.GatewayCredsSource);
+        Assert.DoesNotContain("unused-password", content);
+    }
+
+    [Fact]
+    public void Build_DoesNotWriteAccessToken_WhenTokenIsEmpty()
+    {
+        var configuration = new RdpClientConfiguration
+        {
+            Server = "rdp.example.test",
+            SessionMode = RdpSessionMode.External,
+            Gateway =
+            {
+                GatewayUsageMethod = GatewayUsageMethod.Always,
+                GatewayHostname = "gateway.example.test",
+                GatewayAccessToken = new SensitiveString(string.Empty)
+            }
+        };
+
+        var content = Build(configuration);
+
+        Assert.DoesNotContain("gatewayaccesstoken", content, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("gatewaycredentialssource:i:0", content);
+    }
+
+    [Fact]
     public void Build_Throws_WhenRemoteAppIsEnabledWithoutProgram()
     {
         var configuration = new RdpClientConfiguration

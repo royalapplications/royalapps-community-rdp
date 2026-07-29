@@ -10,6 +10,7 @@ Key behaviors:
 - `RemoteApp` settings are written as standard `.rdp` properties when `RemoteApp.Enabled` is true.
 - gateway settings and `Connection.UseRedirectionServerName` are written as standard `.rdp` properties for brokered RDS / AVD-style connections.
 - when both target-server and RD Gateway credentials are configured, the credential manager staging path now handles them as two independent temporary credentials with separate restore/remove behavior.
+- RD Gateway PAA access tokens are written as `gatewayaccesstoken` in the temporary `.rdp` file; while PAA is active, conventional gateway passwords are not staged in Credential Manager.
 - `RdpControl.ActivateExternalSessionWindow()` can be used as a best-effort helper to bring the external launcher window back to the foreground.
 - `RdpControl.ExternalSessionWindowChanged` reports when the launcher window is discovered or lost, and `RdpControl.ExternalSessionWindowHandle` exposes the last known handle.
 - Additional `.rdp` settings can be appended through `External.AdditionalRdpSettings`.
@@ -27,6 +28,7 @@ Security behavior:
 - `Security.RestrictedAdminMode` implies `DisableCredentialsDelegation` and `RestrictedLogon`.
 - The low-level security flags are only written into the external session when `External.UseMsRdpExHooks` is enabled.
 - `AuthenticationServiceClass` is not written to the generated `.rdp` file and should be treated as an embedded-mode setting.
+- A configured RD Gateway access token is present in plaintext in the temporary `.rdp` file until normal session cleanup removes it. Do not enable `External.KeepTemporaryRdpFile` for token-bearing sessions unless retaining the plaintext token is intentional.
 
 Example:
 

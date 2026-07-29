@@ -89,6 +89,24 @@ public class ExternalCredentialScopesTests
     }
 
     [Fact]
+    public void Create_DoesNotStageGatewayPassword_WhenAccessTokenIsConfigured()
+    {
+        var configuration = CreateBaseConfiguration();
+        configuration.Gateway.GatewayHostname = "gateway.example.test";
+        configuration.Gateway.GatewayUsername = "secureaccess";
+        configuration.Gateway.GatewayPassword = new SensitiveString("unused-password");
+        configuration.Gateway.GatewayAccessToken = new SensitiveString("secureaccess");
+        var store = new FakeCredentialStore();
+
+        using var scopes = ExternalCredentialScopes.Create(configuration, NullLogger.Instance, store);
+
+        Assert.NotNull(scopes);
+        Assert.Collection(
+            store.Operations,
+            operation => Assert.Equal("TERMSRV/rdp.example.test", operation.TargetName));
+    }
+
+    [Fact]
     public void Create_DoesNotRewriteMatchingExistingCredential()
     {
         var configuration = CreateBaseConfiguration();

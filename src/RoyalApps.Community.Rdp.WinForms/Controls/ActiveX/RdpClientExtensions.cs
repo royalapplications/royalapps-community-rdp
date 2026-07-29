@@ -29,6 +29,14 @@ internal static class RdpClientExtensions
         if (rdpClient is null)
             throw new InvalidOperationException("Cannot apply configuration because there is no IRdpClient instance.");
 
+        if (GatewayAuthenticationPolicy.UsesPluggableAuthentication(configuration.Gateway) &&
+            rdpClient is not IGatewayPaaClient)
+        {
+            throw new NotSupportedException(
+                $"RD Gateway access-token authentication requires RDP ActiveX client version 9 or later. " +
+                $"The selected client is {rdpClient.GetType().Name}.");
+        }
+
         try
         {
             logger.LogTrace("Set {Server} and {Port}", configuration.Server, configuration.Port);
@@ -204,10 +212,11 @@ internal static class RdpClientExtensions
 
         if (configuration.Gateway.GatewayUsageMethod != GatewayUsageMethod.Never)
         {
+            var usesGatewayPaa = GatewayAuthenticationPolicy.UsesPluggableAuthentication(configuration.Gateway);
             TraceConfigurationData(logger, configuration.Gateway);
             rdpClient.GatewayUsageMethod = configuration.Gateway.GatewayUsageMethod;
-            rdpClient.GatewayProfileUsageMethod = configuration.Gateway.GatewayProfileUsageMethod;
-            rdpClient.GatewayCredsSource = configuration.Gateway.GatewayCredsSource;
+            rdpClient.GatewayProfileUsageMethod = GatewayAuthenticationPolicy.GetEffectiveProfileUsageMethod(configuration.Gateway);
+            rdpClient.GatewayCredsSource = GatewayAuthenticationPolicy.GetEffectiveCredentialSource(configuration.Gateway);
             rdpClient.GatewayUserSelectedCredsSource = configuration.Gateway.GatewayUserSelectedCredsSource;
             rdpClient.GatewayCredSharing = configuration.Gateway.GatewayCredSharing;
             if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayHostname))
@@ -216,9 +225,18 @@ internal static class RdpClientExtensions
                 rdpClient.GatewayUsername = configuration.Gateway.GatewayUsername;
             if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayDomain))
                 rdpClient.GatewayDomain = configuration.Gateway.GatewayDomain;
-            var gatewayPassword = configuration.Gateway.GatewayPassword?.GetValue();
-            if (!string.IsNullOrWhiteSpace(gatewayPassword))
-                rdpClient.GatewayPassword = gatewayPassword;
+            if (usesGatewayPaa)
+            {
+                var gatewayAccessToken = configuration.Gateway.GatewayAccessToken!.GetValue()!;
+                var encryptedAuthCookie = GatewayAccessTokenProtector.Protect(gatewayAccessToken);
+                ((IGatewayPaaClient)rdpClient).SetGatewayEncryptedAuthCookie(encryptedAuthCookie);
+            }
+            else
+            {
+                var gatewayPassword = configuration.Gateway.GatewayPassword?.GetValue();
+                if (!string.IsNullOrWhiteSpace(gatewayPassword))
+                    rdpClient.GatewayPassword = gatewayPassword;
+            }
         }
         else
         {

@@ -52,6 +52,7 @@ Generated and disabled MsRdpEx interop modes are not supported by this package.
 using System.Windows.Forms;
 using RoyalApps.Community.Rdp.WinForms;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Connection;
 
 var control = new RdpControl
 {
@@ -120,6 +121,19 @@ The existing shared settings `Connection.DisableUdpTransport`, `Input.AllowBackg
 When `External.UseCredentialManager` is enabled and a username/password is configured, the library stages the credential in the Windows credential manager before launch and restores or removes it after the external process exits.
 
 If gateway-specific credentials are configured through `Gateway.GatewayHostname`, `Gateway.GatewayUsername`, and `Gateway.GatewayPassword`, the library stages a second temporary credential for the RD Gateway endpoint independently from the target server credential.
+
+### RD Gateway PAA Access Tokens
+
+Set `Gateway.GatewayAccessToken` to use RD Gateway Pluggable Authentication and Authorization flows such as CyberArk SIA. The package automatically selects explicit gateway settings and cookie-based authentication without mutating the configured values:
+
+```csharp
+control.RdpConfiguration.Gateway.GatewayUsageMethod = GatewayUsageMethod.Always;
+control.RdpConfiguration.Gateway.GatewayHostname = "gateway.example.test";
+control.RdpConfiguration.Gateway.GatewayUsername = "secureaccess";
+control.RdpConfiguration.Gateway.GatewayAccessToken = new SensitiveString("secureaccess");
+```
+
+Embedded mode requires ActiveX client version 9 or later and sends a current-user DPAPI-protected authentication cookie. External mode writes the raw token to its temporary `.rdp` file and removes that file through the normal session cleanup path. Do not enable `External.KeepTemporaryRdpFile` for token-bearing sessions unless retaining the plaintext token is intentional. No access token is inferred from the gateway username.
 
 ### RemoteApp
 

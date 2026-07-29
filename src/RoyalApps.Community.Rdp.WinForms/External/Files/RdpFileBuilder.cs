@@ -103,9 +103,10 @@ internal static class RdpFileBuilder
 
         if (ShouldWriteGatewaySettings(configuration))
         {
+            var usesGatewayPaa = GatewayAuthenticationPolicy.UsesPluggableAuthentication(configuration.Gateway);
             SetInteger(settings, "gatewayusagemethod", (int)configuration.Gateway.GatewayUsageMethod);
-            SetInteger(settings, "gatewayprofileusagemethod", (int)configuration.Gateway.GatewayProfileUsageMethod);
-            SetInteger(settings, "gatewaycredentialssource", (int)configuration.Gateway.GatewayCredsSource);
+            SetInteger(settings, "gatewayprofileusagemethod", (int)GatewayAuthenticationPolicy.GetEffectiveProfileUsageMethod(configuration.Gateway));
+            SetInteger(settings, "gatewaycredentialssource", (int)GatewayAuthenticationPolicy.GetEffectiveCredentialSource(configuration.Gateway));
             SetInteger(settings, "promptcredentialonce", configuration.Gateway.GatewayCredSharing.ToInt());
             SetInteger(settings, "gatewayuserselectedcredentialssource", (int)configuration.Gateway.GatewayUserSelectedCredsSource);
 
@@ -117,6 +118,9 @@ internal static class RdpFileBuilder
 
             if (!string.IsNullOrWhiteSpace(configuration.Gateway.GatewayDomain))
                 SetString(settings, "gatewaydomain", configuration.Gateway.GatewayDomain);
+
+            if (usesGatewayPaa)
+                SetString(settings, "gatewayaccesstoken", configuration.Gateway.GatewayAccessToken!.GetValue()!);
         }
 
         if (!string.IsNullOrWhiteSpace(configuration.HyperV.Instance))
@@ -190,6 +194,7 @@ internal static class RdpFileBuilder
         return !string.IsNullOrWhiteSpace(configuration.Gateway.GatewayHostname) ||
                !string.IsNullOrWhiteSpace(configuration.Gateway.GatewayUsername) ||
                !string.IsNullOrWhiteSpace(configuration.Gateway.GatewayDomain) ||
+               GatewayAuthenticationPolicy.UsesPluggableAuthentication(configuration.Gateway) ||
                configuration.Gateway.GatewayUsageMethod != GatewayUsageMethod.Never ||
                configuration.Gateway.GatewayProfileUsageMethod != GatewayProfileUsageMethod.Default ||
                configuration.Gateway.GatewayCredsSource != GatewayCredentialSource.UsernameAndPassword ||

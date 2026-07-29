@@ -14,7 +14,7 @@ using RoyalApps.Community.Rdp.WinForms.Logging;
 namespace RoyalApps.Community.Rdp.WinForms.Controls.Clients;
 
 /// <inheritdoc cref="IRdpClient"/>
-public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
+public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient, IGatewayPaaClient
 {
     /// <summary>
     /// Provides access to IMsRdpClientAdvancedSettings8 AdvancedSettings9
@@ -158,6 +158,12 @@ public class RdpClient12 : AxMsRdpClient11NotSafeForScripting, IRdpClient
     /// <inheritdoc cref="GatewayPassword"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string GatewayPassword { set => RdpTransportSettings.GatewayPassword = value; }
+
+    void IGatewayPaaClient.SetGatewayEncryptedAuthCookie(string encryptedAuthCookie)
+    {
+        RdpTransportSettings.GatewayEncryptedAuthCookie = encryptedAuthCookie;
+        RdpTransportSettings.GatewayEncryptedAuthCookieSize = (uint)encryptedAuthCookie.Length;
+    }
 
     /// <inheritdoc cref="GatewayProfileUsageMethod"/>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

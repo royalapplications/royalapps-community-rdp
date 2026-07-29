@@ -37,6 +37,7 @@ Create the control and configure a basic embedded session:
 ```csharp
 using RoyalApps.Community.Rdp.WinForms;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Connection;
 
 var control = new RdpControl
 {
@@ -75,6 +76,17 @@ control.Connect();
 
 `RemoteApp` is supported for external sessions. `Program` remains the alternate-shell model for full desktop sessions.
 
+RD Gateway PAA access-token example:
+
+```csharp
+control.RdpConfiguration.Gateway.GatewayUsageMethod = GatewayUsageMethod.Always;
+control.RdpConfiguration.Gateway.GatewayHostname = "gateway.example.test";
+control.RdpConfiguration.Gateway.GatewayUsername = "secureaccess";
+control.RdpConfiguration.Gateway.GatewayAccessToken = new SensitiveString("secureaccess");
+```
+
+A non-empty token automatically uses explicit gateway settings and cookie-based authentication. Embedded mode requires ActiveX client version 9 or later. External mode writes the raw token into the temporary `.rdp` file.
+
 For a quick overview of which settings are valid in each hosting mode, see [Support Matrix](./support-matrix.md).
 
 Validation notes:
@@ -82,6 +94,7 @@ Validation notes:
 - `RemoteApp` and `Program` cannot be combined in one connection attempt.
 - `External.SelectedMonitors` is rejected in embedded mode instead of being ignored.
 - `RemoteApp` is rejected in embedded mode because the RemoteApp window is not truly hosted inside the control.
+- A gateway access token requires an enabled gateway and a gateway hostname.
 
 Security configuration notes:
 

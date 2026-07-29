@@ -58,6 +58,7 @@ public class RdpControl : UserControl
     private bool _canScale;
     private bool _nlaReconnect;
     private bool _smartReconnectInProgress;
+    private int _smartReconnectFallbackAttempts;
     private bool _shouldShowInitialConnectOverlay;
     private IMsRdpExInstance? _rdpInstance;
     private ExternalRdpSession? _externalSession;
@@ -66,6 +67,7 @@ public class RdpControl : UserControl
     private Size _previousClientSize = Size.Empty;
 
     private readonly Timer _timerResizeInProgress;
+    private readonly Timer _timerSmartReconnectFallback;
     private readonly Timer _sessionCaptureTimer;
     private readonly Panel _connectingOverlayPanel;
     private readonly Label _connectingOverlayLabel;
@@ -218,6 +220,12 @@ public class RdpControl : UserControl
             Interval = 1000
         };
 
+        _timerSmartReconnectFallback = new Timer
+        {
+            Interval = 500
+        };
+        _timerSmartReconnectFallback.Tick += TimerSmartReconnectFallback_Tick;
+
         _sessionCaptureTimer = new Timer
         {
             Interval = 1000
@@ -260,6 +268,9 @@ public class RdpControl : UserControl
             _sessionCaptureTimer.Dispose();
 
             _timerResizeInProgress.Dispose();
+
+            _timerSmartReconnectFallback.Tick -= TimerSmartReconnectFallback_Tick;
+            _timerSmartReconnectFallback.Dispose();
         }
 
         base.Dispose(disposing);
@@ -327,7 +338,7 @@ public class RdpControl : UserControl
     /// </summary>
     public void Disconnect()
     {
-        _smartReconnectInProgress = false;
+        CancelSmartReconnectFallback();
 
         if (IsExternalMode)
         {
@@ -592,7 +603,7 @@ public class RdpControl : UserControl
         if (RdpClient == null)
             return;
 
-        _smartReconnectInProgress = false;
+        CancelSmartReconnectFallback();
         HideInitialConnectOverlay();
         _previousClientSize = GetCurrentClientSize();
         ConnectedEventArgs? ea = null;
@@ -656,36 +667,20 @@ public class RdpControl : UserControl
 
         if (!WasSuccessfullyConnected)
             HideInitialConnectOverlay();
+
+        if (ShouldScheduleSmartReconnectFallback(e.discReason, _smartReconnectInProgress))
+        {
+            Logger.LogWarning(
+                "Smart reconnect failed with disconnect reason {DisconnectReason}; waiting for ActiveX teardown before reconnecting",
+                e.discReason);
+            _smartReconnectInProgress = false;
+            _smartReconnectFallbackAttempts = 0;
+            _timerSmartReconnectFallback.Start();
+            return;
+        }
+
         switch (e.discReason)
         {
-            // Reconnect failed with 0x1108. Recreate the ActiveX control after
-            // the current COM event callback returns and establish a new session.
-            case 4360 when _smartReconnectInProgress:
-                Logger.LogWarning("Smart reconnect failed with disconnect reason {DisconnectReason}; scheduling a full reconnect", e.discReason);
-
-                if (IsDisposed || Disposing || !IsHandleCreated)
-                {
-                    _smartReconnectInProgress = false;
-                    return;
-                }
-
-                try
-                {
-                    BeginInvoke(new MethodInvoker(() =>
-                    {
-                        if (!_smartReconnectInProgress || IsDisposed || Disposing)
-                            return;
-
-                        _smartReconnectInProgress = false;
-                        Connect();
-                    }));
-                }
-                catch (InvalidOperationException)
-                {
-                    _smartReconnectInProgress = false;
-                }
-
-                return;
             case 2825 when !RdpClient.NetworkLevelAuthentication && !_nlaReconnect:
                 // NLA seems to be required and was not reconnected using the setting
                 RdpConfiguration.Credentials.NetworkLevelAuthentication = true;
@@ -735,6 +730,9 @@ public class RdpControl : UserControl
                 break;
         }
     }
+
+    internal static bool ShouldScheduleSmartReconnectFallback(int disconnectReason, bool smartReconnectInProgress) =>
+        disconnectReason == 4360 && smartReconnectInProgress;
 
     private void RdpClient_OnRequestContainerMinimize(object? sender, EventArgs e) => OnRequestContainerMinimize?.Invoke(sender, e);
 
@@ -802,7 +800,7 @@ public class RdpControl : UserControl
 
     private void CleanupRdpClient(bool performDisconnect = false)
     {
-        _smartReconnectInProgress = false;
+        CancelSmartReconnectFallback();
         HideInitialConnectOverlay();
         ReleaseOutputMirror();
 
@@ -842,73 +840,92 @@ public class RdpControl : UserControl
             enableMsRdpExHook && MsRdpExManager.Instance.AxHookEnabled ? MsRdpExManager.Instance.CoreApi.MsRdpExDllPath : null,
             useMsRdc);
 
-        ((ISupportInitialize)RdpClient).BeginInit();
-        ConfigureMsRdpExEnvironment(enableMsRdpExHook);
-
-        var control = (Control) RdpClient;
-        control.Dock = DockStyle.Fill;
-        Controls.Add(control);
-        if (_connectingOverlayPanel.Visible)
-            _connectingOverlayPanel.BringToFront();
-
-        LogDebugSizing(
-            "CreateRdpClient attached",
-            GetCurrentClientSize(),
-            RdpConfiguration.Display.DesktopWidth,
-            RdpConfiguration.Display.DesktopHeight);
-
-        if (useMsRdc)
+        try
         {
-            Logger.LogDebug("Microsoft Remote Desktop Client (rdclientax.dll) will be used");
-            Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxDllPath);
+            ((ISupportInitialize)RdpClient).BeginInit();
+            ConfigureMsRdpExEnvironment(enableMsRdpExHook);
+
+            var control = (Control) RdpClient;
+            control.Dock = DockStyle.Fill;
+            Controls.Add(control);
+            if (_connectingOverlayPanel.Visible)
+                _connectingOverlayPanel.BringToFront();
+
+            LogDebugSizing(
+                "CreateRdpClient attached",
+                GetCurrentClientSize(),
+                RdpConfiguration.Display.DesktopWidth,
+                RdpConfiguration.Display.DesktopHeight);
+
+            if (useMsRdc)
+            {
+                Logger.LogDebug("Microsoft Remote Desktop Client (rdclientax.dll) will be used");
+                Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxDllPath);
+            }
+            else
+            {
+                if (RdpConfiguration.UseMsRdc && string.IsNullOrWhiteSpace(msRdcAxDllPath))
+                    Logger.LogDebug("Microsoft Remote Desktop Client will not be used, rdclientax.dll was not found");
+
+                if (enableMsRdpExHook)
+                    Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxDllPath);
+
+                RdpConfiguration.UseMsRdc = false;
+            }
+
+            if (useMsRdc || EnableSessionCapture)
+            {
+                // The new output presenter is only needed for the modern rdclient ActiveX or explicit session capture.
+                try
+                {
+                    RdpClient.SetProperty(RdpProperties.RequestUseNewOutputPresenter, true);
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+
+            EmbeddedRdpClientConfigurationMapper.Apply(this, connectionContext);
+
+            if (enableMsRdpExHook && EnableSessionCapture && MsRdpExManager.Instance.AxHookEnabled)
+            {
+                _outputPresenterHandle = GetOutputPresenterHandle(RdpClient.Handle);
+                MsRdpExManager.Instance.CoreApi.iface.OpenInstanceForWindowHandle(_outputPresenterHandle, out var instance);
+                _rdpInstance = (IMsRdpExInstance)instance;
+                _rdpInstance.SetOutputMirrorEnabled(true);
+            }
+
+            RegisterEvents();
+            ((ISupportInitialize)RdpClient).EndInit();
+            EnsureEmbeddedClientLayout(control);
+            LogDebugSizing(
+                "CreateRdpClient prepared",
+                GetCurrentClientSize(),
+                RdpClient.DesktopWidth,
+                RdpClient.DesktopHeight);
         }
-        else
+        catch
         {
-            if (RdpConfiguration.UseMsRdc && string.IsNullOrWhiteSpace(msRdcAxDllPath))
-                Logger.LogDebug("Microsoft Remote Desktop Client will not be used, rdclientax.dll was not found");
-
-            if (enableMsRdpExHook)
-                Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxDllPath);
-
-            RdpConfiguration.UseMsRdc = false;
-        }
-
-        if (useMsRdc || EnableSessionCapture)
-        {
-            // The new output presenter is only needed for the modern rdclient ActiveX or explicit session capture.
             try
             {
-                RdpClient.SetProperty(RdpProperties.RequestUseNewOutputPresenter, true);
+                CleanupRdpClient();
             }
-            catch
+            catch (Exception ex)
             {
-                // ignored
+                Logger.LogWarning(ex, "Failed to clean up the RDP client after initialization failed");
+                if (RdpClient is Control control)
+                    Controls.Remove(control);
+                RdpClient = null;
             }
+
+            throw;
         }
-
-        EmbeddedRdpClientConfigurationMapper.Apply(this, connectionContext);
-
-        if (enableMsRdpExHook && EnableSessionCapture && MsRdpExManager.Instance.AxHookEnabled)
-        {
-            _outputPresenterHandle = GetOutputPresenterHandle(RdpClient.Handle);
-            MsRdpExManager.Instance.CoreApi.iface.OpenInstanceForWindowHandle(_outputPresenterHandle, out var instance);
-            _rdpInstance = (IMsRdpExInstance)instance;
-            _rdpInstance.SetOutputMirrorEnabled(true);
-        }
-
-        RegisterEvents();
-        ((ISupportInitialize)RdpClient).EndInit();
-        EnsureEmbeddedClientLayout(control);
-        LogDebugSizing(
-            "CreateRdpClient prepared",
-            GetCurrentClientSize(),
-            RdpClient.DesktopWidth,
-            RdpClient.DesktopHeight);
     }
 
     private void Connect(RdpConnectionContext connectionContext)
     {
-        _smartReconnectInProgress = false;
+        CancelSmartReconnectFallback();
         var shouldShowInitialConnectOverlay = !connectionContext.IsExternalMode && !WasSuccessfullyConnected;
         WasSuccessfullyConnected = false;
         _nlaReconnect = false;
@@ -1119,6 +1136,45 @@ public class RdpControl : UserControl
         RaiseRemoteDesktopSizeChanged();
     }
 
+    private void TimerSmartReconnectFallback_Tick(object? sender, EventArgs e)
+    {
+        if (IsDisposed || Disposing || RdpClient == null)
+        {
+            CancelSmartReconnectFallback();
+            return;
+        }
+
+        _smartReconnectFallbackAttempts++;
+        if (RdpClient.ConnectionState != ConnectionState.Disconnected)
+        {
+            if (_smartReconnectFallbackAttempts < 20)
+                return;
+
+            Logger.LogWarning("Timed out waiting for ActiveX to finish smart reconnect teardown");
+            CancelSmartReconnectFallback();
+            return;
+        }
+
+        Logger.LogInformation("ActiveX teardown completed; establishing a full connection after smart reconnect failed");
+        CancelSmartReconnectFallback();
+
+        try
+        {
+            Connect();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Full connection after smart reconnect failure failed");
+        }
+    }
+
+    private void CancelSmartReconnectFallback()
+    {
+        _timerSmartReconnectFallback.Stop();
+        _smartReconnectInProgress = false;
+        _smartReconnectFallbackAttempts = 0;
+    }
+
     private void SessionCaptureTimer_Tick(object? sender, EventArgs e)
     {
         if (RdpClient is null || RdpClient.Handle == IntPtr.Zero)
@@ -1198,7 +1254,8 @@ public class RdpControl : UserControl
 
     private bool UpdateClientSizeWithReconnect()
     {
-        _smartReconnectInProgress = false;
+        if (_smartReconnectInProgress)
+            return true;
 
         var currentClientSize = GetCurrentClientSize();
         if (currentClientSize.Width <= 0 || currentClientSize.Height <= 0)

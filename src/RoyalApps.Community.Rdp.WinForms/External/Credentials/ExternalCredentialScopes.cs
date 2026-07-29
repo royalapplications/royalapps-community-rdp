@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using RoyalApps.Community.Rdp.WinForms.Configuration;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Internal;
 
 namespace RoyalApps.Community.Rdp.WinForms.External.Credentials;
 
@@ -60,6 +61,9 @@ internal sealed class ExternalCredentialScopes : IDisposable
 
     private void AddGatewayScope(RdpClientConfiguration configuration, ILogger logger, ICredentialStore credentialStore)
     {
+        if (GatewayAuthenticationPolicy.UsesPluggableAuthentication(configuration.Gateway))
+            return;
+
         var userName = CredentialTargetResolver.FormatGatewayUserName(configuration.Gateway);
         var password = configuration.Gateway.GatewayPassword?.GetValue();
         if (string.IsNullOrWhiteSpace(configuration.Gateway.GatewayHostname) ||

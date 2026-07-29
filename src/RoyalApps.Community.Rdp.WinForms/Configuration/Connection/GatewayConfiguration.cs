@@ -100,6 +100,16 @@ public class GatewayConfiguration : ExpandableObjectConverter
     public SensitiveString? GatewayPassword { get; set; }
 
     /// <summary>
+    /// Specifies the access token supplied to Remote Desktop Gateway Pluggable Authentication and Authorization (PAA).
+    /// A non-empty token uses cookie-based gateway authentication with explicit gateway settings.
+    /// Support: embedded and external sessions.
+    /// Embedded mode protects the token with Windows DPAPI before assigning it to the ActiveX control.
+    /// External mode writes <c>gatewayaccesstoken</c> into the temporary <c>.rdp</c> file.
+    /// </summary>
+    [TypeConverter(typeof(SensitiveStringConverter))]
+    public SensitiveString? GatewayAccessToken { get; set; }
+
+    /// <summary>
     /// Returns an empty string so this configuration group appears as a blank expandable node in PropertyGrid-style editors.
     /// </summary>
     /// <returns>An empty string.</returns>

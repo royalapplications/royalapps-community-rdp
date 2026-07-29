@@ -1,4 +1,5 @@
 using System;
+using RoyalApps.Community.Rdp.WinForms.Configuration.Connection;
 
 namespace RoyalApps.Community.Rdp.WinForms.Configuration.Internal;
 
@@ -9,6 +10,16 @@ internal static class RdpConfigurationValidator
         ArgumentNullException.ThrowIfNull(context);
 
         ArgumentException.ThrowIfNullOrWhiteSpace(context.Configuration.Server, nameof(context.Configuration.Server));
+
+        if (GatewayAuthenticationPolicy.UsesPluggableAuthentication(context.Configuration.Gateway))
+        {
+            if (context.Configuration.Gateway.GatewayUsageMethod == GatewayUsageMethod.Never)
+                throw new InvalidOperationException("Gateway.GatewayUsageMethod must enable RD Gateway when Gateway.GatewayAccessToken is configured.");
+
+            ArgumentException.ThrowIfNullOrWhiteSpace(
+                context.Configuration.Gateway.GatewayHostname,
+                "Gateway.GatewayHostname");
+        }
 
         if (context.EffectiveRemoteApp.Enabled)
         {

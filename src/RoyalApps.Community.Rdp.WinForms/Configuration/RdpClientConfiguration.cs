@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using RoyalApps.Community.Rdp.WinForms.Configuration.Applications;
 using RoyalApps.Community.Rdp.WinForms.Configuration.Connection;
 using RoyalApps.Community.Rdp.WinForms.Configuration.Display;
@@ -63,17 +63,18 @@ public class RdpClientConfiguration
     public string? MsRdcPath { get; set; }
 
     /// <summary>
-    /// When <see langword="true"/>, MsRdpEx logging is enabled and written to <see cref="LogFilePath"/>.
+    /// When <see langword="true"/>, process-wide MsRdpEx logging is enabled and written to <see cref="LogFilePath"/>.
+    /// All controls in a process should use the same logging configuration.
     /// </summary>
     public bool LogEnabled { get; set; }
 
     /// <summary>
-    /// Gets or sets the MsRdpEx log level, for example <c>TRACE</c>, <c>DEBUG</c>, <c>INFO</c>, <c>WARN</c>, <c>ERROR</c>, <c>FATAL</c>, or <c>OFF</c>.
+    /// Gets or sets the process-wide MsRdpEx log level, for example <c>TRACE</c>, <c>DEBUG</c>, <c>INFO</c>, <c>WARN</c>, <c>ERROR</c>, or <c>FATAL</c>.
     /// </summary>
     public string LogLevel { get; set; } = "TRACE";
 
     /// <summary>
-    /// Gets or sets the MsRdpEx log file path used when <see cref="LogEnabled"/> is enabled.
+    /// Gets or sets the process-wide MsRdpEx log file path used when <see cref="LogEnabled"/> is enabled.
     /// </summary>
     public string LogFilePath { get; set; } = Environment.ExpandEnvironmentVariables(@"%TEMP%\MsRdpEx.log");
 

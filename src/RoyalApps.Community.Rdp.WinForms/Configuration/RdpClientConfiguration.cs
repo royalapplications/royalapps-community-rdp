@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace RoyalApps.Community.Rdp.WinForms.Configuration;
 
@@ -50,17 +50,17 @@ public class RdpClientConfiguration
     public string? MsRdcPath { get; set; }
 
     /// <summary>
-    /// If true, a detailed log file will be written to the file system (see: LogFilePath)
+    /// If true, process-wide MsRdpEx logging is enabled. All controls in a process should use the same logging configuration.
     /// </summary>
     public bool LogEnabled { get; set; }
 
     /// <summary>
-    /// The following log levels are available: TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+    /// The following log levels are available: TRACE, DEBUG, INFO, WARN, ERROR, FATAL.
     /// </summary>
     public string LogLevel { get; set; } = "TRACE";
 
     /// <summary>
-    /// The file path to the log file when LogEnabled is set to true.
+    /// The process-wide log file path used when LogEnabled is set to true.
     /// </summary>
     public string LogFilePath { get; set; } = Environment.ExpandEnvironmentVariables(@"%TEMP%\MsRdpEx.log");
 

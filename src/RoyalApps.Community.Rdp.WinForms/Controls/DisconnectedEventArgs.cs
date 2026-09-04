@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace RoyalApps.Community.Rdp.WinForms.Controls;
 
@@ -8,9 +8,24 @@ namespace RoyalApps.Community.Rdp.WinForms.Controls;
 public class DisconnectedEventArgs : EventArgs
 {
     /// <summary>
+    /// Gets the identifier assigned to this connection attempt for log correlation.
+    /// </summary>
+    public Guid ConnectionAttemptId { get; init; }
+
+    /// <summary>
+    /// Gets the MsRdpEx session identifier when available.
+    /// </summary>
+    public Guid? MsRdpExSessionId { get; init; }
+
+    /// <summary>
     /// The disconnect code provided by the ActiveX control.
     /// </summary>
     public required int DisconnectCode { get; init; }
+
+    /// <summary>
+    /// Gets the extended disconnect reason reported by the ActiveX control, when available.
+    /// </summary>
+    public int? ExtendedDisconnectReasonCode { get; init; }
     /// <summary>
     /// The error description for the disconnect code.
     /// </summary>

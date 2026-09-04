@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -25,6 +26,7 @@ namespace RoyalApps.Community.Rdp.WinForms.Controls;
 /// </summary>
 public class RdpControl : UserControl
 {
+    private static int _liveEmbeddedClientCount;
     private HWND _outputPresenterHandle = HWND.Null;
 
     /// <summary>
@@ -52,6 +54,21 @@ public class RdpControl : UserControl
     private bool _canScale;
     private bool _nlaReconnect;
     private IMsRdpExInstance? _rdpInstance;
+    private Guid _connectionAttemptId;
+    private Guid? _msRdpExSessionId;
+    private bool _embeddedClientCounted;
+    private long _embeddedClientCreatedTimestamp;
+
+    /// <summary>
+    /// Configures native MsRdpEx diagnostics for the current process.
+    /// All controls in the process must use the same configuration because MsRdpEx logging is process-global.
+    /// </summary>
+    public static void ConfigureProcessWideMsRdpExLogging(
+        bool enabled,
+        string? level,
+        string? filePath,
+        ILogger logger) =>
+        MsRdpExManager.Instance.ConfigureLogging(enabled, level, filePath, logger);
 
     private int _currentZoomLevel = 100;
     private Size _previousClientSize = Size.Empty;
@@ -227,6 +244,7 @@ public class RdpControl : UserControl
     public void Connect()
     {
         CleanupRdpClient(true);
+        _connectionAttemptId = Guid.NewGuid();
         CreateRdpClient();
 
         _canScale = false;
@@ -493,6 +511,7 @@ public class RdpControl : UserControl
                 Connect();
                 return;
             default:
+                var extendedDisconnectReasonCode = TryGetExtendedDisconnectReasonCode();
                 var description = e.discReason switch
                 {
                     0 => "No information is available. (Disconnect Reason = 0).",
@@ -525,11 +544,31 @@ public class RdpControl : UserControl
 
                 var ea = new DisconnectedEventArgs
                 {
+                    ConnectionAttemptId = _connectionAttemptId,
+                    MsRdpExSessionId = _msRdpExSessionId,
                     DisconnectCode = e.discReason,
+                    ExtendedDisconnectReasonCode = extendedDisconnectReasonCode,
                     Description = description,
                     ShowError = showError,
                     UserInitiated = userInitiated
                 };
+                Logger.LogInformation(
+                    "RDP disconnected: AttemptId={ConnectionAttemptId}, MsRdpExSessionId={MsRdpExSessionId}, DisconnectReason={DisconnectReason}, ExtendedDisconnectReason={ExtendedDisconnectReason}, ConnectionState={ConnectionState}, Connected={WasSuccessfullyConnected}, Client={ClientName}, GatewayUsage={GatewayUsage}, GatewayProfileUsage={GatewayProfileUsage}, GatewayCredentialSource={GatewayCredentialSource}, GatewayCredentialSharing={GatewayCredentialSharing}, GatewayHostConfigured={GatewayHostConfigured}, GatewayUserConfigured={GatewayUserConfigured}, GatewayDomainConfigured={GatewayDomainConfigured}, GatewayPasswordConfigured={GatewayPasswordConfigured}",
+                    _connectionAttemptId,
+                    _msRdpExSessionId,
+                    e.discReason,
+                    extendedDisconnectReasonCode,
+                    RdpClient.ConnectionState,
+                    WasSuccessfullyConnected,
+                    RdpClient.AxName,
+                    RdpConfiguration.Gateway.GatewayUsageMethod,
+                    RdpConfiguration.Gateway.GatewayProfileUsageMethod,
+                    RdpConfiguration.Gateway.GatewayCredsSource,
+                    RdpConfiguration.Gateway.GatewayCredSharing,
+                    !string.IsNullOrWhiteSpace(RdpConfiguration.Gateway.GatewayHostname),
+                    !string.IsNullOrWhiteSpace(RdpConfiguration.Gateway.GatewayUsername),
+                    !string.IsNullOrWhiteSpace(RdpConfiguration.Gateway.GatewayDomain),
+                    RdpConfiguration.Gateway.GatewayPassword is not null);
                 OnDisconnected?.Invoke(sender, ea);
                 break;
         }
@@ -594,6 +633,21 @@ public class RdpControl : UserControl
 
         UnregisterEvents();
         RdpClient.Dispose();
+        RdpClient = null;
+        _rdpInstance = null;
+        _msRdpExSessionId = null;
+
+        if (_embeddedClientCounted)
+        {
+            _embeddedClientCounted = false;
+            var liveClientCount = Interlocked.Decrement(ref _liveEmbeddedClientCount);
+            var lifetime = Stopwatch.GetElapsedTime(_embeddedClientCreatedTimestamp);
+            Logger.LogDebug(
+                "Disposed embedded RDP client: AttemptId={ConnectionAttemptId}, LifetimeMs={LifetimeMs}, LiveClientCount={LiveClientCount}",
+                _connectionAttemptId,
+                lifetime.TotalMilliseconds,
+                liveClientCount);
+        }
     }
 
     private void CreateRdpClient()
@@ -601,16 +655,34 @@ public class RdpControl : UserControl
         var msTscAxDllPath = GetMsTscAxDllPath();
         var msRdcAxDllPath = GetRdClientAxDllPath();
         var rdcClientInstalled = !string.IsNullOrWhiteSpace(msRdcAxDllPath);
+        var useMsRdc = RdpConfiguration.UseMsRdc && rdcClientInstalled;
+
+        MsRdpExManager.Instance.EnsureLoggingConfigured(
+            RdpConfiguration.LogEnabled,
+            RdpConfiguration.LogLevel,
+            RdpConfiguration.LogFilePath,
+            Logger);
+        ConfigureMsRdpExLoaderEnvironment(useMsRdc, msTscAxDllPath, msRdcAxDllPath);
 
         RdpClient = RdpClientFactory.Create(
             RdpConfiguration.ClientVersion,
             MsRdpExManager.Instance.AxHookEnabled ? MsRdpExManager.Instance.CoreApi.MsRdpExDllPath : null,
-            RdpConfiguration.UseMsRdc && rdcClientInstalled);
+            useMsRdc);
+        _embeddedClientCreatedTimestamp = Stopwatch.GetTimestamp();
+        _embeddedClientCounted = true;
+        var liveClientCount = Interlocked.Increment(ref _liveEmbeddedClientCount);
+        var communityRdpVersion = typeof(RdpControl).Assembly.GetName().Version;
+        var msRdpExVersion = TryGetFileVersion(MsRdpExManager.Instance.CoreApi.MsRdpExDllPath);
+        Logger.LogDebug(
+            "Created embedded RDP client: AttemptId={ConnectionAttemptId}, Client={ClientName}, CommunityRdpVersion={CommunityRdpVersion}, MsRdpExVersion={MsRdpExVersion}, MsRdpExHook={MsRdpExHook}, LiveClientCount={LiveClientCount}",
+            _connectionAttemptId,
+            RdpClient.AxName,
+            communityRdpVersion,
+            msRdpExVersion,
+            MsRdpExManager.Instance.AxHookEnabled,
+            liveClientCount);
 
         ((ISupportInitialize)RdpClient).BeginInit();
-        Environment.SetEnvironmentVariable("MSRDPEX_LOG_ENABLED", RdpConfiguration.LogEnabled ? "1" : "0");
-        Environment.SetEnvironmentVariable("MSRDPEX_LOG_LEVEL", RdpConfiguration.LogLevel);
-        Environment.SetEnvironmentVariable("MSRDPEX_LOG_FILE_PATH", RdpConfiguration.LogFilePath);
 
         var control = (Control) RdpClient;
         control.Dock = DockStyle.Fill;
@@ -619,14 +691,11 @@ public class RdpControl : UserControl
         if (RdpConfiguration.UseMsRdc && !string.IsNullOrWhiteSpace(msRdcAxDllPath))
         {
             Logger.LogDebug("Microsoft Remote Desktop Client (rdclientax.dll) will be used");
-            Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxDllPath);
         }
         else
         {
             if (string.IsNullOrWhiteSpace(msRdcAxDllPath))
                 Logger.LogDebug("Microsoft Remote Desktop Client will not be used, rdclientax.dll was not found");
-
-            Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxDllPath);
 
             RdpConfiguration.UseMsRdc = false;
         }
@@ -650,10 +719,49 @@ public class RdpControl : UserControl
             MsRdpExManager.Instance.CoreApi.iface.OpenInstanceForWindowHandle(_outputPresenterHandle, out var instance);
             _rdpInstance = (IMsRdpExInstance)instance;
             _rdpInstance.SetOutputMirrorEnabled(true);
+            _rdpInstance.GetSessionId(out var sessionId);
+            _msRdpExSessionId = sessionId;
         }
 
         RegisterEvents();
         ((ISupportInitialize)RdpClient).EndInit();
+    }
+
+    private static void ConfigureMsRdpExLoaderEnvironment(bool useMsRdc, string msTscAxDllPath, string? msRdcAxDllPath)
+    {
+        if (useMsRdc)
+            Environment.SetEnvironmentVariable("MSRDPEX_RDCLIENTAX_DLL", msRdcAxDllPath);
+        else
+            Environment.SetEnvironmentVariable("MSRDPEX_MSTSCAX_DLL", msTscAxDllPath);
+    }
+
+    private int? TryGetExtendedDisconnectReasonCode()
+    {
+        try
+        {
+            return RdpClient?.GetOcx() is IMsRdpClient client
+                ? (int)client.ExtendedDisconnectReason
+                : null;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogDebug(ex, "Could not read the extended RDP disconnect reason for attempt {ConnectionAttemptId}", _connectionAttemptId);
+            return null;
+        }
+    }
+
+    private static string? TryGetFileVersion(string? filePath)
+    {
+        try
+        {
+            return string.IsNullOrWhiteSpace(filePath)
+                ? null
+                : FileVersionInfo.GetVersionInfo(filePath).FileVersion;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private uint GetDesktopScaleFactor(int zoomLevel)

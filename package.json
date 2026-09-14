@@ -9,7 +9,7 @@
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
-    "vitepress": "2.0.0-alpha.18"
+    "vitepress": "2.0.0-alpha.19"
   },
   "overrides": {
     "postcss": "8.5.23"

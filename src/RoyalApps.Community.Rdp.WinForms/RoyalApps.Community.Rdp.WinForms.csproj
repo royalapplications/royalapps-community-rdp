@@ -11,7 +11,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>RoyalApps_1024.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.4.3</Version>
+        <Version>1.4.4</Version>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -19,6 +19,8 @@
         <RuntimeIdentifier Condition="'$(Platform)' == 'x64'">win-x64</RuntimeIdentifier>
         <RuntimeIdentifier Condition="'$(Platform)' == 'ARM64'">win-arm64</RuntimeIdentifier>
         <UseWindowsForms>true</UseWindowsForms>
+        <!-- Public v1 types require the legacy MSTSC ActiveX interop assemblies. -->
+        <MsRdpExComInterop>Legacy</MsRdpExComInterop>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -40,6 +42,9 @@
         <None Include="Resources\Images\RoyalApps_1024.png" Pack="true" PackagePath="\" />
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
         <EmbeddedResource Include="Resources\Files\*.*" />
+        <None Update="buildTransitive\RoyalApps.Community.Rdp.WinForms.targets" Pack="true" PackagePath="buildTransitive\RoyalApps.Community.Rdp.WinForms.targets" />
     </ItemGroup>
+
+    <Import Project="buildTransitive\RoyalApps.Community.Rdp.WinForms.targets" />
 
 </Project>

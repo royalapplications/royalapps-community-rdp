@@ -59,6 +59,27 @@ Shows a window with all the settings from the `RdpClientConfiguration` class. Ed
 
 ## Notable Features
 
+### MsRdpEx Gateway Isolation and Logging
+
+V1 loads MsRdpEx hooks for every connection. MsRdpEx 2026.9.21.0 enables gateway RPC binding isolation by default, addressing failures when a second embedded RD Gateway connection opens in the same process. Logging and capture need not be enabled. To disable isolation, set `MSRDPEX_GATEWAY_UNIQUE_BINDING=0` before MsRdpEx loads. The setting is process-wide; existing bindings retain their behavior.
+
+Set `RdpConfiguration.LogEnabled`, `LogLevel`, and `LogFilePath` before connecting to configure native diagnostics. A connection with logging disabled leaves the implicit logging configuration unset, allowing a later connection to enable it. All controls should use the same process-wide logging configuration.
+
+For explicit runtime changes, use the existing `RoyalApps.Community.Rdp.WinForms.Controls.RdpControl.ConfigureProcessWideMsRdpExLogging(enabled, level, filePath, logger)` method. Explicit settings take precedence over subsequent connection settings. After explicitly disabling logging, use this method to enable it again. The updated native library supports enabling logging after DLL load and changing the log level. In MsRdpEx 2026.9.21.0, the destination is fixed after the first successful log open; disabling logging retains the native file handle until process exit. Choose the destination before enabling logging and reuse it for runtime changes.
+
+### Legacy COM Interop
+
+V1 retains its public API and requires MsRdpEx's legacy interop assemblies. Applications that configure interop explicitly must use:
+
+```xml
+<PropertyGroup>
+  <MsRdpExComInterop>Legacy</MsRdpExComInterop>
+  <MsRdpExGeneratedWinForms>false</MsRdpExGeneratedWinForms>
+</PropertyGroup>
+```
+
+Generated and disabled interop modes are rejected at build time. The repository's `NuGet.Config` uses nuget.org only and clears inherited sources and source mappings without changing machine or user feed settings.
+
 ### Use Microsoft Remote Desktop Client
 One of the most interesting possibilities of this package is to use the Microsoft's modern Remote Desktop Client (RDC) instead of the Terminal Services Client (MSTSC) which ships with Windows. Just set `RdpClientConfiguration.UseMsRdc` to true and ensure that the [Remote Desktop Client](https://www.microsoft.com/store/productId/9WZDNCRFJ3PS) is installed from the Microsoft Store.
 

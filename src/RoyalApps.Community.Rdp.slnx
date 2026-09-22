@@ -7,4 +7,5 @@
   </Folder>
   <Project Path="RoyalApps.Community.Rdp.WinForms.Demo/RoyalApps.Community.Rdp.WinForms.Demo.csproj" />
   <Project Path="RoyalApps.Community.Rdp.WinForms/RoyalApps.Community.Rdp.WinForms.csproj" />
+  <Project Path="RoyalApps.Community.Rdp.WinForms.Tests/RoyalApps.Community.Rdp.WinForms.Tests.csproj" />
 </Solution>

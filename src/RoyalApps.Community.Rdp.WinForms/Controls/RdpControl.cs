@@ -657,11 +657,15 @@ public class RdpControl : UserControl
         var rdcClientInstalled = !string.IsNullOrWhiteSpace(msRdcAxDllPath);
         var useMsRdc = RdpConfiguration.UseMsRdc && rdcClientInstalled;
 
-        MsRdpExManager.Instance.EnsureLoggingConfigured(
-            RdpConfiguration.LogEnabled,
-            RdpConfiguration.LogLevel,
-            RdpConfiguration.LogFilePath,
-            Logger);
+        // Loading hooks must not commit an implicit disabled logging configuration.
+        if (RdpConfiguration.LogEnabled)
+        {
+            MsRdpExManager.Instance.EnsureLoggingConfigured(
+                true,
+                RdpConfiguration.LogLevel,
+                RdpConfiguration.LogFilePath,
+                Logger);
+        }
         ConfigureMsRdpExLoaderEnvironment(useMsRdc, msTscAxDllPath, msRdcAxDllPath);
 
         RdpClient = RdpClientFactory.Create(

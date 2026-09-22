@@ -46,6 +46,10 @@ The package requires Devolutions.MsRdpEx's legacy COM interop because its public
 
 Generated and disabled MsRdpEx interop modes are not supported by this package.
 
+## Building from Source
+
+The repository's `NuGet.Config` restores packages exclusively from nuget.org and clears inherited package sources and source mappings. Machine and user feed settings remain unchanged. Build the solution with `dotnet build src/RoyalApps.Community.Rdp.slnx -c Release`.
+
 ## Quick Start
 
 ```csharp
@@ -121,6 +125,12 @@ The existing shared settings `Connection.DisableUdpTransport`, `Input.AllowBackg
 When `External.UseCredentialManager` is enabled and a username/password is configured, the library stages the credential in the Windows credential manager before launch and restores or removes it after the external process exits.
 
 If gateway-specific credentials are configured through `Gateway.GatewayHostname`, `Gateway.GatewayUsername`, and `Gateway.GatewayPassword`, the library stages a second temporary credential for the RD Gateway endpoint independently from the target server credential.
+
+### Embedded RD Gateway Isolation
+
+Embedded sessions automatically load MsRdpEx hooks whenever `Gateway.GatewayUsageMethod` is not `Never`, including default gateway settings without an explicit hostname. This enables the gateway RPC binding isolation introduced in MsRdpEx 2026.9.21.0, which addresses failures when opening a second simultaneous gateway connection in the same process. Logging and session capture can remain disabled.
+
+Gateway isolation is enabled by default and is process-wide. To disable it, set `MSRDPEX_GATEWAY_UNIQUE_BINDING=0` before MsRdpEx loads. The library honors this startup override without assigning `GatewayIsolationEnabled`; existing bindings retain their behavior. External sessions continue to use `External.UseMsRdpExHooks` to select hook-based launching.
 
 ### RD Gateway PAA Access Tokens
 

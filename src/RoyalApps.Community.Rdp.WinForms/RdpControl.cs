@@ -886,15 +886,23 @@ public class RdpControl : UserControl
         var msTscAxDllPath = GetMsTscAxDllPath();
         var msRdcAxDllPath = GetRdClientAxDllPath();
         var useMsRdc = RdpConfiguration.UseMsRdc && !string.IsNullOrWhiteSpace(msRdcAxDllPath);
-        var enableMsRdpExHook = useMsRdc || EnableSessionCapture || RdpConfiguration.LogEnabled;
+        var enableMsRdpExHook = MsRdpExHookPolicy.ShouldEnable(
+            useMsRdc,
+            EnableSessionCapture,
+            RdpConfiguration.LogEnabled,
+            connectionContext.Configuration.Gateway.GatewayUsageMethod);
 
         if (enableMsRdpExHook)
         {
-            MsRdpExManager.Instance.EnsureLoggingConfigured(
-                RdpConfiguration.LogEnabled,
-                RdpConfiguration.LogLevel,
-                RdpConfiguration.LogFilePath,
-                Logger);
+            // Gateway-only hooks must not commit an implicit disabled logging configuration.
+            if (useMsRdc || EnableSessionCapture || RdpConfiguration.LogEnabled)
+            {
+                MsRdpExManager.Instance.EnsureLoggingConfigured(
+                    RdpConfiguration.LogEnabled,
+                    RdpConfiguration.LogLevel,
+                    RdpConfiguration.LogFilePath,
+                    Logger);
+            }
             ConfigureMsRdpExLoaderEnvironment(useMsRdc, msTscAxDllPath, msRdcAxDllPath);
         }
 

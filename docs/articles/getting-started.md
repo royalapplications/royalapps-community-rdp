@@ -102,3 +102,38 @@ Security configuration notes:
 - `RestrictedAdminMode` is the higher-level option for “connect without sending reusable credentials”.
 - `DisableCredentialsDelegation`, `RedirectedAuthentication`, and `RestrictedLogon` are the low-level building blocks behind those modes.
 - `AuthenticationServiceClass` is mainly for embedded ActiveX sessions that need a non-default SPN service class.
+
+## Embedded RD Gateway Isolation
+
+Starting with version 2.0.4, embedded sessions automatically load MsRdpEx hooks whenever `Gateway.GatewayUsageMethod` is not `Never`. This includes `Always`, `OnDemand`, `UseDefaultSettings`, and `BypassLocalAddresses`. Default gateway settings do not require an explicit hostname to activate hooks.
+
+MsRdpEx 2026.9.21.0 enables gateway RPC binding isolation by default to address failures when opening a second simultaneous embedded gateway connection in the same process. Logging and session capture can remain disabled; gateway-only hook activation does not enable the new output presenter.
+
+Isolation is process-wide. To disable it, set `MSRDPEX_GATEWAY_UNIQUE_BINDING=0` in the host process environment before MsRdpEx loads. The library honors this startup override without assigning `GatewayIsolationEnabled`. Existing bindings retain their behavior when the setting changes.
+
+External sessions continue to select hook-based launching through `External.UseMsRdpExHooks`. See [External Mode](./external-mode.md) for launcher selection and deployment details.
+
+## MsRdpEx Logging
+
+For embedded sessions, set `LogEnabled`, `LogLevel`, and `LogFilePath` before connecting:
+
+```csharp
+control.RdpConfiguration.LogEnabled = true;
+control.RdpConfiguration.LogLevel = "DEBUG";
+control.RdpConfiguration.LogFilePath = @"C:\Logs\rdp.log";
+control.Connect();
+```
+
+Logging is process-wide, so all controls should use the same configuration. A gateway-only connection with logging disabled leaves logging unconfigured, allowing a later connection attempt to enable it. MSRDC or capture initialization can establish the process-wide logging configuration even when logging is disabled.
+
+Use `RdpControl.ConfigureProcessWideMsRdpExLogging` to change logging after initialization:
+
+```csharp
+RdpControl.ConfigureProcessWideMsRdpExLogging(
+    enabled: true,
+    level: "DEBUG",
+    filePath: @"C:\Logs\rdp.log",
+    logger: control.Logger);
+```
+
+To disable logging, call the same method with `enabled: false`; `level` and `filePath` may be `null`. An explicit process-wide configuration takes precedence over subsequent connection settings. After explicitly disabling logging, use this method to enable it again.

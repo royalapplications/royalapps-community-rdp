@@ -28,16 +28,19 @@ features:
     details: Use typed MsRdpEx settings, bundled launcher fallback for `x64` and `arm64`, and app-local probing without hand-authoring raw `.rdp` entries.
 ---
 
-## Version 2.0.0-beta.1
+## Version 2.0.4
 
 `RoyalApps.Community.Rdp.WinForms` provides a WinForms `RdpControl` for Microsoft Remote Desktop sessions.
 
-Current beta highlights:
+Highlights:
 
 - embedded ActiveX-hosted RDP sessions
+- automatic MsRdpEx hooks for embedded RD Gateway sessions, enabling gateway connection isolation without logging or capture
 - external `mstsc.exe` sessions driven by generated `.rdp` files
 - optional `mstscex.exe` launch when MsRdpEx hooks are available
 - unified configuration with mode-aware validation
+
+See [Getting Started](/articles/getting-started#embedded-rd-gateway-isolation) for gateway isolation and process-wide logging configuration.
 
 ![RDP screenshot](/assets/Screenshot.png)
 

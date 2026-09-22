@@ -15,6 +15,7 @@ Use this page as the contract for which features are valid in `Embedded` and `Ex
 | `External.SelectedMonitors` | No | Yes | External-only monitor targeting via `selectedmonitors`. |
 | `Connection.EnableRdsAadAuth` | Yes | Yes | Embedded requires the host executable's Windows 10/11 `supportedOS` manifest; external writes `enablerdsaadauth` and uses the `mstsc.exe` manifest. |
 | `Gateway.GatewayAccessToken` | Yes | Yes | Uses RD Gateway PAA. Embedded requires ActiveX client version 9 or later and a DPAPI-protected cookie; external writes `gatewayaccesstoken` to the temporary `.rdp` file. |
+| RD Gateway RPC binding isolation | Automatic with gateway usage | Requires MsRdpEx | Embedded hooks activate whenever gateway usage is not `Never`, independently of logging or capture. External mode requires `External.UseMsRdpExHooks` and a launcher using MsRdpEx 2026.9.21.0 or later. Isolation is process-wide and enabled by default unless overridden at startup. |
 | `Security.AuthenticationServiceClass` | Yes | No | Embedded-only ActiveX setting. It is not written to generated external `.rdp` files. |
 | `Security.DisableCredentialsDelegation` | Yes | Limited | External support requires `External.UseMsRdpExHooks`. |
 | `Security.RedirectedAuthentication` | Yes | Limited | External support requires `External.UseMsRdpExHooks`. |

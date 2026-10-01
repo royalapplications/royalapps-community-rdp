@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using RoyalApps.Community.Rdp.WinForms.Controls.ActiveX;
 using Xunit;
 
@@ -13,13 +13,13 @@ public class RdpClientExtensionsTests
     [InlineData(RdpProperties.KdcProxyUrl)]
     [InlineData(RdpProperties.MouseJigglerInterval)]
     [InlineData(RdpProperties.MouseJigglerMethod)]
-    [InlineData(RdpProperties.ZoomLevel)]
     public void RequiresMsRdpExHook_ReturnsTrue_ForHookOnlyProperties(string propertyName)
     {
         Assert.True(RdpClientExtensions.RequiresMsRdpExHook(propertyName));
     }
 
     [Theory]
+    [InlineData(RdpProperties.ZoomLevel)]
     [InlineData(RdpProperties.DisableUdpTransport)]
     [InlineData(RdpProperties.EnableRdsAadAuth)]
     [InlineData(RdpProperties.RestrictedLogon)]

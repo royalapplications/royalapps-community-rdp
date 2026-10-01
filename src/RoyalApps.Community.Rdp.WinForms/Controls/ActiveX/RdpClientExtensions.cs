@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -152,8 +152,7 @@ internal static class RdpClientExtensions
         rdpClient.BandwidthDetection = configuration.Performance.BandwidthDetection ||
                                        configuration.Performance.NetworkConnectionType == NetworkConnectionType.Automatic;
 
-        if (configuration.Performance.EnableHardwareMode)
-            rdpClient.EnableHardwareMode = true;
+        rdpClient.EnableHardwareMode = configuration.Performance.EnableHardwareMode;
         rdpClient.ClientProtocolSpec = configuration.Performance.ClientProtocolSpec switch
         {
             ClientProtocolSpec.FullMode => ClientSpec.FullMode,
@@ -354,8 +353,7 @@ internal static class RdpClientExtensions
             RdpProperties.KeyboardHookToggleShortcutKey or
             RdpProperties.KdcProxyUrl or
             RdpProperties.MouseJigglerInterval or
-            RdpProperties.MouseJigglerMethod or
-            RdpProperties.ZoomLevel;
+            RdpProperties.MouseJigglerMethod;
 
     internal static bool IsUnsupportedWithoutMsRdpExHook(string? rdpExDll, string propertyName, Exception? exception) =>
         string.IsNullOrWhiteSpace(rdpExDll) &&

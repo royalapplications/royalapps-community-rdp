@@ -470,7 +470,7 @@ public class RdpControl : UserControl
         if (RdpClient is not {ConnectionState: ConnectionState.Connected})
             return;
 
-        RdpClient.SmartSizing = resizeBehavior == ResizeBehavior.SmartSizing;
+        RdpClient.SmartSizing = !RdpConfiguration.Display.UseLocalScaling && resizeBehavior == ResizeBehavior.SmartSizing;
 
         if (resizeBehavior == ResizeBehavior.UpdateDesktopSize)
             UpdateClientSize();

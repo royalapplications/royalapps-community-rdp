@@ -9,9 +9,11 @@
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
-    "vitepress": "2.0.0-alpha.19"
+    "vitepress": "2.0.0-alpha.20"
   },
   "overrides": {
-    "postcss": "8.5.23"
+    "postcss": "8.5.23",
+    "source-map-js": "1.2.2",
+    "@vue/server-renderer": "3.5.43"
   }
 }

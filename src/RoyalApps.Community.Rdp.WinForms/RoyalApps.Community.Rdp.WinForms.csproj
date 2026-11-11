@@ -11,11 +11,11 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>RoyalApps_1024.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.4.9</Version>
+        <Version>1.5.0</Version>
     </PropertyGroup>
 
     <PropertyGroup>
-        <TargetFramework>net10.0-windows</TargetFramework>
+        <TargetFrameworks>net10.0-windows;net11.0-windows</TargetFrameworks>
         <RuntimeIdentifier Condition="'$(Platform)' == 'x64'">win-x64</RuntimeIdentifier>
         <RuntimeIdentifier Condition="'$(Platform)' == 'ARM64'">win-arm64</RuntimeIdentifier>
         <UseWindowsForms>true</UseWindowsForms>
@@ -42,7 +42,7 @@
         <None Include="Resources\Images\RoyalApps_1024.png" Pack="true" PackagePath="\" />
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
         <EmbeddedResource Include="Resources\Files\*.*" />
-        <None Update="buildTransitive\RoyalApps.Community.Rdp.WinForms.targets" Pack="true" PackagePath="buildTransitive\RoyalApps.Community.Rdp.WinForms.targets" />
+        <None Include="buildTransitive\RoyalApps.Community.Rdp.WinForms.targets" Pack="true" PackagePath="buildTransitive\RoyalApps.Community.Rdp.WinForms.targets" />
     </ItemGroup>
 
     <Import Project="buildTransitive\RoyalApps.Community.Rdp.WinForms.targets" />

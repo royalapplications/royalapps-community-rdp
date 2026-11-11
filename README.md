@@ -2,12 +2,15 @@
 
 [![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Rdp.WinForms.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.Rdp.WinForms)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Rdp.WinForms.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.Rdp.WinForms)
-[![.NET](https://img.shields.io/badge/.NET-%3E%3D%20%208.0-blueviolet)](https://dotnet.microsoft.com/download)
+[![.NET](https://img.shields.io/badge/.NET-10%20%7C%2011-blueviolet)](https://dotnet.microsoft.com/download)
 
 RoyalApps.Community.RDP contains projects/packages to easily embed/use Microsoft RDP ActiveX wrapped in [MsRdpEx](https://github.com/Devolutions/MsRdpEx) in a Windows (WinForms) application.
 ![Screenshot](https://raw.githubusercontent.com/royalapplications/royalapps-community-rdp/main/docs/assets/Screenshot.png)
 
 ## Getting Started
+
+Requires Windows and .NET 10 or .NET 11. The package includes separate assemblies for both frameworks. Building the repository requires the .NET 11 SDK; running both test targets requires both Windows Desktop runtimes.
+
 ### Installation
 You should install the RoyalApps.Community.RDP.WinForms with NuGet:
 ```
@@ -47,6 +50,14 @@ The `Disconnected` event is raised when:
 The `DisconnectedEventArgs` may have an error code or error message for more information.
 
 ## Exploring the Demo Application
+
+Run the demo from the repository root, choosing a target framework:
+
+```powershell
+dotnet run --project src/RoyalApps.Community.Rdp.WinForms.Demo -f net10.0-windows
+dotnet run --project src/RoyalApps.Community.Rdp.WinForms.Demo -f net11.0-windows
+```
+
 The demo application is quite simple. The `Remote Desktop` menu has the following items:
 ### Connect
 Starts the remote desktop connection.

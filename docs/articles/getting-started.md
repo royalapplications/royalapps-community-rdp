@@ -5,6 +5,8 @@
 - `Embedded`: the existing ActiveX-hosted experience inside `RdpControl`.
 - `External`: a generated `.rdp` file plus an external `mstsc.exe` or `mstscex.exe` process.
 
+Requires Windows and .NET 10 or .NET 11. Building the repository requires the .NET 11 SDK.
+
 ## Install the Package
 
 Install the package from NuGet first:

@@ -32,17 +32,25 @@ jobs:
         fetch-depth: 0
         persist-credentials: false
 
-    # Install the .NET Core workload
-    - name: Install .NET Core
+    # Install both .NET SDKs and their runtimes
+    - name: Install .NET SDKs and runtimes
       uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: '10.0.x'
+        dotnet-version: |
+          10.0.x
+          11.0.x
 
     # Build
-    - name: build project
-      run: dotnet build -c Release src/RoyalApps.Community.Rdp.WinForms/RoyalApps.Community.Rdp.WinForms.csproj
+    - name: Build solution
+      run: dotnet build -c Release src/RoyalApps.Community.Rdp.slnx
       env:
         Configuration: ${{ matrix.configuration }}
+
+    - name: Test .NET 10
+      run: dotnet test --no-build -c Release -f net10.0-windows src/RoyalApps.Community.Rdp.WinForms.Tests/RoyalApps.Community.Rdp.WinForms.Tests.csproj
+
+    - name: Test .NET 11
+      run: dotnet test --no-build -c Release -f net11.0-windows src/RoyalApps.Community.Rdp.WinForms.Tests/RoyalApps.Community.Rdp.WinForms.Tests.csproj
 
     # Pack nuget package
     - name: dotnet pack
@@ -57,9 +65,53 @@ jobs:
         name: Rdp-nupkg
         path: ./*.nupkg
 
-    # Push nuget package to nuget.org
-    - name: nuget push
-      if: github.ref == 'refs/heads/main'
-      run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+  publish:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+    - name: Validate NuGet trusted publishing configuration
+      shell: pwsh
       env:
-        Configuration: ${{ matrix.configuration }}
+        NUGET_USER: ${{ vars.NUGET_USER }}
+      run: |
+        if ([string]::IsNullOrWhiteSpace($env:NUGET_USER)) {
+          throw "Set the NUGET_USER Actions variable to the nuget.org username that created the trusted publishing policy."
+        }
+
+    - name: Install .NET SDK
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '11.0.x'
+
+    - name: Download package
+      uses: actions/download-artifact@v7
+      with:
+        name: Rdp-nupkg
+        path: packages
+
+    - name: NuGet login
+      uses: NuGet/login@v1
+      id: nuget-login
+      with:
+        user: ${{ vars.NUGET_USER }}
+
+    - name: Publish package
+      shell: pwsh
+      run: |
+        $packages = @(Get-ChildItem -LiteralPath packages -Filter *.nupkg -File)
+        if ($packages.Count -eq 0) {
+          throw "No NuGet packages were found in the downloaded packages directory."
+        }
+        foreach ($package in $packages) {
+          dotnet nuget push $package.FullName --source https://api.nuget.org/v3/index.json --api-key "$env:NUGET_API_KEY" --skip-duplicate
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+        }
+      env:
+        NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}

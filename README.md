@@ -2,7 +2,7 @@
 
 [![NuGet Version](https://img.shields.io/nuget/v/RoyalApps.Community.Rdp.WinForms.svg?style=flat)](https://www.nuget.org/packages/RoyalApps.Community.Rdp.WinForms)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/RoyalApps.Community.Rdp.WinForms.svg?color=green)](https://www.nuget.org/packages/RoyalApps.Community.Rdp.WinForms)
-[![.NET](https://img.shields.io/badge/.NET-net10.0--windows-blueviolet)](https://dotnet.microsoft.com/download)
+[![.NET](https://img.shields.io/badge/.NET-10%20%7C%2011-blueviolet)](https://dotnet.microsoft.com/download)
 
 `RoyalApps.Community.Rdp.WinForms` provides a WinForms `RdpControl` for Microsoft Remote Desktop sessions.
 
@@ -24,6 +24,8 @@ Read the documentation first:
 - [API Reference](https://royalapplications.github.io/royalapps-community-rdp/api/)
 
 ![Screenshot](https://raw.githubusercontent.com/royalapplications/royalapps-community-rdp/main/docs/assets/Screenshot.png)
+
+Requires Windows and .NET 10 or .NET 11. The NuGet package includes separate assemblies for both frameworks.
 
 ## Installation
 
@@ -48,7 +50,20 @@ Generated and disabled MsRdpEx interop modes are not supported by this package.
 
 ## Building from Source
 
-The repository's `NuGet.Config` restores packages exclusively from nuget.org and clears inherited package sources and source mappings. Machine and user feed settings remain unchanged. Build the solution with `dotnet build src/RoyalApps.Community.Rdp.slnx -c Release`.
+The repository's `NuGet.Config` restores packages exclusively from nuget.org and clears inherited package sources and source mappings. Machine and user feed settings remain unchanged. Building the repository requires the .NET 11 SDK; running both test targets requires both Windows Desktop runtimes. Build the solution with `dotnet build src/RoyalApps.Community.Rdp.slnx -c Release`.
+
+## Running the Demo
+
+Choose a target framework when running the demo from the repository root:
+
+```powershell
+dotnet run --project src/RoyalApps.Community.Rdp.WinForms.Demo -f net10.0-windows
+dotnet run --project src/RoyalApps.Community.Rdp.WinForms.Demo -f net11.0-windows
+```
+
+## Publishing
+
+See [NuGet trusted publishing setup](docs/trusted-publishing.md) for the NuGet policy and Actions variable configuration.
 
 ## Quick Start
 

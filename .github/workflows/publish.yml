@@ -117,6 +117,15 @@ jobs:
       id-token: write
 
     steps:
+    - name: Validate NuGet trusted publishing configuration
+      shell: pwsh
+      env:
+        NUGET_USER: ${{ vars.NUGET_USER }}
+      run: |
+        if ([string]::IsNullOrWhiteSpace($env:NUGET_USER)) {
+          throw "Set the NUGET_USER Actions variable to the nuget.org username that created the trusted publishing policy."
+        }
+
     - name: Install .NET SDK
       uses: actions/setup-dotnet@v5
       with:
@@ -132,7 +141,7 @@ jobs:
       uses: NuGet/login@v1
       id: nuget-login
       with:
-        user: ${{ secrets.NUGET_USER }}
+        user: ${{ vars.NUGET_USER }}
 
     - name: Publish package
       run: dotnet nuget push "packages/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$env:NUGET_API_KEY" --skip-duplicate

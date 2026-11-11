@@ -25,17 +25,17 @@ active member account.
 
 ## GitHub configuration
 
-In the repository's **Settings > Secrets and variables > Actions**, add a
-repository secret named **NUGET_USER**. Set it to the NuGet.org profile username
+In the repository's **Settings > Secrets and variables > Actions > Variables**, configure a
+repository variable named **NUGET_USER** with value **StefanKoell**. This is the NuGet.org profile username
 of the account that created the policy, including when the policy belongs to an
-organization. Use the profile username, not an email address or GitHub username.
+organization. The workflow reads vars.NUGET_USER, matching RoyalTerminal. A secret with the same name is a separate setting and is not used.
 
 No GitHub environment is configured by this workflow, so leave the policy's
 environment field empty.
 
 ## First publish
 
-1. Create the NuGet policy and the NUGET_USER secret before pushing the workflow
+1. Create the NuGet policy and the NUGET_USER variable before pushing the workflow
    change to main or v1.
 2. Push the change. The publish job runs only after the build and tests succeed.
    NuGet/login exchanges the GitHub identity token for a temporary publishing

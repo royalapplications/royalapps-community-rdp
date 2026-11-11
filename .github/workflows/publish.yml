@@ -144,6 +144,17 @@ jobs:
         user: ${{ vars.NUGET_USER }}
 
     - name: Publish package
-      run: dotnet nuget push "packages/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$env:NUGET_API_KEY" --skip-duplicate
+      shell: pwsh
+      run: |
+        $packages = @(Get-ChildItem -LiteralPath packages -Filter *.nupkg -File)
+        if ($packages.Count -eq 0) {
+          throw "No NuGet packages were found in the downloaded packages directory."
+        }
+        foreach ($package in $packages) {
+          dotnet nuget push $package.FullName --source https://api.nuget.org/v3/index.json --api-key "$env:NUGET_API_KEY" --skip-duplicate
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+        }
       env:
         NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}

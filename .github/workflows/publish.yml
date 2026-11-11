@@ -108,9 +108,33 @@ jobs:
         name: Rdp-nupkg
         path: ./*.nupkg
 
-    # Push nuget package to nuget.org
-    - name: nuget push
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v1'
-      run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+  publish:
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v1')
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+    - name: Install .NET SDK
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '11.0.x'
+
+    - name: Download package
+      uses: actions/download-artifact@v7
+      with:
+        name: Rdp-nupkg
+        path: packages
+
+    - name: NuGet login
+      uses: NuGet/login@v1
+      id: nuget-login
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
+    - name: Publish package
+      run: dotnet nuget push "packages/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$env:NUGET_API_KEY" --skip-duplicate
       env:
-        Configuration: ${{ matrix.configuration }}
+        NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
